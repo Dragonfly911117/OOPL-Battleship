@@ -4,9 +4,9 @@
 
 #define GAME_TITLE           "Game"
 //! 設定遊戲畫面的解析度（寬度）
-#define SIZE_X				 1400
+#define SIZE_X				 1920
 //! 設定遊戲畫面的解析度（高度）
-#define SIZE_Y				 900
+#define SIZE_Y				 1080
 //! 是否以全螢幕方式開啟遊戲
 #define OPEN_AS_FULLSCREEN	 false
 //! 是否顯示loading(OnInit)的進度
@@ -22,9 +22,9 @@
 //! 啟動音效介面
 #define ENABLE_AUDIO		 true
 //! 是否關閉 toolbar
-#define ENABLE_TOOLBAR       false
+#define ENABLE_TOOLBAR       true
 //! 是否關閉 menu
-#define ENABLE_MENU          false
+#define ENABLE_MENU          true
 //! 是否關閉 statusbar
 #define ENABLE_STATUSBAR     false
 //! 全螢幕用，請設定成目前視窗的解析度 (width)。

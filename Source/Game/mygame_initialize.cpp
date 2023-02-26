@@ -12,6 +12,8 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲開頭畫面物件
 /////////////////////////////////////////////////////////////////////////////
 
+
+
 CGameStateInit::CGameStateInit(CGame* g) : CGameState(g) {
 
 }
@@ -29,6 +31,9 @@ void CGameStateInit::OnInit() {
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
+    startBg.LoadBitmapA("Resources/startBG.bmp");
+    startBg.SetTopLeft(0, 0);
+    
 }
 
 void CGameStateInit::OnBeginState() {
@@ -43,4 +48,5 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 }
 
 void CGameStateInit::OnShow() {
+    startBg.ShowBitmap();
 }
