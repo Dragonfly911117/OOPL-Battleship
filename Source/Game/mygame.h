@@ -38,7 +38,6 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 
-
 namespace game_framework {
     /////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -52,21 +51,12 @@ namespace game_framework {
         // 1
         AUDIO_NTUT // 2
     };
-    
 
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的遊戲開頭畫面物件
     // 每個Member function的Implementation都要弄懂
     /////////////////////////////////////////////////////////////////////////////
-    class myBtn : public CMovingBitmap {
-        string texts;
-    public:
-        myBtn(const string& text);
-        void BeingPressed();
-        void showBTN();
-    };
 
-    
     class CGameStateInit : public CGameState {
     public:
         CGameStateInit(CGame* g);
@@ -90,6 +80,16 @@ namespace game_framework {
         match_making,
         in_game
     };
+
+    class myBtn : public  CMovingBitmap{
+        string text;
+    public:
+        myBtn();
+        void setText(const string& str);
+        void pressed();
+        void released();
+        void showBtn();
+    };
     
     class CGameStateRun : public CGameState {
     public:
@@ -104,17 +104,18 @@ namespace game_framework {
         void OnMouseMove(UINT nFlags, CPoint point) override; // 處理滑鼠的動作 
         void OnRButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
         void OnRButtonUp(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
-        void  menuBtnProcess();
+
     protected:
         void OnMove() override; // 移動遊戲元素
         void OnShow() override; // 顯示這個狀態的遊戲畫面
     private:
         // Some phases-shared variables.
         int int_phase_ = menu;
-
+        CMovingBitmap cursor;
+        
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
-        CMovingBitmap menu_btns[4]; // TODO : make btn has animation while being pressed 
+        myBtn menu_btns[4]; 
     };
 
     /////////////////////////////////////////////////////////////////////////////
