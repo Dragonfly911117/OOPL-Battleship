@@ -27,7 +27,6 @@ void myBtn::pressed() {
 }
 
 void myBtn::released() {
-    // TODO : enter corresponding phases
     this->SetFrameIndexOfBitmap(0);
 }
 
@@ -44,6 +43,7 @@ void myBtn::showBtn() {
     CDDraw::ReleaseBackCDC();
 
 }
+
 
 CGameStateRun::CGameStateRun(CGame* g) : CGameState(g) {
 
@@ -81,8 +81,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    if (nChar == 27) exit(1);
-
+    if (nChar == 27) exit(27);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -105,12 +104,28 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
     cursor.SetTopLeft(point.x - 5, point.y - 5);
     switch (int_phase_) {
     case menu:
-        for (auto& i : menu_btns) {
-            if (CMovingBitmap::IsOverlap(cursor, i)) {
-                i.released();
+        for (int i = 0; i < 4; ++i){
+            if (CMovingBitmap::IsOverlap(cursor, menu_btns[i])) {
+                menu_btns[i].released();
+                switch (i) {
+                case  0 :
+                    startSingleGame();
+                    break;
+                case 1:
+                    start_mutiple_game();
+                    break;
+                case 2:
+                    gotoSettings();
+                    break;
+                case 3:
+                    gotoExit();
+                    break;
+                    default:
+                        break;
+                }
             }
-            else if (i.GetFrameIndexOfBitmap() == 1)
-                i.SetFrameIndexOfBitmap(0);
+            else if (menu_btns[i].GetFrameIndexOfBitmap() == 1)
+                menu_btns[i].released();
         }
 
     default:
@@ -119,8 +134,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
-    cursor.SetTopLeft(point.x - 5, point.y - 5);
-    // cursor.ShowBitmap();
+    // cursor.SetTopLeft(point.x - 5, point.y - 5);
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {
@@ -144,4 +158,20 @@ void CGameStateRun::OnShow() {
     }
 
     // cursor.ShowBitmap(); // un-comment this to see where the cursor is 
+}
+
+void CGameStateRun::startSingleGame() {
+    int_phase_ = single_game;
+}
+
+void CGameStateRun::start_mutiple_game() {
+    int_phase_ = match_making;
+}
+
+void CGameStateRun::gotoSettings() {
+    int_phase_ = settings;
+}
+
+void CGameStateRun::gotoExit() {
+    GotoGameState(GAME_STATE_OVER);
 }
