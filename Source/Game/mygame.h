@@ -78,19 +78,41 @@ namespace game_framework {
     enum CGameStateRunPhases {
         menu,
         match_making,
+        single_game,
+        settings,
         in_game
     };
 
-    class myBtn : public  CMovingBitmap{
+    class myBtn : public CMovingBitmap {
+    protected:
         string text;
+
     public:
         myBtn();
         void setText(const string& str);
         void pressed();
-        void released();
+        virtual void released();
         void showBtn();
     };
-    
+
+    enum { empty, placed, hit };
+
+    class BoardGrid : public CMovingBitmap {
+        int status_; 
+
+    public:
+        int get_status();
+        void beingHit();
+    };
+
+    class GameBoard : public CMovingBitmap {
+        vector<vector<BoardGrid>> board;
+        vector<int> shipsHitCount;
+        vector<int>
+
+    public:
+    };
+
     class CGameStateRun : public CGameState {
     public:
         CGameStateRun(CGame* g);
@@ -105,19 +127,29 @@ namespace game_framework {
         void OnRButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
         void OnRButtonUp(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
 
+        void startSingleGame();
+        void start_mutiple_game();
+        void gotoSettings();
+        void gotoExit();
+
     protected:
         void OnMove() override; // 移動遊戲元素
         void OnShow() override; // 顯示這個狀態的遊戲畫面
+
     private:
         // Some phases-shared variables.
-        int int_phase_ = menu;
         CMovingBitmap cursor;
-        
+        int int_phase_ = menu;
+
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
-        myBtn menu_btns[4]; 
+        myBtn menu_btns[4];
+
+        // Variables used ONLY by in-game
+        CMovingBitmap board;
     };
 
+    // int CGameStateRun::int_phase = in_game;
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
     // 每個Member function的Implementation都要弄懂
