@@ -91,28 +91,10 @@ namespace game_framework {
         myBtn();
         void setText(const string& str);
         void pressed();
-        virtual void released();
+        void released();
         void showBtn();
     };
-
-    enum { empty, placed, hit };
-
-    class BoardGrid : public CMovingBitmap {
-        int status_; 
-
-    public:
-        int get_status();
-        void beingHit();
-    };
-
-    class GameBoard : public CMovingBitmap {
-        vector<vector<BoardGrid>> board;
-        vector<int> shipsHitCount;
-        vector<int>
-
-    public:
-    };
-
+    
     class CGameStateRun : public CGameState {
     public:
         CGameStateRun(CGame* g);
@@ -135,12 +117,11 @@ namespace game_framework {
     protected:
         void OnMove() override; // 移動遊戲元素
         void OnShow() override; // 顯示這個狀態的遊戲畫面
-
     private:
         // Some phases-shared variables.
-        CMovingBitmap cursor;
         int int_phase_ = menu;
-
+        CMovingBitmap cursor;
+        
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
         myBtn menu_btns[4];
@@ -149,7 +130,6 @@ namespace game_framework {
         CMovingBitmap board;
     };
 
-    // int CGameStateRun::int_phase = in_game;
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
     // 每個Member function的Implementation都要弄懂
