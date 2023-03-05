@@ -131,11 +131,11 @@ namespace game_framework {
         vector<Ship*> ships;
     public:
         void init();
-        
+        void show();
     };
 
 
-    
+
     class CGameStateRun : public CGameState {
     public:
         CGameStateRun(CGame* g);
@@ -162,13 +162,13 @@ namespace game_framework {
         // Some phases-shared variables.
         int int_phase_ = menu;
         CMovingBitmap cursor;
-        
+
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
         myBtn menu_btns[4];
 
         // Variables used ONLY by in-game
-        CMovingBitmap board;
+        gameBoard board;
     };
 
     /////////////////////////////////////////////////////////////////////////////

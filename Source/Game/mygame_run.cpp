@@ -49,6 +49,7 @@ Ship* game_framework::makeAShip(const int& sz) {
     ship->type_ = sz;
     ship->health_ = sz % 6;
     ship->picked_ = false;
+    ship->LoadBitmapByString({"Resources/shipFullHealth.bmp", "Resources/shipDamaged.bmp", "Resources/shipSink.bmp"});
     return ship;
 }
 
@@ -58,16 +59,29 @@ void gameBoard::init() {
         vector<BaseGrid*> curr(10);
         for(int j  = 0; j < 10; ++j) {
             curr.at(j) = new EmptyGrid;
-            curr.at(j)->SetTopLeft(baseX, j * 10);
+            curr.at(j)->LoadBitmapA("Resources/emptyGrid.bmp");
+            curr.at(j)->SetTopLeft(baseX, j * 60);
         }
-        baseX += 10;
+        grids.push_back(curr);
+        baseX += 60;
     }
     for (int i = 2; i < 6; ++i) {
         ships.emplace_back(makeAShip(i));
-        ships.back()->SetTopLeft(baseX, i * 10);
+        ships.back()->SetTopLeft(baseX, i * 60);
     }
     ships.emplace_back(makeAShip((9)));
-    ships.back()->SetTopLeft(baseX,  60);
+    ships.back()->SetTopLeft(baseX,  0);
+}
+
+void gameBoard::show() {
+    for (auto& i : grids) {
+        for(auto& j : i) {
+            j->ShowBitmap();
+        }
+    }
+    for(auto& i : ships) {
+        i->ShowBitmap();
+    }
 }
 
 CGameStateRun::CGameStateRun(CGame* g) : CGameState(g) {
@@ -99,6 +113,8 @@ void CGameStateRun::OnInit() {
     menu_btns[1].setText("Multiple Players");
     menu_btns[2].setText("Options");
     menu_btns[3].setText("Exit");
+
+    board.init();
 
 }
 
@@ -175,9 +191,9 @@ void CGameStateRun::OnShow() {
         menu_bkg_.ShowBitmap();
         for (auto& i : menu_btns)
             i.showBtn();
-
         break;
-
+    case single_game:
+        board.show();
     default:
         break;
     }
