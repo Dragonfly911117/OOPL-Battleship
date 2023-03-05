@@ -44,6 +44,31 @@ void myBtn::showBtn() {
 
 }
 
+Ship* game_framework::makeAShip(const int& sz) {
+    Ship* ship =  new Ship;
+    ship->type_ = sz;
+    ship->health_ = sz % 6;
+    ship->picked_ = false;
+    return ship;
+}
+
+void gameBoard::init() {
+    int baseX = 0;
+    for (int i = 0; i < 10; ++i) {
+        vector<BaseGrid*> curr(10);
+        for(int j  = 0; j < 10; ++j) {
+            curr.at(j) = new EmptyGrid;
+            curr.at(j)->SetTopLeft(baseX, j * 10);
+        }
+        baseX += 10;
+    }
+    for (int i = 2; i < 6; ++i) {
+        ships.emplace_back(makeAShip(i));
+        ships.back()->SetTopLeft(baseX, i * 10);
+    }
+    ships.emplace_back(makeAShip((9)));
+    ships.back()->SetTopLeft(baseX,  60);
+}
 
 CGameStateRun::CGameStateRun(CGame* g) : CGameState(g) {
 

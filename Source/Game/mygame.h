@@ -94,6 +94,47 @@ namespace game_framework {
         void released();
         void showBtn();
     };
+    class BaseGrid : public CMovingBitmap {
+        
+    };
+    class Ship;
+    Ship* makeAShip(const int&  sz);
+    class Ship :public BaseGrid {
+        friend Ship* makeAShip(const int& sz);
+        int type_;
+        int health_;
+        bool picked_;
+        
+        
+        void damaged();
+        void sink();
+        
+    public:
+        // shared methods & variables
+        const int getSize();
+
+        // placement phase
+        void rotation();
+        void drop();
+
+        // main-game phase
+        void beingHit();
+        
+    };
+
+    class EmptyGrid : public BaseGrid {
+        
+    };
+
+    class gameBoard : public CMovingBitmap {
+        vector<vector<BaseGrid*>> grids;
+        vector<Ship*> ships;
+    public:
+        void init();
+        
+    };
+
+
     
     class CGameStateRun : public CGameState {
     public:
