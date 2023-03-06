@@ -47,6 +47,7 @@ END_MESSAGE_MAP()
 
 CGameDoc::CGameDoc() {
     // TODO: add one-time construction code here
+
 }
 
 CGameDoc::~CGameDoc() {

@@ -10,13 +10,14 @@
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
-// ³o­Óclass¬°¹CÀ¸ªºµ²§ôª¬ºA(Game Over)
+// ï¿½oï¿½ï¿½classï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A(Game Over)
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateOver::CGameStateOver(CGame* g): CGameState(g) {
 }
 
 void CGameStateOver::OnMove() {
+
 }
 
 void CGameStateOver::OnBeginState() {
@@ -31,7 +32,7 @@ void CGameStateOver::OnShow() {
 }
 
 void CGameStateOver::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    exit(0);
+
 }
 
 void CGameStateOver::load_background() {

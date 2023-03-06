@@ -1,5 +1,5 @@
 /*
- * mygame.h: ¥»ÀÉ®×Àx¹CÀ¸¥»¨­ªºclassªºinterface
+ * mygame.h: ï¿½ï¿½ï¿½É®ï¿½ï¿½xï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½classï¿½ï¿½interface
  * Copyright (C) 2002-2008 Woei-Kae Chen <wkc@csie.ntut.edu.tw>
  *
  * This file is part of game, a free game development framework for windows.
@@ -44,7 +44,7 @@ namespace game_framework {
     /////////////////////////////////////////////////////////////////////////////
 
     enum AUDIO_ID {
-        // ©w¸q¦UºØ­µ®Äªº½s¸¹
+        // ï¿½wï¿½qï¿½Uï¿½Ø­ï¿½ï¿½Äªï¿½ï¿½sï¿½ï¿½
         AUDIO_DING,
         // 0
         AUDIO_LAKE,
@@ -53,19 +53,19 @@ namespace game_framework {
     };
 
     /////////////////////////////////////////////////////////////////////////////
-    // ³o­Óclass¬°¹CÀ¸ªº¹CÀ¸¶}ÀYµe­±ª«¥ó
-    // ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+    // ï¿½oï¿½ï¿½classï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½}ï¿½Yï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½Cï¿½ï¿½Member functionï¿½ï¿½Implementationï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½
     /////////////////////////////////////////////////////////////////////////////
 
     class CGameStateInit : public CGameState {
     public:
         CGameStateInit(CGame* g);
-        void OnInit() override; // ¹CÀ¸ªºªì­È¤Î¹Ï§Î³]©w
-        void OnBeginState() override; // ³]©w¨C¦¸­«ª±©Ò»ÝªºÅÜ¼Æ
-        void OnKeyUp(UINT, UINT, UINT) override; // ³B²zÁä½LUpªº°Ê§@
-        void OnLButtonDown(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@
+        void OnInit() override; // ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¤Î¹Ï§Î³]ï¿½w
+        void OnBeginState() override; // ï¿½]ï¿½wï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ýªï¿½ï¿½Ü¼ï¿½
+        void OnKeyUp(UINT, UINT, UINT) override; // ï¿½Bï¿½zï¿½ï¿½LUpï¿½ï¿½ï¿½Ê§@
+        void OnLButtonDown(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@
     protected:
-        void OnShow() override; // Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+        void OnShow() override; // ï¿½ï¿½Ü³oï¿½Óªï¿½ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½
     private:
         void load_background();
         void draw_text();
@@ -73,26 +73,26 @@ namespace game_framework {
     };
 
     /////////////////////////////////////////////////////////////////////////////
-    // ³o­Óclass¬°¹CÀ¸ªº¹CÀ¸°õ¦æª«¥ó¡A¥D­nªº¹CÀ¸µ{¦¡³£¦b³o¸Ì
-    // ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+    // ï¿½oï¿½ï¿½classï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æª«ï¿½ï¿½Aï¿½Dï¿½nï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½oï¿½ï¿½
+    // ï¿½Cï¿½ï¿½Member functionï¿½ï¿½Implementationï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½
     /////////////////////////////////////////////////////////////////////////////
 
     class CGameStateRun : public CGameState {
     public:
         CGameStateRun(CGame* g);
         ~CGameStateRun() override;
-        void OnBeginState() override; // ³]©w¨C¦¸­«ª±©Ò»ÝªºÅÜ¼Æ
-        void OnInit() override; // ¹CÀ¸ªºªì­È¤Î¹Ï§Î³]©w
+        void OnBeginState() override; // ï¿½]ï¿½wï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ýªï¿½ï¿½Ü¼ï¿½
+        void OnInit() override; // ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¤Î¹Ï§Î³]ï¿½w
         void OnKeyDown(UINT, UINT, UINT) override;
         void OnKeyUp(UINT, UINT, UINT) override;
-        void OnLButtonDown(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@
-        void OnLButtonUp(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@
-        void OnMouseMove(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@ 
-        void OnRButtonDown(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@
-        void OnRButtonUp(UINT nFlags, CPoint point) override; // ³B²z·Æ¹«ªº°Ê§@
+        void OnLButtonDown(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@
+        void OnLButtonUp(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@
+        void OnMouseMove(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@ 
+        void OnRButtonDown(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@
+        void OnRButtonUp(UINT nFlags, CPoint point) override; // ï¿½Bï¿½zï¿½Æ¹ï¿½ï¿½ï¿½ï¿½Ê§@
     protected:
-        void OnMove() override; // ²¾°Ê¹CÀ¸¤¸¯À
-        void OnShow() override; // Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+        void OnMove() override; // ï¿½ï¿½ï¿½Ê¹Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        void OnShow() override; // ï¿½ï¿½Ü³oï¿½Óªï¿½ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½
     private:
         int phase = 1;
         int sub_phase = 1;
@@ -113,20 +113,20 @@ namespace game_framework {
     };
 
     /////////////////////////////////////////////////////////////////////////////
-    // ³o­Óclass¬°¹CÀ¸ªºµ²§ôª¬ºA(Game Over)
-    // ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+    // ï¿½oï¿½ï¿½classï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A(Game Over)
+    // ï¿½Cï¿½ï¿½Member functionï¿½ï¿½Implementationï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½
     /////////////////////////////////////////////////////////////////////////////
 
     class CGameStateOver : public CGameState {
     public:
         CGameStateOver(CGame* g);
-        void OnBeginState() override; // ³]©w¨C¦¸­«ª±©Ò»ÝªºÅÜ¼Æ
+        void OnBeginState() override; // ï¿½]ï¿½wï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ýªï¿½ï¿½Ü¼ï¿½
         void OnInit() override;
         void OnKeyDown(UINT, UINT, UINT) override;
 
     protected:
-        void OnMove() override; // ²¾°Ê¹CÀ¸¤¸¯À
-        void OnShow() override; // Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+        void OnMove() override; // ï¿½ï¿½ï¿½Ê¹Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        void OnShow() override; // ï¿½ï¿½Ü³oï¿½Óªï¿½ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½
     private:
         CMovingBitmap background;
         void load_background();

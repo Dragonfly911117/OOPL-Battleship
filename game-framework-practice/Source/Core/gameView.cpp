@@ -77,6 +77,7 @@ END_MESSAGE_MAP()
 
 CGameView::CGameView() {
     // TODO: add construction code here
+
 }
 
 CGameView::~CGameView() {
@@ -204,6 +205,7 @@ void CGameView::OnUpdateFilePause(CCmdUI* pCmdUI) {
 
 void CGameView::OnFileNew() {
     // TODO: Add your command handler code here
+
 }
 
 void CGameView::OnButtonPause() {
@@ -230,6 +232,7 @@ void CGameView::OnMouseMove(UINT nFlags, CPoint point) {
 }
 
 void CGameView::OnSetFocus(CWnd* pOldWnd) {
+
     // TODO: Add your message handler code here
     game_framework::CGame::Instance()->OnSetFocus();
     CView::OnSetFocus(pOldWnd);

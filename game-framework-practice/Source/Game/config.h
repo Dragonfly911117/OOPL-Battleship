@@ -1,19 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// ©w¸q¹CÀ¸¥i³]©wªºÀô¹Ò»P±ø¥ó
+// ï¿½wï¿½qï¿½Cï¿½ï¿½ï¿½iï¿½]ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½Ò»Pï¿½ï¿½ï¿½ï¿½
 /////////////////////////////////////////////////////////////////////////////
 
 #define GAME_TITLE           "Game"
-#define SIZE_X				 600		// ³]©w¹CÀ¸µe­±ªº¸ÑªR«×¬°640x480
-#define SIZE_Y				 600		// µù¡G­Y¤£¨Ï¥Î¼Ð·Çªº¸ÑªR«×¡A«h¤£¯à¤Á´«¨ì¥þ¿Ã¹õ
-#define OPEN_AS_FULLSCREEN	 false		// ¬O§_¥H¥þ¿Ã¹õ¤è¦¡¶}±Ò¹CÀ¸
-#define SHOW_LOAD_PROGRESS   true		// ¬O§_Åã¥Üloading(OnInit)ªº¶i«×
-#define DEFAULT_BG_COLOR	 RGB(0, 0, 0)	// ¹CÀ¸µe­±¹w³]ªº­I´ºÃC¦â(¶Â¦â)
-#define GAME_CYCLE_TIME		 15		    // ¨C33ms¶]¤@¦¸Move¤ÎShow(¨C¬í30¦¸)
-#define SHOW_GAME_CYCLE_TIME false		// ¬O§_¦bdebug modeÅã¥Ücycle time
-#define ENABLE_GAME_PAUSE	 false		// ¬O§_¤¹³\¥H Ctrl-Q ¼È°±¹CÀ¸
-#define ENABLE_AUDIO		 true		// ±Ò°Ê­µ®Ä¤¶­±
-#define ENABLE_TOOLBAR       false      // ¬O§_Ãö³¬ toolbar
-#define ENABLE_MENU          false      // ¬O§_Ãö³¬ menu
-#define ENABLE_STATUSBAR     false      // ¬O§_Ãö³¬ statusbar
-#define RESOLUTION_X     1920           // ¥þ¿Ã¹õ¥Î¡A½Ð³]©w¦¨¥Ø«eµøµ¡ªº¸ÑªR«× (width)¡C
-#define RESOLUTION_Y     1080           // ¥þ¿Ã¹õ¥Î¡A½Ð³]©w¦¨¥Ø«eµøµ¡ªº¸ÑªR«× (height)¡C
+#define SIZE_X				 600		// ï¿½]ï¿½wï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ÑªRï¿½×¬ï¿½640x480
+#define SIZE_Y				 600		// ï¿½ï¿½ï¿½Gï¿½Yï¿½ï¿½ï¿½Ï¥Î¼Ð·Çªï¿½ï¿½ÑªRï¿½×¡Aï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¹ï¿½
+#define OPEN_AS_FULLSCREEN	 false		// ï¿½Oï¿½_ï¿½Hï¿½ï¿½ï¿½Ã¹ï¿½ï¿½è¦¡ï¿½}ï¿½Ò¹Cï¿½ï¿½
+#define SHOW_LOAD_PROGRESS   true		// ï¿½Oï¿½_ï¿½ï¿½ï¿½loading(OnInit)ï¿½ï¿½ï¿½iï¿½ï¿½
+#define DEFAULT_BG_COLOR	 RGB(0, 0, 0)	// ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½wï¿½]ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Cï¿½ï¿½(ï¿½Â¦ï¿½)
+#define GAME_CYCLE_TIME		 15		    // ï¿½C33msï¿½]ï¿½@ï¿½ï¿½Moveï¿½ï¿½Show(ï¿½Cï¿½ï¿½30ï¿½ï¿½)
+#define SHOW_GAME_CYCLE_TIME false		// ï¿½Oï¿½_ï¿½bdebug modeï¿½ï¿½ï¿½cycle time
+#define ENABLE_GAME_PAUSE	 false		// ï¿½Oï¿½_ï¿½ï¿½ï¿½\ï¿½H Ctrl-Q ï¿½È°ï¿½ï¿½Cï¿½ï¿½
+#define ENABLE_AUDIO		 true		// ï¿½Ò°Ê­ï¿½ï¿½Ä¤ï¿½ï¿½ï¿½
+#define ENABLE_TOOLBAR       false      // ï¿½Oï¿½_ï¿½ï¿½ï¿½ï¿½ toolbar
+#define ENABLE_MENU          false      // ï¿½Oï¿½_ï¿½ï¿½ï¿½ï¿½ menu
+#define ENABLE_STATUSBAR     false      // ï¿½Oï¿½_ï¿½ï¿½ï¿½ï¿½ statusbar
+#define RESOLUTION_X     1920           // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½Î¡Aï¿½Ð³]ï¿½wï¿½ï¿½ï¿½Ø«eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÑªRï¿½ï¿½ (width)ï¿½C
+#define RESOLUTION_Y     1080           // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½Î¡Aï¿½Ð³]ï¿½wï¿½ï¿½ï¿½Ø«eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÑªRï¿½ï¿½ (height)ï¿½C
