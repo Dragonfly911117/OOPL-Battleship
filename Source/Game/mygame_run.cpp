@@ -14,75 +14,7 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
-myBtn::myBtn() {
-    this->text = "";
-}
 
-void myBtn::setText(const string& str) {
-    this->text = str;
-}
-
-void myBtn::pressed() {
-    this->SetFrameIndexOfBitmap(1);
-}
-
-void myBtn::released() {
-    this->SetFrameIndexOfBitmap(0);
-}
-
-void myBtn::showBtn() {
-    this->ShowBitmap();
-    CDC* pDC = CDDraw::GetBackCDC();
-
-    pDC->SetBkMode(TRANSPARENT);
-    pDC->SetTextColor(RGB(255, 255, 255));
-
-    /* 變更字體 */
-    CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(255, 255, 255), 40);
-    CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->text);
-    CDDraw::ReleaseBackCDC();
-
-}
-
-Ship* game_framework::makeAShip(const int& sz) {
-    Ship* ship =  new Ship;
-    ship->type_ = sz;
-    ship->health_ = sz % 6;
-    ship->picked_ = false;
-    ship->LoadBitmapByString({"Resources/shipFullHealth.bmp", "Resources/shipDamaged.bmp", "Resources/shipSink.bmp"});
-    return ship;
-}
-
-void gameBoard::init() {
-    int baseX = 0;
-    for (int i = 0; i < 10; ++i) {
-        vector<BaseGrid*> curr(10);
-        for(int j  = 0; j < 10; ++j) {
-            curr.at(j) = new EmptyGrid;
-            curr.at(j)->LoadBitmapA("Resources/emptyGrid.bmp");
-            curr.at(j)->SetTopLeft(baseX, j * 60);
-        }
-        grids.push_back(curr);
-        baseX += 60;
-    }
-    for (int i = 2; i < 6; ++i) {
-        ships.emplace_back(makeAShip(i));
-        ships.back()->SetTopLeft(baseX, i * 60);
-    }
-    ships.emplace_back(makeAShip((9)));
-    ships.back()->SetTopLeft(baseX,  0);
-}
-
-void gameBoard::show() {
-    for (auto& i : grids) {
-        for(auto& j : i) {
-            j->ShowBitmap();
-        }
-    }
-    for(auto& i : ships) {
-        i->ShowBitmap();
-    }
-}
 
 CGameStateRun::CGameStateRun(CGame* g) : CGameState(g) {
 
@@ -102,7 +34,6 @@ void CGameStateRun::OnMove() {
 
 void CGameStateRun::OnInit() {
     cursor.LoadBitmapA("Resources/cursor.bmp");
-
     menu_bkg_.LoadBitmapA("Resources/menuBg.bmp");
     menu_bkg_.SetTopLeft(0, 0);
     for (int i = 0; i < 4; ++i) {
@@ -135,7 +66,21 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
                 break;
             }
         }
-
+    case single_game:
+        if (board.getCurrSel() == -1) {
+            const auto ships = board.getShip();
+            for (int i = 0; i < 5; ++i) {
+                if (CMovingBitmap::IsOverlap(cursor, *ships.at(i))) {
+                    board.pickUpShip(i);
+                    break;
+                }
+            }
+        }
+        else {
+            const auto ships = board.getShip();
+            board.dropShip(point);
+        }
+        break;
     default:
         break;
     }
@@ -175,7 +120,26 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
-    // cursor.SetTopLeft(point.x - 5, point.y - 5);
+    cursor.SetTopLeft(point.x - 5, point.y - 5);
+switch (int_phase_) {
+    case menu: // copilot suggested code, add dis function in the future
+        // for (auto& i : menu_btns) {
+        //     if (CMovingBitmap::IsOverlap(cursor, i)) {
+        //         i.hover();
+        //         break;
+        //     }
+        //     else if (i.GetFrameIndexOfBitmap() == 1)
+        //         i.released();
+        // }
+        break;
+    case single_game:
+        if (board.getCurrSel() != -1) {
+            board.getShip().at(board.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25);
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {

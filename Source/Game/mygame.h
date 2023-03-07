@@ -37,7 +37,7 @@
  *      2. Replace the demonstration of animation as a new bouncing ball.
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
-
+#include "tinyUtil.h"
 namespace game_framework {
     /////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -83,58 +83,7 @@ namespace game_framework {
         in_game
     };
 
-    class myBtn : public CMovingBitmap {
-    protected:
-        string text;
-
-    public:
-        myBtn();
-        void setText(const string& str);
-        void pressed();
-        void released();
-        void showBtn();
-    };
-    class BaseGrid : public CMovingBitmap {
-        
-    };
-    class Ship;
-    Ship* makeAShip(const int&  sz);
-    class Ship :public BaseGrid {
-        friend Ship* makeAShip(const int& sz);
-        int type_;
-        int health_;
-        bool picked_;
-        
-        
-        void damaged();
-        void sink();
-        
-    public:
-        // shared methods & variables
-        const int getSize();
-
-        // placement phase
-        void rotation();
-        void drop();
-
-        // main-game phase
-        void beingHit();
-        
-    };
-
-    class EmptyGrid : public BaseGrid {
-        
-    };
-
-    class gameBoard : public CMovingBitmap {
-        vector<vector<BaseGrid*>> grids;
-        vector<Ship*> ships;
-    public:
-        void init();
-        void show();
-    };
-
-
+    
 
     class CGameStateRun : public CGameState {
     public:
@@ -170,7 +119,7 @@ namespace game_framework {
         // Variables used ONLY by in-game
         gameBoard board;
     };
-
+    
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
     // 每個Member function的Implementation都要弄懂
