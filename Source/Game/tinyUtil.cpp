@@ -40,6 +40,10 @@ void myBtn::showBtn() {
 
 }
 
+void BaseGrid::invertPlaceableState() {
+    placeable = !placeable;
+}
+
 bool BaseGrid::ifPlaceable() {
     return placeable;
 }
@@ -50,8 +54,65 @@ Ship* makeAShip(const int& tp) {
     ship->health_ = tp % 6;
     ship->picked_ = false;
     ship->placeable = false;
-    ship->LoadBitmapByString({"Resources/shipFullHealth.bmp", "Resources/shipDamaged.bmp", "Resources/shipSink.bmp"});
+    string baseAddress = "Resources/ships/";
+    vector<string> fileNames;
+    fileNames.emplace_back("headAtLeft.bmp");
+    fileNames.emplace_back("headAtTop.bmp");
+    switch (tp) {
+    case 2:
+        for (int i = 0; i < 2; ++i) {
+            fileNames.at(i) = baseAddress + "A/" + fileNames.at(i);
+        }
+        break;
+    case 3:
+        for (int i = 0; i < 2; ++i) {
+            fileNames.at(i) = baseAddress + "B/" + fileNames.at(i);
+        }
+        break;
+    case 4:
+        for (int i = 0; i < 2; ++i) {
+            fileNames.at(i) = baseAddress + "C/" + fileNames.at(i);
+        }
+        break;
+    case 5:
+        for (int i = 0; i < 2; ++i) {
+            fileNames.at(i) = baseAddress + "D/" + fileNames.at(i);
+        }
+        break;
+    case 9:
+        for (int i = 0; i < 2; ++i) {
+            fileNames.at(i) = baseAddress + "E/" + fileNames.at(i);
+        }
+        break;
+    default:
+        exit(-1);
+    }
+    ship->LoadBitmapByString(fileNames, RGB(255, 255, 255));
+    ship->SetFrameIndexOfBitmap(1);
     return ship;
+}
+
+int Ship::getSize() {
+    switch (type_) {
+    // {2, 3, 4, 5, 9} ->{ 2, 3, 3, 4, 5}
+    case 2:
+        return 2;
+    case 3:
+        return 3;
+    case 4:
+        return 3;
+    case 5:
+        return 4;
+    case 9:
+        return 5;
+    default:
+        exit(-2);
+    }
+
+}
+
+void Ship::rotate() {
+    this->SetFrameIndexOfBitmap((this->GetFrameIndexOfBitmap() + 1) % 2);
 }
 
 int gameBoard::getCurrSel() {
@@ -62,25 +123,80 @@ vector<Ship*> gameBoard::getShip() {
     return ships;
 }
 
-void gameBoard::pickUpShip(const int& i) {
-    currentlySelShip = i;
-    int x, y;
-    x = (ships.at(i)->GetLeft() - baseX) / 60;
-    y = (ships.at(i)->GetTop() - baseX) / 60;
-    if (x < 10 && y < 10) {
-        grids.at(x).at(y) = new EmptyGrid;
-        grids.at(x).at(y)->LoadBitmapA("Resources/emptyGrid.bmp");
-        grids.at(x).at(y)->SetTopLeft(ships.at(i)->GetLeft(), ships.at(i)->GetTop());
+void gameBoard::pickUpShip(const int& sel) {
+    currentlySelShip = sel;
+    const int x = (ships.at(sel)->GetLeft() - baseX) / 60;
+    const int y = (ships.at(sel)->GetTop() - baseX) / 60;
+    int direction = ships.at(sel)->GetFrameIndexOfBitmap();
+    for (int i = 0; i < ships.at(currentlySelShip)->getSize(); ++i) {
+        if (x < 10 && y < 10) {
+            EmptyGrid* grid = new EmptyGrid;
+            grid->LoadBitmapA("Resources/emptyGrid.bmp");
+            switch (direction) {
+            case 0:
+                grid->SetTopLeft(grids.at(x + i).at(y)->GetLeft(), grids.at(x + i).at(y)->GetTop());
+                grids.at(x + i).at(y) = grid;
+                break;
+            case 1:
+                grid->SetTopLeft(grids.at(x).at(y + i)->GetLeft(), grids.at(x).at(y + i)->GetTop());
+                grids.at(x).at(y + i) = grid;
+                break;
+            }
+        }
     }
 }
 
 void gameBoard::dropShip(const CPoint& pt) {
-    int x, y;
-    x = (pt.x - baseX) / 60;
-    y = (pt.y - baseY) / 60;
-    if (grids.at(x).at(y)->ifPlaceable()) {
+    const int x = (pt.x - baseX) / 60;
+    const int y = (pt.y - baseY) / 60;
+    if (x > 9 || y > 9) return;
+    int direction = ships.at(currentlySelShip)->GetFrameIndexOfBitmap();
+    bool flag = grids.at(x).at(y)->ifPlaceable();
+    for (int i = 1; i < ships.at(currentlySelShip)->getSize(); ++i) {
+        switch (direction) {
+        case 0:
+            if (x + i >= 10 || !grids.at(x + i).at(y)->ifPlaceable()) {
+                flag = false;
+            }
+            break;
+        case 1:
+            if (y + i >= 10 || !grids.at(x).at(y + i)->ifPlaceable()) {
+                flag = false;
+            }
+            break;
+        }
+    }
+    if (flag) {
         ships.at(currentlySelShip)->SetTopLeft(grids.at(x).at(y)->GetLeft(), grids.at(x).at(y)->GetTop());
-        delete grids.at(x).at(y);
+        for (int i = 0; i < ships.at(currentlySelShip)->getSize(); ++i) {
+            BaseGrid* grid = new BaseGrid;
+            switch (direction) {
+            case 0:
+                *grid = *grids.at(x + i).at(y);
+                delete grids.at(x + i).at(y);
+                grids.at(x + i).at(y) = grid;
+                grids.at(x + i).at(y)->invertPlaceableState();
+                break;
+            case 1:
+                *grid = *grids.at(x).at(y + i);
+                delete grids.at(x).at(y + i);
+                grids.at(x).at(y + i) = grid;
+                grids.at(x).at(y + i)->invertPlaceableState();
+                break;
+            case 2:
+                *grid = *grids.at(x - i).at(y);
+                delete grids.at(x - i).at(y);
+                grids.at(x - i).at(y) = grid;
+                grids.at(x - i).at(y)->invertPlaceableState();
+                break;
+            case 3:
+                *grid = *grids.at(x).at(y - i);
+                delete grids.at(x).at(y - i);
+                grids.at(x).at(y - i) = grid;
+                grids.at(x).at(y - i)->invertPlaceableState();
+                break;
+            }
+        }
         grids.at(x).at(y) = ships.at(currentlySelShip);
         currentlySelShip = -1;
     } // else: may have to do something    
@@ -118,3 +234,9 @@ void gameBoard::show() {
         i->ShowBitmap();
     }
 }
+
+void gameBoard::rotateShip() {
+    if (currentlySelShip == -1) return;
+    ships.at(currentlySelShip)->rotate();
+}
+

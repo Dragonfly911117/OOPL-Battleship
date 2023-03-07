@@ -17,6 +17,7 @@ class BaseGrid : public CMovingBitmap {
 protected:
     bool placeable = true;
 public:
+    void invertPlaceableState();
     bool ifPlaceable();
 };
 
@@ -34,11 +35,10 @@ class Ship : public BaseGrid {
 
 public:
     // shared methods & variables
-    const int getSize();
+    int getSize();
 
     // placement phase
-    void rotation();
-    void drop();
+    void rotate();
 
     // main-game phase
     void beingHit();
@@ -56,8 +56,9 @@ class gameBoard : public CMovingBitmap {
 public:
     int getCurrSel();
     vector<Ship*> getShip();
-    void pickUpShip(const int& i);
+    void pickUpShip(const int& sel);
     void gameBoard::dropShip(const CPoint& pt);
     void init();
     void show();
+    void rotateShip();
 };

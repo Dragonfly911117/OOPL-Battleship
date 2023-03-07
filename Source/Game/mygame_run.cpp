@@ -50,6 +50,13 @@ void CGameStateRun::OnInit() {
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+    if (int_phase_ == single_game) {
+        if (board.getCurrSel() != -1) {
+            if (nChar == 52 || nChar == 82) {
+                 board.rotateShip();
+            }
+        }
+    }
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -93,6 +100,11 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
         for (int i = 0; i < 4; ++i){
             if (CMovingBitmap::IsOverlap(cursor, menu_btns[i])) {
                 menu_btns[i].released();
+                
+                // Remember to remove these two lines
+                startSingleGame();
+                return;
+                
                 switch (i) {
                 case  0 :
                     startSingleGame();
