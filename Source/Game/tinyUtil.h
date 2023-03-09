@@ -22,13 +22,14 @@ public:
 };
 
 class Ship;
-Ship* makeAShip(const int& tp);
+bool myIsOverlap(const CPoint& pt1,  Ship* ship);
+Ship* MakeAShip(const int& tp);
 
 class Ship : public BaseGrid {
-    friend Ship* makeAShip(const int& tp);
-    int type_;
-    int health_;
-    bool picked_;
+    friend Ship* MakeAShip(const int& tp);
+    friend bool myIsOverlap(const CPoint& pt1, Ship* ship);
+    int int_type_;
+    int int_health_;
 
     void damaged();
     void sink();

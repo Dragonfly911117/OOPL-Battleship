@@ -77,7 +77,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
         if (board.getCurrSel() == -1) {
             const auto ships = board.getShip();
             for (int i = 0; i < 5; ++i) {
-                if (CMovingBitmap::IsOverlap(cursor, *ships.at(i))) {
+                if (myIsOverlap(point, ships.at(i))) {
                     board.pickUpShip(i);
                     break;
                 }

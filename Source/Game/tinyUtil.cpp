@@ -48,11 +48,20 @@ bool BaseGrid::ifPlaceable() {
     return placeable;
 }
 
-Ship* makeAShip(const int& tp) {
+bool myIsOverlap(const CPoint& pt1, Ship* ship) {
+    CPoint lt = CPoint(ship->GetLeft(), ship->GetTop());
+    CPoint rb; // dont use GetHeight()  and GetWidth(). They are not the same as the size of the bitmap after rotations.
+    int direction = ship->GetFrameIndexOfBitmap();
+    rb = direction == 0
+             ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
+             : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
+    return (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y);
+}
+
+Ship* MakeAShip(const int& tp) {
     Ship* ship = new Ship;
-    ship->type_ = tp;
-    ship->health_ = tp % 6;
-    ship->picked_ = false;
+    ship->int_type_ = tp;
+    ship->int_health_ = tp % 6;
     ship->placeable = false;
     string baseAddress = "Resources/ships/";
     vector<string> fileNames;
@@ -88,12 +97,12 @@ Ship* makeAShip(const int& tp) {
         exit(-1);
     }
     ship->LoadBitmapByString(fileNames, RGB(255, 255, 255));
-    ship->SetFrameIndexOfBitmap(1);
+    // ship->SetFrameIndexOfBitmap(1);
     return ship;
 }
 
 int Ship::getSize() {
-    switch (type_) {
+    switch (int_type_) {
     // {2, 3, 4, 5, 9} ->{ 2, 3, 3, 4, 5}
     case 2:
         return 2;
@@ -216,10 +225,10 @@ void gameBoard::init() {
         baseX += 60;
     }
     for (int i = 2; i < 6; ++i) {
-        ships.emplace_back(makeAShip(i));
+        ships.emplace_back(MakeAShip(i));
         ships.back()->SetTopLeft(baseX, (i - 1) * 60);
     }
-    ships.emplace_back(makeAShip((9)));
+    ships.emplace_back(MakeAShip((9)));
     ships.back()->SetTopLeft(baseX, baseY);
     baseX = baseY = 0;
 }
@@ -239,4 +248,3 @@ void gameBoard::rotateShip() {
     if (currentlySelShip == -1) return;
     ships.at(currentlySelShip)->rotate();
 }
-
