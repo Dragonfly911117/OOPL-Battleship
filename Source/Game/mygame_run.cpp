@@ -37,7 +37,7 @@ void CGameStateRun::OnInit() {
     menu_bkg_.LoadBitmapA("Resources/menuBg.bmp");
     menu_bkg_.SetTopLeft(0, 0);
     for (int i = 0; i < 4; ++i) {
-        menu_btns[i].LoadBitmapByString({"Resources/menuBtn.bmp", "Resources/menuBtnBeingPressed.bmp"});
+        menu_btns[i].LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
         menu_btns[i].SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
     }
     menu_btns[0].setText("Single Player");
@@ -87,6 +87,11 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
             const auto ships = board.getShip();
             board.dropShip(point);
         }
+        if (board.ifAllShipPlaced()) {
+            if (CMovingBitmap::IsOverlap(cursor, board.btnStart )) {
+                board.btnStart.pressed();
+            }
+        }
         break;
     default:
         break;
@@ -100,7 +105,6 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
         for (int i = 0; i < 4; ++i){
             if (CMovingBitmap::IsOverlap(cursor, menu_btns[i])) {
                 menu_btns[i].released();
-                
                 // Remember to remove these two lines
                 startSingleGame();
                 return;
@@ -122,10 +126,14 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
                         break;
                 }
             }
-            else if (menu_btns[i].GetFrameIndexOfBitmap() == 1)
-                menu_btns[i].released();
         }
-
+    case single_game:
+        if (board.ifAllShipPlaced()) {
+            if (CMovingBitmap::IsOverlap(cursor, board.btnStart)) {
+                board.btnStart.released();
+                // start game
+            }
+        }
     default:
         break;
     }

@@ -22,12 +22,14 @@ public:
 };
 
 class Ship;
-bool myIsOverlap(const CPoint& pt1,  Ship* ship);
+int myIsOverlap(const CPoint& pt1,  Ship* ship);
 Ship* MakeAShip(const int& tp);
+
+
 
 class Ship : public BaseGrid {
     friend Ship* MakeAShip(const int& tp);
-    friend bool myIsOverlap(const CPoint& pt1, Ship* ship);
+    friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
     int int_health_;
 
@@ -54,12 +56,19 @@ class gameBoard : public CMovingBitmap {
     vector<Ship*> ships;
     int currentlySelShip = -1;
     int baseX, baseY;
+
 public:
-    int getCurrSel();
+    // shared methods & variables
     vector<Ship*> getShip();
-    void pickUpShip(const int& sel);
-    void gameBoard::dropShip(const CPoint& pt);
-    void init();
     void show();
+
+    // deployment-phase methods
+    myBtn btnStart;
+    void init();
+    int getCurrSel();
+    void pickUpShip(const int& sel);
     void rotateShip();
+    void dropShip(const CPoint& pt);
+    bool ifAllShipPlaced();
+    void gettingStart();
 };

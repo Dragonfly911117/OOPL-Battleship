@@ -34,7 +34,10 @@ void myBtn::showBtn() {
     pDC->SetTextColor(RGB(255, 255, 255));
 
     /* 變更字體 */
-    CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(255, 255, 255), 40);
+    if (this->GetFrameIndexOfBitmap() == 0)
+        CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(255, 255, 255), 40);
+    else
+        CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(188, 188, 188), 40);
     CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->text);
     CDDraw::ReleaseBackCDC();
 
@@ -48,14 +51,24 @@ bool BaseGrid::ifPlaceable() {
     return placeable;
 }
 
-bool myIsOverlap(const CPoint& pt1, Ship* ship) {
+int myIsOverlap(const CPoint& pt1, Ship* ship) {
     CPoint lt = CPoint(ship->GetLeft(), ship->GetTop());
     CPoint rb; // dont use GetHeight()  and GetWidth(). They are not the same as the size of the bitmap after rotations.
     int direction = ship->GetFrameIndexOfBitmap();
     rb = direction == 0
              ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
              : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
-    return (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y);
+    if  (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y) {
+        for (int i = 1; i <= ship->getSize(); ++i) {
+            CPoint pt2 = direction == 0
+                             ? CPoint(lt.x + i * 60 - 10 , lt.y+50 )
+                             : CPoint(lt.x +50 , lt.y + i * 60 - 10);
+            if (pt1.x > pt2.x-50  && pt1.x < pt2.x  && pt1.y > pt2.y - 50 && pt1.y < pt2.y) {
+                return i;
+            }
+        }
+    }else return  0;
+    return 0;
 }
 
 Ship* MakeAShip(const int& tp) {
@@ -211,26 +224,44 @@ void gameBoard::dropShip(const CPoint& pt) {
     } // else: may have to do something    
 }
 
+bool gameBoard::ifAllShipPlaced() {
+    if (currentlySelShip != -1) return false;
+    for (auto& ship : ships) {
+        if (ship->GetLeft() >= baseX + 10 * 60) return false;
+    }
+    return true;
+}
+
+void gameBoard::gettingStart() {
+    int direction = ships.at(currentlySelShip)->GetFrameIndexOfBitmap();
+    
+}
+
 void gameBoard::init() {
     currentlySelShip = -1;
-    baseY = baseX = 0;
+    baseY = baseX = 150;
     for (int i = 0; i < 10; ++i) {
         vector<BaseGrid*> curr(10);
         for (int j = 0; j < 10; ++j) {
             curr.at(j) = new EmptyGrid;
             curr.at(j)->LoadBitmapA("Resources/emptyGrid.bmp");
-            curr.at(j)->SetTopLeft(baseX, j * 60);
+            curr.at(j)->SetTopLeft(baseX, j * 60 + baseY);
         }
         grids.push_back(curr);
         baseX += 60;
     }
     for (int i = 2; i < 6; ++i) {
         ships.emplace_back(MakeAShip(i));
-        ships.back()->SetTopLeft(baseX, (i - 1) * 60);
+        ships.back()->SetTopLeft(baseX, (i - 2) * 60 + baseY);
     }
     ships.emplace_back(MakeAShip((9)));
-    ships.back()->SetTopLeft(baseX, baseY);
-    baseX = baseY = 0;
+    ships.back()->SetTopLeft(baseX, baseY + 240);
+    baseY = baseX = 150;
+
+    btnStart.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+    btnStart.SetTopLeft(SIZE_X - 150 - btnStart.GetWidth(), SIZE_Y - 150 - btnStart.GetHeight());
+    btnStart.setText("Game Start!");
+
 }
 
 void gameBoard::show() {
@@ -242,6 +273,8 @@ void gameBoard::show() {
     for (auto& i : ships) {
         i->ShowBitmap();
     }
+    if (ifAllShipPlaced())
+        btnStart.showBtn();
 }
 
 void gameBoard::rotateShip() {
