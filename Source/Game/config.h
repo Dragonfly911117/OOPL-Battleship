@@ -22,9 +22,9 @@
 //! 啟動音效介面
 #define ENABLE_AUDIO		 true
 //! 是否關閉 toolbar
-#define ENABLE_TOOLBAR       true
+#define ENABLE_TOOLBAR       false
 //! 是否關閉 menu
-#define ENABLE_MENU          true
+#define ENABLE_MENU          false
 //! 是否關閉 statusbar
 #define ENABLE_STATUSBAR     false
 //! 全螢幕用，請設定成目前視窗的解析度 (width)。

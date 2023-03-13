@@ -27,7 +27,7 @@
 #endif // _MSC_VER >= 1000
 
 class CGameDoc : public CDocument {
-protected: // create from serialization only
+protected:// create from serialization only
     CGameDoc();
     DECLARE_DYNCREATE(CGameDoc)
 

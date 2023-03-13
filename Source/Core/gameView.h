@@ -27,7 +27,7 @@
 #endif // _MSC_VER >= 1000
 
 class CGameView : public CView {
-protected: // create from serialization only
+protected:// create from serialization only
     CGameView();
     DECLARE_DYNCREATE(CGameView)
 
@@ -41,7 +41,7 @@ public:
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CGameView)
 public:
-    void OnDraw(CDC* pDC) override; // overridden to draw this view
+    void OnDraw(CDC* pDC) override;// overridden to draw this view
     BOOL PreCreateWindow(CREATESTRUCT& cs) override;
     void OnInitialUpdate() override;
 

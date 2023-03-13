@@ -27,7 +27,7 @@
 #endif // _MSC_VER >= 1000
 
 class CMainFrame : public CFrameWnd {
-protected: // create from serialization only
+protected:// create from serialization only
     CMainFrame();
     DECLARE_DYNCREATE(CMainFrame)
 
@@ -60,7 +60,7 @@ public:
     void Dump(CDumpContext& dc) const override;
 #endif
 
-protected: // control bar embedded members
+protected:// control bar embedded members
     CStatusBar m_wndStatusBar;
     CToolBar m_wndToolBar;
 

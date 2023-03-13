@@ -14,189 +14,177 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
-myBtn::myBtn() {
-    this->text = "";
-}
 
-void myBtn::setText(const string& str) {
-    this->text = str;
-}
+CGameStateRun::CGameStateRun(CGame* g)
+    : CGameState(g) {}
 
-void myBtn::pressed() {
-    this->SetFrameIndexOfBitmap(1);
-}
+CGameStateRun::~CGameStateRun() {}
 
-void myBtn::released() {
-    this->SetFrameIndexOfBitmap(0);
-}
+void CGameStateRun::OnBeginState() {}
 
-void myBtn::showBtn() {
-    this->ShowBitmap();
-    CDC* pDC = CDDraw::GetBackCDC();
-
-    pDC->SetBkMode(TRANSPARENT);
-    pDC->SetTextColor(RGB(255, 255, 255));
-
-    /* 變更字體 */
-    CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(255, 255, 255), 40);
-    CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->text);
-    CDDraw::ReleaseBackCDC();
-
-}
-
-Ship* game_framework::makeAShip(const int& sz) {
-    Ship* ship =  new Ship;
-    ship->type_ = sz;
-    ship->health_ = sz % 6;
-    ship->picked_ = false;
-    return ship;
-}
-
-void gameBoard::init() {
-    int baseX = 0;
-    for (int i = 0; i < 10; ++i) {
-        vector<BaseGrid*> curr(10);
-        for(int j  = 0; j < 10; ++j) {
-            curr.at(j) = new EmptyGrid;
-            curr.at(j)->SetTopLeft(baseX, j * 10);
-        }
-        baseX += 10;
-    }
-    for (int i = 2; i < 6; ++i) {
-        ships.emplace_back(makeAShip(i));
-        ships.back()->SetTopLeft(baseX, i * 10);
-    }
-    ships.emplace_back(makeAShip((9)));
-    ships.back()->SetTopLeft(baseX,  60);
-}
-
-CGameStateRun::CGameStateRun(CGame* g) : CGameState(g) {
-
-}
-
-CGameStateRun::~CGameStateRun() {
-
-}
-
-void CGameStateRun::OnBeginState() {
-
-}
-
-void CGameStateRun::OnMove() {
-
-}
+void CGameStateRun::OnMove() {}
 
 void CGameStateRun::OnInit() {
     cursor.LoadBitmapA("Resources/cursor.bmp");
-
     menu_bkg_.LoadBitmapA("Resources/menuBg.bmp");
     menu_bkg_.SetTopLeft(0, 0);
     for (int i = 0; i < 4; ++i) {
-        menu_btns[i].LoadBitmapByString({"Resources/menuBtn.bmp", "Resources/menuBtnBeingPressed.bmp"});
-        menu_btns[i].SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
+        menu_btns_[i].LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+        menu_btns_[i].SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
     }
-    menu_btns[0].setText("Single Player");
-    menu_btns[1].setText("Multiple Players");
-    menu_btns[2].setText("Options");
-    menu_btns[3].setText("Exit");
+    menu_btns_[0].setText("Single Player");
+    menu_btns_[1].setText("Multiple Players");
+    menu_btns_[2].setText("Options");
+    menu_btns_[3].setText("Exit");
+
+    btn_start_.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+    btn_start_.SetTopLeft(SIZE_X - 150 - btn_start_.GetWidth(), SIZE_Y - 150 - btn_start_.GetHeight());
+    btn_start_.setText("Game Start!");
+    player1_board_.init();
 
 }
 
-void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-}
+void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { if (int_phase_ == placement_phase) { if (player1_board_.getCurrSel() != -1) { if (nChar == 52 || nChar == 82) { player1_board_.rotateShip(); } } } }
 
-void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    if (nChar == 27) exit(27);
-}
+void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) { if (nChar == 27) exit(27); }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
     cursor.SetTopLeft(point.x - 5, point.y - 5);
+    int x = (point.x - (SIZE_X - 150 - 60 * 10)) / 60;
+    int y = (point.y - 150) / 60;
     switch (int_phase_) {
-    case menu:
-        for (auto& i : menu_btns) {
-            if (CMovingBitmap::IsOverlap(cursor, i)) {
-                i.pressed();
-                break;
+        case menu:
+            for (auto& i: menu_btns_) {
+                if (CMovingBitmap::IsOverlap(cursor, i)) {
+                    i.pressed();
+                    break;
+                }
             }
-        }
-
-    default:
-        break;
+        case placement_phase:
+            if (player1_board_.getCurrSel() == -1) {
+                const auto ships = player1_board_.getShip();
+                for (int i = 0; i < 5; ++i) {
+                    if (myIsOverlap(point, ships.at(i)) != 0) {
+                        player1_board_.pickUpShip(i);
+                        break;
+                    }
+                }
+            } else {
+                const auto ships = player1_board_.getShip();
+                player1_board_.dropShip(point);
+            }
+            if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor, btn_start_)) { btn_start_.pressed(); } }
+            break;
+        case in_game:
+            if (x < 0 || x > 9) break;
+            if (y < 0 || y > 9) break;
+            if (player2_board_.beingHit(x, y))
+                // to next player
+                break;
+        default:
+            break;
     }
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
     cursor.SetTopLeft(point.x - 5, point.y - 5);
     switch (int_phase_) {
-    case menu:
-        for (int i = 0; i < 4; ++i){
-            if (CMovingBitmap::IsOverlap(cursor, menu_btns[i])) {
-                menu_btns[i].released();
-                switch (i) {
-                case  0 :
+        case menu:
+            for (int i = 0; i < 4; ++i) {
+                if (CMovingBitmap::IsOverlap(cursor, menu_btns_[i])) {
+                    menu_btns_[i].released();
+                    // Remember to remove these two lines
                     startSingleGame();
-                    break;
-                case 1:
-                    start_mutiple_game();
-                    break;
-                case 2:
-                    gotoSettings();
-                    break;
-                case 3:
-                    gotoExit();
-                    break;
-                    default:
-                        break;
+                    return;
+
+                    switch (i) {
+                        case 0:
+                            startSingleGame();
+                            break;
+                        case 1:
+                            start_mutiple_game();
+                            break;
+                        case 2:
+                            gotoSettings();
+                            break;
+                        case 3:
+                            gotoExit();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            else if (menu_btns[i].GetFrameIndexOfBitmap() == 1)
-                menu_btns[i].released();
-        }
-
-    default:
-        break;
+        case placement_phase:
+            if (player1_board_.ifAllShipPlaced()) {
+                if (CMovingBitmap::IsOverlap(cursor, btn_start_)) {
+                    btn_start_.released();
+                    gameStart();
+                    // start game
+                }
+            }
+        default:
+            break;
     }
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
-    // cursor.SetTopLeft(point.x - 5, point.y - 5);
+    cursor.SetTopLeft(point.x - 5, point.y - 5);
+    switch (int_phase_) {
+        case menu: // copilot suggested code, add dis function in the future
+            // for (auto& i : menu_btns) {
+            //     if (CMovingBitmap::IsOverlap(cursor, i)) {
+            //         i.hover();
+            //         break;
+            //     }
+            //     else if (i.GetFrameIndexOfBitmap() == 1)
+            //         i.released();
+            // }
+            break;
+        case placement_phase:
+            if (player1_board_.getCurrSel() != -1) { player1_board_.getShip().at(player1_board_.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25); }
+            break;
+
+        default:
+            break;
+    }
 }
 
-void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {
-}
+void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {}
 
-void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {
-}
+void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {}
 
 void CGameStateRun::OnShow() {
-
     switch (int_phase_) {
-    case menu:
-        menu_bkg_.ShowBitmap();
-        for (auto& i : menu_btns)
-            i.showBtn();
+        case menu:
+            menu_bkg_.ShowBitmap();
+            for (auto& i: menu_btns_) i.showBtn();
+            break;
+        case placement_phase:
+            player1_board_.show();
+            if (player1_board_.ifAllShipPlaced()) btn_start_.showBtn();
+        case in_game:
+            player1_board_.show();
+            player2_board_.show();
 
-        break;
-
-    default:
-        break;
+        default:
+            break;
     }
 
     // cursor.ShowBitmap(); // un-comment this to see where the cursor is 
 }
 
-void CGameStateRun::startSingleGame() {
-    int_phase_ = single_game;
+void CGameStateRun::startSingleGame() { int_phase_ = placement_phase; }
+
+void CGameStateRun::start_mutiple_game() { int_phase_ = multiply_players; }
+
+void CGameStateRun::gameStart() {
+    // copy player1_board_ for bot's usage, and start the game
+    // make sure the bot's player1_board_ is shown but not its ships
+    player2_board_.whatEasesMyPainCannotBeCalledSteal(player1_board_);
+    int_phase_ = in_game;
 }
 
-void CGameStateRun::start_mutiple_game() {
-    int_phase_ = match_making;
-}
+void CGameStateRun::gotoSettings() { int_phase_ = settings; }
 
-void CGameStateRun::gotoSettings() {
-    int_phase_ = settings;
-}
-
-void CGameStateRun::gotoExit() {
-    GotoGameState(GAME_STATE_OVER);
-}
+void CGameStateRun::gotoExit() { GotoGameState(GAME_STATE_OVER); }
