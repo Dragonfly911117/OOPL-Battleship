@@ -50,16 +50,16 @@ static char THIS_FILE[] = __FILE__;
 // CGameApp
 
 BEGIN_MESSAGE_MAP(CGameApp, CWinApp)
-        //{{AFX_MSG_MAP(CGameApp)
-        ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG_MAP
-        // Standard file based document commands
-        ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-        ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-        // Standard print setup command
-        ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
+                //{{AFX_MSG_MAP(CGameApp)
+                ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+                // NOTE - the ClassWizard will add and remove mapping macros here.
+                //    DO NOT EDIT what you see in these blocks of generated code!
+                //}}AFX_MSG_MAP
+                // Standard file based document commands
+                ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
+                ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+                // Standard print setup command
+                ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -105,17 +105,17 @@ BOOL CGameApp::InitInstance() {
     // such as the name of your company or organization.
     SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-    LoadStdProfileSettings(); // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();// Load standard INI file options (including MRU)
 
     // Register the application's document templates.  Document templates
     //  serve as the connection between documents, frame windows and views.
 
     CSingleDocTemplate* pDocTemplate;
     pDocTemplate = new CSingleDocTemplate(
-        IDR_MAINFRAME,
-        RUNTIME_CLASS(CGameDoc),
-        RUNTIME_CLASS(CMainFrame), // main SDI frame window
-        RUNTIME_CLASS(CGameView));
+            IDR_MAINFRAME,
+            RUNTIME_CLASS(CGameDoc),
+            RUNTIME_CLASS(CMainFrame),// main SDI frame window
+            RUNTIME_CLASS(CGameView));
     AddDocTemplate(pDocTemplate);
 
     // Parse command line for standard shell commands, DDE, file open
@@ -123,8 +123,7 @@ BOOL CGameApp::InitInstance() {
     ParseCommandLine(cmdInfo);
 
     // Dispatch commands specified on the command line
-    if (!ProcessShellCommand(cmdInfo))
-        return FALSE;
+    if (!ProcessShellCommand(cmdInfo)) return FALSE;
 
     // The one and only window has been initialized, so show and update it.
     m_pMainWnd->ShowWindow(SW_SHOW);
@@ -149,7 +148,7 @@ public:
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CAboutDlg)
 protected:
-    void DoDataExchange(CDataExchange* pDX) override; // DDX/DDV support
+    void DoDataExchange(CDataExchange* pDX) override;// DDX/DDV support
     //}}AFX_VIRTUAL
 
     // Implementation
@@ -160,7 +159,8 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() : CDialog(IDD) {
+CAboutDlg::CAboutDlg()
+    : CDialog(IDD) {
     //{{AFX_DATA_INIT(CAboutDlg)
     //}}AFX_DATA_INIT
 }
@@ -172,9 +172,9 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX) {
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-        //{{AFX_MSG_MAP(CAboutDlg)
-        ON_BN_CLICKED(IDC_README, OnReadme)
-        //}}AFX_MSG_MAP
+                //{{AFX_MSG_MAP(CAboutDlg)
+                ON_BN_CLICKED(IDC_README, OnReadme)
+                //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 // App command to run the dialog
@@ -193,7 +193,7 @@ void CGameApp::OnAppAbout() {
 
 BOOL CGameApp::OnIdle(LONG lCount) {
     // TODO: Add your specialized code here and/or call the base class
-    return game_framework::CGame::Instance()->OnIdle();
+    return CGame::Instance()->OnIdle();
     //return CWinApp::OnIdle(lCount);
 }
 

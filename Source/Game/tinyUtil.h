@@ -19,28 +19,25 @@ class BaseGrid : public CMovingBitmap {
 protected:
     int shipID = -1;
     bool placeable = true;
+    bool displayFlag = true;
+
 public:
-    void invertPlaceableState();
+    void shipDroppingHere(const int& id);
+    void shipPickingUpHere();
     bool ifPlaceable();
     CPoint getCoordinate();
     int getShipID();
     void setShipID(const int& id);
+    bool ifDisplay();
 };
-
-class Ship;
-class gameBoard;
-int myIsOverlap(const CPoint& pt1,  Ship* ship);
-Ship* MakeAShip(const int& tp);
-Ship* stealAShip(Ship* ship); // for test, not gonna be used in future
-
 
 class Ship : public BaseGrid {
     friend Ship* MakeAShip(const int& tp);
-    friend Ship* stealAShip( Ship* ship);
+    friend Ship* stealAShip(Ship* ship);
     friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
     int int_health_;
-    
+    bool displayFlag = true;
     void damaged();
     void sink();
 
@@ -55,8 +52,10 @@ public:
     void beingHit();
 };
 
-class EmptyGrid : public BaseGrid {
-};
+int myIsOverlap(const CPoint& pt1, Ship* ship);
+Ship* MakeAShip(const int& tp);
+Ship* stealAShip(Ship* ship);// for test, not gonna be used in future
+class EmptyGrid : public BaseGrid {};
 
 class gameBoard : public CMovingBitmap {
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
@@ -64,7 +63,6 @@ class gameBoard : public CMovingBitmap {
     vector<Ship*> ships;
     int currentlySelShip = -1;
     int baseX, baseY;
-    
 
 public:
     // shared methods & variables
@@ -79,5 +77,8 @@ public:
     void dropShip(const CPoint& pt);
     bool ifAllShipPlaced();
     void gettingStart();
-    void  whatEasesMyPainCannotBeCalledABargain(const gameBoard& copied);
+    void whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied);
+
+    // main-game-phase methods
+    bool beingHit(const int& x, const int& y);
 };

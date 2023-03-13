@@ -37,7 +37,9 @@
  *      2. Replace the demonstration of animation as a new bouncing ball.
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
+#pragma once
 #include "tinyUtil.h"
+
 namespace game_framework {
     /////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -49,7 +51,7 @@ namespace game_framework {
         // 0
         AUDIO_LAKE,
         // 1
-        AUDIO_NTUT // 2
+        AUDIO_NTUT// 2
     };
 
     /////////////////////////////////////////////////////////////////////////////
@@ -60,12 +62,12 @@ namespace game_framework {
     class CGameStateInit : public CGameState {
     public:
         CGameStateInit(CGame* g);
-        void OnInit() override; // 遊戲的初值及圖形設定
-        void OnBeginState() override; // 設定每次重玩所需的變數
-        void OnKeyUp(UINT, UINT, UINT) override; // 處理鍵盤Up的動作
-        void OnLButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
+        void OnInit() override;                                // 遊戲的初值及圖形設定
+        void OnBeginState() override;                          // 設定每次重玩所需的變數
+        void OnKeyUp(UINT, UINT, UINT) override;               // 處理鍵盤Up的動作
+        void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
     protected:
-        void OnShow() override; // 顯示這個狀態的遊戲畫面
+        void OnShow() override;// 顯示這個狀態的遊戲畫面
     private:
         CMovingBitmap startBg;
     };
@@ -87,15 +89,15 @@ namespace game_framework {
     public:
         CGameStateRun(CGame* g);
         ~CGameStateRun() override;
-        void OnBeginState() override; // 設定每次重玩所需的變數
-        void OnInit() override; // 遊戲的初值及圖形設定
+        void OnBeginState() override;// 設定每次重玩所需的變數
+        void OnInit() override;      // 遊戲的初值及圖形設定
         void OnKeyDown(UINT, UINT, UINT) override;
         void OnKeyUp(UINT, UINT, UINT) override;
-        void OnLButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
-        void OnLButtonUp(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
-        void OnMouseMove(UINT nFlags, CPoint point) override; // 處理滑鼠的動作 
-        void OnRButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
-        void OnRButtonUp(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
+        void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+        void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
+        void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+        void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 
         void startSingleGame();
         void start_mutiple_game();
@@ -104,8 +106,8 @@ namespace game_framework {
         void gotoExit();
 
     protected:
-        void OnMove() override; // 移動遊戲元素
-        void OnShow() override; // 顯示這個狀態的遊戲畫面
+        void OnMove() override;// 移動遊戲元素
+        void OnShow() override;// 顯示這個狀態的遊戲畫面
     private:
         // Some phases-shared variables.
         int int_phase_ = menu;
@@ -113,15 +115,13 @@ namespace game_framework {
 
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
-        myBtn menu_btns[4];
-        myBtn btnStart;
+        myBtn menu_btns_[4];
+        myBtn btn_start_;
 
         // Variables used ONLY by in-game
         gameBoard player1_board_;
         gameBoard player2_board_;
     };
-
-
 
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
@@ -131,13 +131,13 @@ namespace game_framework {
     class CGameStateOver : public CGameState {
     public:
         CGameStateOver(CGame* g);
-        void OnBeginState() override; // 設定每次重玩所需的變數
+        void OnBeginState() override;// 設定每次重玩所需的變數
         void OnInit() override;
-        
+
     protected:
-        void OnMove() override; // 移動遊戲元素
-        void OnShow() override; // 顯示這個狀態的遊戲畫面
+        void OnMove() override;// 移動遊戲元素
+        void OnShow() override;// 顯示這個狀態的遊戲畫面
     private:
-        int counter; // 倒數之計數器
+        int counter;// 倒數之計數器
     };
 }

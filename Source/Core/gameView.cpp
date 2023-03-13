@@ -51,25 +51,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CGameView, CView)
 
 BEGIN_MESSAGE_MAP(CGameView, CView)
-        //{{AFX_MSG_MAP(CGameView)
-        ON_WM_LBUTTONDOWN()
-        ON_WM_LBUTTONUP()
-        ON_WM_RBUTTONDOWN()
-        ON_WM_RBUTTONUP()
-        ON_WM_KILLFOCUS()
-        ON_COMMAND(ID_FILE_PAUSE, OnFilePause)
-        ON_UPDATE_COMMAND_UI(ID_FILE_PAUSE, OnUpdateFilePause)
-        ON_COMMAND(ID_FILE_NEW, OnFileNew)
-        ON_COMMAND(ID_BUTTON_PAUSE, OnButtonPause)
-        ON_WM_KEYDOWN()
-        ON_WM_KEYUP()
-        ON_WM_MOUSEMOVE()
-        ON_WM_SETFOCUS()
-        //}}AFX_MSG_MAP
-        // Standard printing commands
-        ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-        ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-        ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+                //{{AFX_MSG_MAP(CGameView)
+                ON_WM_LBUTTONDOWN()
+                ON_WM_LBUTTONUP()
+                ON_WM_RBUTTONDOWN()
+                ON_WM_RBUTTONUP()
+                ON_WM_KILLFOCUS()
+                ON_COMMAND(ID_FILE_PAUSE, OnFilePause)
+                ON_UPDATE_COMMAND_UI(ID_FILE_PAUSE, OnUpdateFilePause)
+                ON_COMMAND(ID_FILE_NEW, OnFileNew)
+                ON_COMMAND(ID_BUTTON_PAUSE, OnButtonPause)
+                ON_WM_KEYDOWN()
+                ON_WM_KEYUP()
+                ON_WM_MOUSEMOVE()
+                ON_WM_SETFOCUS()
+                //}}AFX_MSG_MAP
+                // Standard printing commands
+                ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
+                ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
+                ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -80,8 +80,7 @@ CGameView::CGameView() {
 
 }
 
-CGameView::~CGameView() {
-}
+CGameView::~CGameView() {}
 
 BOOL CGameView::PreCreateWindow(CREATESTRUCT& cs) {
     // TODO: Modify the Window class or styles here by modifying
@@ -101,17 +100,17 @@ void CGameView::OnDraw(CDC* pDC) {
     static bool first_ondraw = true;
     static bool second_ondraw = false;
     if (first_ondraw) {
-        first_ondraw = false; // The first ondraw does not show the Menu, etc.
-        second_ondraw = true; // So, it is skipped.
-        Invalidate(); // Trigger the second ondraw.
+        first_ondraw = false;// The first ondraw does not show the Menu, etc.
+        second_ondraw = true;// So, it is skipped.
+        Invalidate();        // Trigger the second ondraw.
         return;
     }
     if (second_ondraw) {
         // The second ondraw shows everything. Therefore,
-        second_ondraw = false; //   the initialization progress can be shown.
-        game_framework::CGame::Instance()->OnInitStates();
+        second_ondraw = false;//   the initialization progress can be shown.
+        CGame::Instance()->OnInitStates();
     }
-    game_framework::CGame::Instance()->OnDraw();
+    CGame::Instance()->OnDraw();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -134,15 +133,11 @@ void CGameView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/) {
 // CGameView diagnostics
 
 #ifdef _DEBUG
-void CGameView::AssertValid() const {
-    CView::AssertValid();
-}
+void CGameView::AssertValid() const { CView::AssertValid(); }
 
-void CGameView::Dump(CDumpContext& dc) const {
-    CView::Dump(dc);
-}
+void CGameView::Dump(CDumpContext& dc) const { CView::Dump(dc); }
 
-CGameDoc* CGameView::GetDocument() // non-debug version is inline
+CGameDoc* CGameView::GetDocument()// non-debug version is inline
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CGameDoc)));
     return static_cast<CGameDoc*>(m_pDocument);
@@ -155,32 +150,32 @@ CGameDoc* CGameView::GetDocument() // non-debug version is inline
 void CGameView::OnInitialUpdate() {
     CView::OnInitialUpdate();
     // TODO: Add your specialized code here and/or call the base class
-    game_framework::CGame::Instance()->OnInit();
+    CGame::Instance()->OnInit();
 }
 
 void CGameView::OnLButtonDown(UINT nFlags, CPoint point) {
     // TODO: Add your message handler code here and/or call default
     SetCapture();
-    game_framework::CGame::Instance()->OnLButtonDown(nFlags, point);
+    CGame::Instance()->OnLButtonDown(nFlags, point);
     CView::OnLButtonDown(nFlags, point);
 }
 
 void CGameView::OnLButtonUp(UINT nFlags, CPoint point) {
     // TODO: Add your message handler code here and/or call default
     ReleaseCapture();
-    game_framework::CGame::Instance()->OnLButtonUp(nFlags, point);
+    CGame::Instance()->OnLButtonUp(nFlags, point);
     CView::OnLButtonUp(nFlags, point);
 }
 
 void CGameView::OnRButtonDown(UINT nFlags, CPoint point) {
     // TODO: Add your message handler code here and/or call default
-    game_framework::CGame::Instance()->OnRButtonDown(nFlags, point);
+    CGame::Instance()->OnRButtonDown(nFlags, point);
     CView::OnRButtonDown(nFlags, point);
 }
 
 void CGameView::OnRButtonUp(UINT nFlags, CPoint point) {
     // TODO: Add your message handler code here and/or call default
-    game_framework::CGame::Instance()->OnRButtonUp(nFlags, point);
+    CGame::Instance()->OnRButtonUp(nFlags, point);
     CView::OnRButtonUp(nFlags, point);
 }
 
@@ -188,19 +183,19 @@ void CGameView::OnKillFocus(CWnd* pNewWnd) {
     CView::OnKillFocus(pNewWnd);
 
     // TODO: Add your message handler code here
-    game_framework::CGame::Instance()->OnKillFocus();
+    CGame::Instance()->OnKillFocus();
     Invalidate();
 }
 
 void CGameView::OnFilePause() {
     // TODO: Add your command handler code here
-    game_framework::CGame::Instance()->OnFilePause();
+    CGame::Instance()->OnFilePause();
     InvalidateRect(nullptr);
 }
 
 void CGameView::OnUpdateFilePause(CCmdUI* pCmdUI) {
     // TODO: Add your command update UI handler code here
-    pCmdUI->SetCheck(!game_framework::CGame::Instance()->IsRunning());
+    pCmdUI->SetCheck(!CGame::Instance()->IsRunning());
 }
 
 void CGameView::OnFileNew() {
@@ -215,25 +210,25 @@ void CGameView::OnButtonPause() {
 
 void CGameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
     // TODO: Add your message handler code here and/or call default
-    game_framework::CGame::Instance()->OnKeyDown(nChar, nRepCnt, nFlags);
+    CGame::Instance()->OnKeyDown(nChar, nRepCnt, nFlags);
     CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
     // TODO: Add your message handler code here and/or call default
-    game_framework::CGame::Instance()->OnKeyUp(nChar, nRepCnt, nFlags);
+    CGame::Instance()->OnKeyUp(nChar, nRepCnt, nFlags);
     CView::OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CGameView::OnMouseMove(UINT nFlags, CPoint point) {
     // TODO: Add your message handler code here and/or call default
-    game_framework::CGame::Instance()->OnMouseMove(nFlags, point);
+    CGame::Instance()->OnMouseMove(nFlags, point);
     CView::OnMouseMove(nFlags, point);
 }
 
 void CGameView::OnSetFocus(CWnd* pOldWnd) {
 
     // TODO: Add your message handler code here
-    game_framework::CGame::Instance()->OnSetFocus();
+    CGame::Instance()->OnSetFocus();
     CView::OnSetFocus(pOldWnd);
 }
