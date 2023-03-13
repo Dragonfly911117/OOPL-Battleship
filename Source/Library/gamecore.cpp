@@ -103,7 +103,7 @@ namespace game_framework {
         //
         // 啟動亂數
         //
-        srand(static_cast<unsigned>(time(NULL)));
+        srand(static_cast<unsigned>(time(nullptr)));
         //
         // 開啟DirectX繪圖介面
         //
@@ -546,7 +546,7 @@ namespace game_framework {
 
     void CDDraw::LoadBitmap(int i, char* filename) {
 
-        auto hbitmap = static_cast<HBITMAP>(LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+        auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
         GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
         CBitmap* bmp = CBitmap::FromHandle(hbitmap);// will be deleted automatically
         CDC mDC;
@@ -651,8 +651,7 @@ namespace game_framework {
 
     int CDDraw::RegisterBitmap(int IDB_BITMAP, COLORREF ColorKey) {
         unsigned i;
-        for (i = 0; i < lpDDS.size(); i++)
-            if (BitmapID[i] == IDB_BITMAP) return i;
+        for (i = 0; i < lpDDS.size(); i++) if (BitmapID[i] == IDB_BITMAP) return i;
         //
         // Enlarge the size of vectors
         //
@@ -668,8 +667,7 @@ namespace game_framework {
 
     int CDDraw::RegisterBitmap(char* filename, COLORREF ColorKey) {
         unsigned i;
-        for (i = 0; i < lpDDS.size(); i++)
-            if (BitmapName[i].compare(filename) == 0) return i;
+        for (i = 0; i < lpDDS.size(); i++) if (BitmapName[i].compare(filename) == 0) return i;
         //
         // Enlarge the size of vectors
         //
@@ -833,7 +831,7 @@ namespace game_framework {
 
     void CGameState::ShowInitProgress(int percent, string message) {
         if (!SHOW_LOAD_PROGRESS) return;
-        const int bar_width = SIZE_X * 2 / 3; 
+        const int bar_width = SIZE_X * 2 / 3;
         const int bar_height = SIZE_Y / 20;
         const int x1 = (SIZE_X - bar_width) / 2;
         const int x2 = x1 + bar_width;
