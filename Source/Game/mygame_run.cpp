@@ -79,6 +79,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
         case in_game:
             if (y < 0 || y > 9) break;
             if ((x2 < 0 || x2 > 9 && is_player1_turn_) && (x1 < 0 || x1 > 9 && !is_player1_turn_)) break;
+        
             is_player1_turn_ ? player1Turn(x2, y) : player2Turn(x1, y);
             break;
         default:
@@ -179,13 +180,15 @@ void CGameStateRun::startSingleGame() { int_phase_ = placement_phase; }
 void CGameStateRun::start_mutiple_game() { int_phase_ = multiply_players; }
 
 void CGameStateRun::gameStart() {
-    // copy player1_board_ for bot's usage, and start the game
-    // make sure the bot's player1_board_ is shown but not its ships
-    player2_board_.whatEasesMyPainCannotBeCalledSteal(player1_board_);
+    // copy player1_board_ for bot's usage, and start the game Done!
+    // make sure the bot's player1_board_ is shown but not its ships  Done!
+    // player2_board_.whatEasesMyPainCannotBeCalledSteal(player1_board_); 
+    player2_board_ = copyCatABoard(player1_board_);
     int_phase_ = in_game;
 }
 
 void CGameStateRun::player1Turn(const int& x, const int& y) {
+    if (x < 0 || x > 9 || y < 0 || y > 9) return;
     if (player2_board_.beingHit(x, y)) {
         if (player2_board_.ifAllShipSunk()) int_phase_ = we_have_a_winner;
         else is_player1_turn_ = false;
@@ -193,6 +196,7 @@ void CGameStateRun::player1Turn(const int& x, const int& y) {
 }
 
 void CGameStateRun::player2Turn(const int& x, const int& y) {
+    if (x < 0 || x > 9 || y < 0 || y > 9) return;
     if (player1_board_.beingHit(x, y)) {
         if (player1_board_.ifAllShipSunk()) int_phase_ = we_have_a_winner;
         else is_player1_turn_ = true;

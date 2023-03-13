@@ -141,12 +141,33 @@ Ship* MakeAShip(const int& tp) {
     return ship;
 }
 
-Ship* stealAShip(Ship* ship) {
+Ship* copyCatAShip(Ship* ship) {
     Ship* newShip = MakeAShip(ship->int_type_);
     newShip->shipID = ship->shipID;
     newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
     newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());
     return newShip;
+}
+
+gameBoard copyCatABoard(const gameBoard& copied) {
+    gameBoard newBoard;
+    newBoard.base_x_ = copied.base_x_;
+    newBoard.base_y_ = copied.base_y_;
+    newBoard.is_enemy_ = true;
+    vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
+    for (int i = 0 ; i < 10; ++i) {
+    vector<BaseGrid*> curr;
+        for (int j = 0; j < 10; ++j) {
+            EmptyGrid* newGrid = new EmptyGrid;
+            newGrid->LoadBitmapByString(fileName);
+            newGrid->setShipID(copied.grids_.at(i).at(j)->getShipID());
+            newGrid->SetTopLeft( copied.grids_.at(i).at(j)->GetLeft()  +1020 , copied.grids_.at(i).at(j)->GetTop());
+            curr.push_back(newGrid);
+        }
+        newBoard.grids_.push_back(curr);
+    }
+    for (auto& ship : copied.ships_) { newBoard.ships_.push_back(copyCatAShip(ship)); }
+    return newBoard;
 }
 
 int gameBoard::getCurrSel() const { return currently_sel_ship_; }
@@ -181,7 +202,7 @@ void gameBoard::pickUpShip(const int& sel) {
 void gameBoard::dropShip(const CPoint& pt) {
     const int x = (pt.x - base_x_) / 60;
     const int y = (pt.y - base_y_) / 60;
-    if (x > 9 || y > 9) return;
+    if (x < 0 || x > 9 || y < 0 ||y > 9) return;
     int direction = ships_.at(currently_sel_ship_)->GetFrameIndexOfBitmap();
     bool flag = grids_.at(x).at(y)->ifPlaceable();
     for (int i = 1; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
@@ -292,13 +313,12 @@ void gameBoard::init() {
     ships_.emplace_back(MakeAShip((9)));
     ships_.back()->SetTopLeft(base_x_, base_y_ + 240);
     base_y_ = base_x_ = 150;
-
 }
 
 void gameBoard::show() {
-    if (currently_sel_ship_ == -1) for (auto& i: ships_) { i->ShowBitmap(); }
+    if (currently_sel_ship_ == -1 && ! is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
     for (auto& i: grids_) { for (auto& j: i) { if (j->ifDisplay()) j->ShowBitmap(); } }
-    if (currently_sel_ship_ != -1) for (auto& i: ships_) { i->ShowBitmap(); }
+    if (currently_sel_ship_ != -1 && !is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
 }
 
 void gameBoard::rotateShip() {
