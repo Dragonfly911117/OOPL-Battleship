@@ -44,16 +44,19 @@ void CGameStateRun::OnInit() {
     menu_btns[1].setText("Multiple Players");
     menu_btns[2].setText("Options");
     menu_btns[3].setText("Exit");
-
-    board.init();
+    
+    btnStart.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+    btnStart.SetTopLeft(SIZE_X - 150 - btnStart.GetWidth(), SIZE_Y - 150 - btnStart.GetHeight());
+    btnStart.setText("Game Start!");
+    player1_board_.init();
 
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-    if (int_phase_ == single_game) {
-        if (board.getCurrSel() != -1) {
+    if (int_phase_ == placement_phase) {
+        if (player1_board_.getCurrSel() != -1) {
             if (nChar == 52 || nChar == 82) {
-                 board.rotateShip();
+                 player1_board_.rotateShip();
             }
         }
     }
@@ -73,23 +76,23 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
                 break;
             }
         }
-    case single_game:
-        if (board.getCurrSel() == -1) {
-            const auto ships = board.getShip();
+    case placement_phase:
+        if (player1_board_.getCurrSel() == -1) {
+            const auto ships = player1_board_.getShip();
             for (int i = 0; i < 5; ++i) {
                 if (myIsOverlap(point, ships.at(i))) {
-                    board.pickUpShip(i);
+                    player1_board_.pickUpShip(i);
                     break;
                 }
             }
         }
         else {
-            const auto ships = board.getShip();
-            board.dropShip(point);
+            const auto ships = player1_board_.getShip();
+            player1_board_.dropShip(point);
         }
-        if (board.ifAllShipPlaced()) {
-            if (CMovingBitmap::IsOverlap(cursor, board.btnStart )) {
-                board.btnStart.pressed();
+        if (player1_board_.ifAllShipPlaced()) {
+            if (CMovingBitmap::IsOverlap(cursor, btnStart )) {
+                btnStart.pressed();
             }
         }
         break;
@@ -127,10 +130,11 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
                 }
             }
         }
-    case single_game:
-        if (board.ifAllShipPlaced()) {
-            if (CMovingBitmap::IsOverlap(cursor, board.btnStart)) {
-                board.btnStart.released();
+    case placement_phase:
+        if (player1_board_.ifAllShipPlaced()) {
+            if (CMovingBitmap::IsOverlap(cursor, btnStart)) {
+                btnStart.released();
+                gameStart();
                 // start game
             }
         }
@@ -152,11 +156,12 @@ switch (int_phase_) {
         //         i.released();
         // }
         break;
-    case single_game:
-        if (board.getCurrSel() != -1) {
-            board.getShip().at(board.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25);
+    case placement_phase:
+        if (player1_board_.getCurrSel() != -1) {
+            player1_board_.getShip().at(player1_board_.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25);
         }
         break;
+
     default:
         break;
     }
@@ -169,15 +174,20 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnShow() {
-
     switch (int_phase_) {
     case menu:
         menu_bkg_.ShowBitmap();
         for (auto& i : menu_btns)
             i.showBtn();
         break;
-    case single_game:
-        board.show();
+    case placement_phase:
+        player1_board_.show();
+        if (player1_board_.ifAllShipPlaced())
+            btnStart.showBtn();
+   case in_game:
+       player1_board_.show();
+        player2_board_.show();
+        
     default:
         break;
     }
@@ -186,11 +196,18 @@ void CGameStateRun::OnShow() {
 }
 
 void CGameStateRun::startSingleGame() {
-    int_phase_ = single_game;
+    int_phase_ = placement_phase;
 }
 
 void CGameStateRun::start_mutiple_game() {
-    int_phase_ = match_making;
+    int_phase_ = multiply_players;
+}
+
+void CGameStateRun::gameStart() {
+    // copy player1_board_ for bot's usage, and start the game
+    // make sure the bot's player1_board_ is shown but not its ships
+    player2_board_.whatEasesMyPainCannotBeCalledABargain(player1_board_);
+    int_phase_ = in_game;
 }
 
 void CGameStateRun::gotoSettings() {

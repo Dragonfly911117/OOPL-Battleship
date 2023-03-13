@@ -51,6 +51,18 @@ bool BaseGrid::ifPlaceable() {
     return placeable;
 }
 
+CPoint BaseGrid::getCoordinate() {
+    return CPoint(this->GetLeft(), this->GetTop());
+}
+
+int BaseGrid::getShipID() {
+    return shipID;
+}
+
+void BaseGrid::setShipID(const int& id) {
+    shipID = id;
+}
+
 int myIsOverlap(const CPoint& pt1, Ship* ship) {
     CPoint lt = CPoint(ship->GetLeft(), ship->GetTop());
     CPoint rb; // dont use GetHeight()  and GetWidth(). They are not the same as the size of the bitmap after rotations.
@@ -58,16 +70,17 @@ int myIsOverlap(const CPoint& pt1, Ship* ship) {
     rb = direction == 0
              ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
              : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
-    if  (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y) {
+    if (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y) {
         for (int i = 1; i <= ship->getSize(); ++i) {
             CPoint pt2 = direction == 0
-                             ? CPoint(lt.x + i * 60 - 10 , lt.y+50 )
-                             : CPoint(lt.x +50 , lt.y + i * 60 - 10);
-            if (pt1.x > pt2.x-50  && pt1.x < pt2.x  && pt1.y > pt2.y - 50 && pt1.y < pt2.y) {
+                             ? CPoint(lt.x + i * 60 - 10, lt.y + 50)
+                             : CPoint(lt.x + 50, lt.y + i * 60 - 10);
+            if (pt1.x > pt2.x - 50 && pt1.x < pt2.x && pt1.y > pt2.y - 50 && pt1.y < pt2.y) {
                 return i;
             }
         }
-    }else return  0;
+    }
+    else return 0;
     return 0;
 }
 
@@ -114,9 +127,18 @@ Ship* MakeAShip(const int& tp) {
     return ship;
 }
 
+Ship* stealAShip(Ship* ship) {
+    Ship* newShip = MakeAShip(ship->int_type_);
+    newShip->shipID = ship->shipID;
+    newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
+    newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());
+    return newShip;
+}
+
 int Ship::getSize() {
-    switch (int_type_) {
+
     // {2, 3, 4, 5, 9} ->{ 2, 3, 3, 4, 5}
+    switch (int_type_) {
     case 2:
         return 2;
     case 3:
@@ -233,8 +255,40 @@ bool gameBoard::ifAllShipPlaced() {
 }
 
 void gameBoard::gettingStart() {
-    int direction = ships.at(currentlySelShip)->GetFrameIndexOfBitmap();
-    
+    for (int i = 0; i < ships.size(); ++i) {
+        const int direction = ships.at(i)->GetFrameIndexOfBitmap();
+        const int x = (ships.at(i)->GetLeft() - baseX) / 60;
+        const int y = (ships.at(i)->GetTop() - baseY) / 60;
+        for (int j = 0; j < ships.at(i)->getSize(); ++j) {
+            if (direction == 1) {
+                grids.at(x + j).at(y)->setShipID(i);
+            }
+            else {
+                grids.at(x).at(y + j)->setShipID(i);
+            }
+
+        }
+    }
+}
+
+void gameBoard::whatEasesMyPainCannotBeCalledABargain(const gameBoard& copied) {
+    this->baseX = SIZE_X - 150 - 60 * 10;
+    this->baseY = 150;
+    this->currentlySelShip = -1;
+    for (int i = 0; i < 10; ++i) {
+        vector<BaseGrid*> curr(10);
+        for (int j = 0; j < 10; ++j) {
+            curr.at(j) = new EmptyGrid;
+            curr.at(j)->LoadBitmapA("Resources/emptyGrid.bmp");
+            curr.at(j)->SetTopLeft(baseX, j * 60 + baseY);
+            curr.at(j)->setShipID(copied.grids.at(i).at(j)->getShipID());
+        }
+        grids.push_back(curr);
+        baseX += 60;
+    }
+    for (int i = 0; i < copied.ships.size(); ++i) {
+        ships.emplace_back(stealAShip(copied.ships.at(i )));
+    }
 }
 
 void gameBoard::init() {
@@ -258,10 +312,6 @@ void gameBoard::init() {
     ships.back()->SetTopLeft(baseX, baseY + 240);
     baseY = baseX = 150;
 
-    btnStart.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
-    btnStart.SetTopLeft(SIZE_X - 150 - btnStart.GetWidth(), SIZE_Y - 150 - btnStart.GetHeight());
-    btnStart.setText("Game Start!");
-
 }
 
 void gameBoard::show() {
@@ -273,8 +323,7 @@ void gameBoard::show() {
     for (auto& i : ships) {
         i->ShowBitmap();
     }
-    if (ifAllShipPlaced())
-        btnStart.showBtn();
+
 }
 
 void gameBoard::rotateShip() {

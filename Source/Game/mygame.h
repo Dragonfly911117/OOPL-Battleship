@@ -77,13 +77,11 @@ namespace game_framework {
 
     enum CGameStateRunPhases {
         menu,
-        match_making,
-        single_game,
+        multiply_players,
+        placement_phase,
+        in_game,
         settings,
-        in_game
     };
-
-    
 
     class CGameStateRun : public CGameState {
     public:
@@ -101,6 +99,7 @@ namespace game_framework {
 
         void startSingleGame();
         void start_mutiple_game();
+        void gameStart();
         void gotoSettings();
         void gotoExit();
 
@@ -115,11 +114,15 @@ namespace game_framework {
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
         myBtn menu_btns[4];
+        myBtn btnStart;
 
         // Variables used ONLY by in-game
-        gameBoard board;
+        gameBoard player1_board_;
+        gameBoard player2_board_;
     };
-    
+
+
+
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
     // 每個Member function的Implementation都要弄懂
@@ -130,7 +133,7 @@ namespace game_framework {
         CGameStateOver(CGame* g);
         void OnBeginState() override; // 設定每次重玩所需的變數
         void OnInit() override;
-
+        
     protected:
         void OnMove() override; // 移動遊戲元素
         void OnShow() override; // 顯示這個狀態的遊戲畫面
