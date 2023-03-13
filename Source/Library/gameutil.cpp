@@ -79,7 +79,7 @@ namespace game_framework {
         \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
     */
     void CMovingBitmap::LoadBitmap(char* filepath, COLORREF color) {
-        auto hbitmap = static_cast<HBITMAP>(LoadImage(NULL, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+        auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 
         if (hbitmap == nullptr) {
             char error_msg[300];

@@ -82,6 +82,7 @@ namespace game_framework {
         multiply_players,
         placement_phase,
         in_game,
+        we_have_a_winner,
         settings,
     };
 
@@ -112,6 +113,8 @@ namespace game_framework {
         // Some phases-shared variables.
         int int_phase_ = menu;
         CMovingBitmap cursor;
+        gameBoard player1_board_;
+        gameBoard player2_board_;
 
         // Variables used ONLY by menu
         CMovingBitmap menu_bkg_;
@@ -119,14 +122,17 @@ namespace game_framework {
         myBtn btn_start_;
 
         // Variables used ONLY by in-game
-        gameBoard player1_board_;
-        gameBoard player2_board_;
+        bool is_player1_turn_ = true;
+        void player1Turn(const int& x, const int& y);
+        void player2Turn(const int& x, const int& y);
     };
 
     /////////////////////////////////////////////////////////////////////////////
     // 這個class為遊戲的結束狀態(Game Over)
     // 每個Member function的Implementation都要弄懂
     /////////////////////////////////////////////////////////////////////////////
+
+    
 
     class CGameStateOver : public CGameState {
     public:

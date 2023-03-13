@@ -50,7 +50,8 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) { if (nChar =
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
     cursor.SetTopLeft(point.x - 5, point.y - 5);
-    int x = (point.x - (SIZE_X - 150 - 60 * 10)) / 60;
+    int x1 = (point.x - 150) / 60;
+    int x2 = (point.x - (SIZE_X - 150 - 60 * 10)) / 60;
     int y = (point.y - 150) / 60;
     switch (int_phase_) {
         case menu:
@@ -76,11 +77,10 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
             if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor, btn_start_)) { btn_start_.pressed(); } }
             break;
         case in_game:
-            if (x < 0 || x > 9) break;
             if (y < 0 || y > 9) break;
-            if (player2_board_.beingHit(x, y))
-                // to next player
-                break;
+            if ((x2 < 0 || x2 > 9 && is_player1_turn_) && (x1 < 0 || x1 > 9 && !is_player1_turn_)) break;
+            is_player1_turn_ ? player1Turn(x2, y) : player2Turn(x1, y);
+            break;
         default:
             break;
     }
@@ -93,6 +93,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
             for (int i = 0; i < 4; ++i) {
                 if (CMovingBitmap::IsOverlap(cursor, menu_btns_[i])) {
                     menu_btns_[i].released();
+
                     // Remember to remove these two lines
                     startSingleGame();
                     return;
@@ -166,7 +167,6 @@ void CGameStateRun::OnShow() {
         case in_game:
             player1_board_.show();
             player2_board_.show();
-
         default:
             break;
     }
@@ -183,6 +183,20 @@ void CGameStateRun::gameStart() {
     // make sure the bot's player1_board_ is shown but not its ships
     player2_board_.whatEasesMyPainCannotBeCalledSteal(player1_board_);
     int_phase_ = in_game;
+}
+
+void CGameStateRun::player1Turn(const int& x, const int& y) {
+    if (player2_board_.beingHit(x, y)) {
+        if (player2_board_.ifAllShipSunk()) int_phase_ = we_have_a_winner;
+        else is_player1_turn_ = false;
+    }
+}
+
+void CGameStateRun::player2Turn(const int& x, const int& y) {
+    if (player1_board_.beingHit(x, y)) {
+        if (player1_board_.ifAllShipSunk()) int_phase_ = we_have_a_winner;
+        else is_player1_turn_ = true;
+    }
 }
 
 void CGameStateRun::gotoSettings() { int_phase_ = settings; }

@@ -36,6 +36,8 @@ class Ship : public BaseGrid {
     friend Ship* stealAShip(Ship* ship);
     friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
+
+private:
     int int_health_;
     bool displayFlag = true;
     void damaged();
@@ -44,6 +46,7 @@ class Ship : public BaseGrid {
 public:
     // shared methods & variables
     int getSize();
+    int getHealth() const;
 
     // placement phase
     void rotate();
@@ -59,10 +62,11 @@ class EmptyGrid : public BaseGrid {};
 
 class gameBoard : public CMovingBitmap {
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
-    vector<vector<BaseGrid*>> grids;
-    vector<Ship*> ships;
-    int currentlySelShip = -1;
-    int baseX, baseY;
+    vector<vector<BaseGrid*>> grids_;
+    vector<Ship*> ships_;
+    int currently_sel_ship_ = -1;
+    int base_x_ = 0;
+    int base_y_ = 0;
 
 public:
     // shared methods & variables
@@ -71,14 +75,15 @@ public:
 
     // deployment-phase methods
     void init();
-    int getCurrSel();
+    int getCurrSel() const;
     void pickUpShip(const int& sel);
     void rotateShip();
     void dropShip(const CPoint& pt);
-    bool ifAllShipPlaced();
+    bool ifAllShipPlaced() const;
     void gettingStart();
     void whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied);
 
     // main-game-phase methods
     bool beingHit(const int& x, const int& y);
+    bool ifAllShipSunk() const;
 };
