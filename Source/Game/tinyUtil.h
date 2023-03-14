@@ -63,11 +63,12 @@ class gameBoard : public CMovingBitmap {
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
     vector<vector<BaseGrid*>> grids_;
     vector<Ship*> ships_;
+    vector<BaseGrid*> ship_hit_; 
     int currently_sel_ship_ = -1;
     int base_x_ = 0;
     int base_y_ = 0;
     bool is_enemy_ = false;
-
+    
 public:
     // shared methods & variables
     vector<Ship*> getShip();

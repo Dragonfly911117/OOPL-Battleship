@@ -71,7 +71,6 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
                     }
                 }
             } else {
-                const auto ships = player1_board_.getShip();
                 player1_board_.dropShip(point);
             }
             if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor, btn_start_)) { btn_start_.pressed(); } }
