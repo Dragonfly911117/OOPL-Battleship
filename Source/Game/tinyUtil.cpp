@@ -155,18 +155,18 @@ gameBoard copyCatABoard(const gameBoard& copied) {
     newBoard.base_y_ = copied.base_y_;
     newBoard.is_enemy_ = true;
     vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
-    for (int i = 0 ; i < 10; ++i) {
-    vector<BaseGrid*> curr;
+    for (int i = 0; i < 10; ++i) {
+        vector<BaseGrid*> curr;
         for (int j = 0; j < 10; ++j) {
-            EmptyGrid* newGrid = new EmptyGrid;
+            auto newGrid = new EmptyGrid;
             newGrid->LoadBitmapByString(fileName);
             newGrid->setShipID(copied.grids_.at(i).at(j)->getShipID());
-            newGrid->SetTopLeft( copied.grids_.at(i).at(j)->GetLeft()  +1020 , copied.grids_.at(i).at(j)->GetTop());
+            newGrid->SetTopLeft(copied.grids_.at(i).at(j)->GetLeft() + 1020, copied.grids_.at(i).at(j)->GetTop());
             curr.push_back(newGrid);
         }
         newBoard.grids_.push_back(curr);
     }
-    for (auto& ship : copied.ships_) { newBoard.ships_.push_back(copyCatAShip(ship)); }
+    for (auto& ship: copied.ships_) { newBoard.ships_.push_back(copyCatAShip(ship)); }
     return newBoard;
 }
 
@@ -202,7 +202,7 @@ void gameBoard::pickUpShip(const int& sel) {
 void gameBoard::dropShip(const CPoint& pt) {
     const int x = (pt.x - base_x_) / 60;
     const int y = (pt.y - base_y_) / 60;
-    if (x < 0 || x > 9 || y < 0 ||y > 9) return;
+    if (x < 0 || x > 9 || y < 0 || y > 9) return;
     int direction = ships_.at(currently_sel_ship_)->GetFrameIndexOfBitmap();
     bool flag = grids_.at(x).at(y)->ifPlaceable();
     for (int i = 1; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
@@ -268,8 +268,6 @@ void gameBoard::gettingStart() {
 }
 
 void gameBoard::whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied) {
-    // i'm too lazy to write a copy constructor, so player1's board is stolen by player2
-    // TODO write a copy constructor
     this->base_x_ = SIZE_X - 150 - 60 * 10;
     this->base_y_ = 150;
     this->currently_sel_ship_ = -1;
@@ -283,7 +281,13 @@ void gameBoard::whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied) {
 bool gameBoard::beingHit(const int& x, const int& y) {
     if (grids_.at(x).at(y)->GetFrameIndexOfBitmap() == grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1) return false;
     grids_.at(x).at(y)->SetFrameIndexOfBitmap(grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1);
-    if (grids_.at(x).at(y)->getShipID() != -1) { ships_.at(grids_.at(x).at(y)->getShipID())->beingHit(); }
+    if (grids_.at(x).at(y)->getShipID() != -1) {
+        ships_.at(grids_.at(x).at(y)->getShipID())->beingHit();
+        auto temp = new BaseGrid;
+        temp->LoadBitmapA("Resources/shipHit.bmp");
+        temp->SetTopLeft(grids_.at(x).at(y)->GetLeft(), grids_.at(x).at(y)->GetTop());
+        ship_hit_.push_back(temp);
+    }
     return true;
 }
 
@@ -316,9 +320,10 @@ void gameBoard::init() {
 }
 
 void gameBoard::show() {
-    if (currently_sel_ship_ == -1 && ! is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
+    if (! is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
     for (auto& i: grids_) { for (auto& j: i) { if (j->ifDisplay()) j->ShowBitmap(); } }
-    if (currently_sel_ship_ != -1 && !is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
+    if (currently_sel_ship_ != -1 && !is_enemy_) ships_.at(currently_sel_ship_)->ShowBitmap();
+    for (const auto& i: ship_hit_) i->ShowBitmap();
 }
 
 void gameBoard::rotateShip() {

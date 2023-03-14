@@ -38,8 +38,6 @@ class Ship : public BaseGrid {
     friend Ship* copyCatAShip(Ship* ship);
     friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
-
-private:
     int int_health_;
     void damaged();
     void sink();
@@ -63,6 +61,7 @@ class gameBoard : public CMovingBitmap {
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
     vector<vector<BaseGrid*>> grids_;
     vector<Ship*> ships_;
+    vector<BaseGrid*> ship_hit_;
     int currently_sel_ship_ = -1;
     int base_x_ = 0;
     int base_y_ = 0;
