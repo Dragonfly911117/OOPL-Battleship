@@ -70,15 +70,13 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
                         break;
                     }
                 }
-            } else {
-                player1_board_.dropShip(point);
-            }
+            } else { player1_board_.dropShip(point); }
             if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor, btn_start_)) { btn_start_.pressed(); } }
             break;
         case in_game:
             if (y < 0 || y > 9) break;
             if ((x2 < 0 || x2 > 9 && is_player1_turn_) && (x1 < 0 || x1 > 9 && !is_player1_turn_)) break;
-        
+
             is_player1_turn_ ? player1Turn(x2, y) : player2Turn(x1, y);
             break;
         default:

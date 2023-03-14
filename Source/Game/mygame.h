@@ -132,8 +132,6 @@ namespace game_framework {
     // 每個Member function的Implementation都要弄懂
     /////////////////////////////////////////////////////////////////////////////
 
-    
-
     class CGameStateOver : public CGameState {
     public:
         CGameStateOver(CGame* g);
