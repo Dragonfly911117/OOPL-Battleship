@@ -25,18 +25,12 @@ void CGameStateRun::OnBeginState() {}
 void CGameStateRun::OnMove() {}
 
 void CGameStateRun::OnInit() {
-    cursor.LoadBitmapA("Resources/cursor.bmp");
-    menu_bkg_.LoadBitmapA("Resources/menuBg.bmp");
-    menu_bkg_.SetTopLeft(0, 0);
-    for (int i = 0; i < 4; ++i) {
-        menu_btns_[i].LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
-        menu_btns_[i].SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
-    }
-    menu_btns_[0].setText("Single Player");
-    menu_btns_[1].setText("Multiple Players");
-    menu_btns_[2].setText("Options");
-    menu_btns_[3].setText("Exit");
 
+    cursor_.LoadBitmapA("Resources/cursor.bmp");
+    backgrounds_.LoadBitmapA("Resources/menuBg.bmp");
+    backgrounds_.SetTopLeft(0, 0);
+
+    buttonsInit(menu_button_, btn_start_);
     btn_start_.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
     btn_start_.SetTopLeft(SIZE_X - 150 - btn_start_.GetWidth(), SIZE_Y - 150 - btn_start_.GetHeight());
     btn_start_.setText("Game Start!");
@@ -49,14 +43,14 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) { if (int_p
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) { if (nChar == 27) exit(27); }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
-    cursor.SetTopLeft(point.x - 5, point.y - 5);
+    cursor_.SetTopLeft(point.x - 5, point.y - 5);
     int x1 = (point.x - 150) / 60;
     int x2 = (point.x - (SIZE_X - 150 - 60 * 10)) / 60;
     int y = (point.y - 150) / 60;
     switch (int_phase_) {
         case menu:
-            for (auto& i: menu_btns_) {
-                if (CMovingBitmap::IsOverlap(cursor, i)) {
+            for (auto& i: menu_button_) {
+                if (CMovingBitmap::IsOverlap(cursor_, i)) {
                     i.pressed();
                     break;
                 }
@@ -66,12 +60,13 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
                 const auto ships = player1_board_.getShip();
                 for (int i = 0; i < 5; ++i) {
                     if (myIsOverlap(point, ships.at(i)) != 0) {
+                        // if (CMovingBitmap::IsOverlap(cursor, *ships.at(i))){
                         player1_board_.pickUpShip(i);
                         break;
                     }
                 }
             } else { player1_board_.dropShip(point); }
-            if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor, btn_start_)) { btn_start_.pressed(); } }
+            if (player1_board_.ifAllShipPlaced()) { if (CMovingBitmap::IsOverlap(cursor_, btn_start_)) { btn_start_.pressed(); } }
             break;
         case in_game:
             if (y < 0 || y > 9) break;
@@ -85,12 +80,12 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
-    cursor.SetTopLeft(point.x - 5, point.y - 5);
+    cursor_.SetTopLeft(point.x - 5, point.y - 5);
     switch (int_phase_) {
         case menu:
             for (int i = 0; i < 4; ++i) {
-                if (CMovingBitmap::IsOverlap(cursor, menu_btns_[i])) {
-                    menu_btns_[i].released();
+                if (CMovingBitmap::IsOverlap(cursor_, menu_button_[i])) {
+                    menu_button_[i].released();
 
                     // Remember to remove these two lines
                     startSingleGame();
@@ -116,7 +111,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
             }
         case placement_phase:
             if (player1_board_.ifAllShipPlaced()) {
-                if (CMovingBitmap::IsOverlap(cursor, btn_start_)) {
+                if (CMovingBitmap::IsOverlap(cursor_, btn_start_)) {
                     btn_start_.released();
                     gameStart();
                     // start game
@@ -128,9 +123,9 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
-    cursor.SetTopLeft(point.x - 5, point.y - 5);
+    cursor_.SetTopLeft(point.x - 5, point.y - 5);
     switch (int_phase_) {
-        case menu: // copilot suggested code, add dis function in the future
+        case menu: // copilot suggested code, add this function in the future
             // for (auto& i : menu_btns) {
             //     if (CMovingBitmap::IsOverlap(cursor, i)) {
             //         i.hover();
@@ -156,8 +151,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point) {}
 void CGameStateRun::OnShow() {
     switch (int_phase_) {
         case menu:
-            menu_bkg_.ShowBitmap();
-            for (auto& i: menu_btns_) i.showBtn();
+            backgrounds_.ShowBitmap();
+            for (auto& i: menu_button_) i.showBtn();
             break;
         case placement_phase:
             player1_board_.show();
@@ -180,7 +175,7 @@ void CGameStateRun::gameStart() {
     // copy player1_board_ for bot's usage, and start the game Done!
     // make sure the bot's player1_board_ is shown but not its ships  Done!
     // player2_board_.whatEasesMyPainCannotBeCalledSteal(player1_board_); 
-    player2_board_ = copyCatABoard(player1_board_);
+    player2_board_ = copyABoard(player1_board_);
     int_phase_ = in_game;
 }
 

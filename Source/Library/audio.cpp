@@ -49,8 +49,6 @@
  *         be observed.
 */
 #include "stdafx.h"
-#pragma once
-#include "stdafx.h"
 #include "../Core/Game.h"
 #include "../Core/gameDoc.h"
 #include "../Core/Resource.h"

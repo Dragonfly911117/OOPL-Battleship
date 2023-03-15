@@ -3,7 +3,7 @@
 
 class Ship : public BaseGrid {
     friend Ship* MakeAShip(const int& tp);
-    friend Ship* copyCatAShip(Ship* ship);
+    friend Ship* copyAShip(Ship* ship);
     friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
     int int_health_;

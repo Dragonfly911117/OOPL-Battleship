@@ -110,18 +110,18 @@ namespace game_framework {
         void OnMove() override;// 移動遊戲元素
         void OnShow() override;// 顯示這個狀態的遊戲畫面
     private:
-        // Some phases-shared variables.
+        // phases-shared variables
         int int_phase_ = menu;
-        CMovingBitmap cursor;
+        CMovingBitmap cursor_;
         gameBoard player1_board_;
         gameBoard player2_board_;
 
         // Variables used ONLY by menu
-        CMovingBitmap menu_bkg_;
-        myBtn menu_btns_[4];
-        myBtn btn_start_;
+        CMovingBitmap backgrounds_;
+        myBtn menu_button_[4];
 
         // Variables used ONLY by in-game
+        myBtn btn_start_;
         bool is_player1_turn_ = true;
         void player1Turn(const int& x, const int& y);
         void player2Turn(const int& x, const int& y);

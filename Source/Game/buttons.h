@@ -15,3 +15,5 @@ public:
     void released();
     void showBtn();
 };
+
+void buttonsInit(myBtn menuBtn[4], myBtn& startButton);

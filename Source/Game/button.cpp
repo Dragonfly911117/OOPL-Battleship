@@ -33,3 +33,15 @@ void myBtn::showBtn() {
     CDDraw::ReleaseBackCDC();
 
 }
+
+void buttonsInit(myBtn menuBtn[4], myBtn& startButton) {
+
+    for (int i = 0; i < 4; ++i) {
+        menuBtn[i].LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+        menuBtn[i].SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
+    }
+    menuBtn[0].setText("Single Player");
+    menuBtn[1].setText("Multiple Players");
+    menuBtn[2].setText("Options");
+    menuBtn[3].setText("Exit");
+}

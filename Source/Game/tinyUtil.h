@@ -7,9 +7,11 @@
 #include "gameBoard.h"
 using namespace game_framework;
 
-// Path: Source\Game\tinyUtil.h
-
 int myIsOverlap(const CPoint& pt1, Ship* ship);
 Ship* MakeAShip(const int& tp);
-Ship* copyCatAShip(Ship* ship);// for test, not gonna be used in future
-gameBoard copyCatABoard(const gameBoard& copied);
+
+Ship* copyAShip(Ship* ship);
+gameBoard copyABoard(const gameBoard& copied);
+// functions that are used to copy stuff is not gonna be used in future
+
+void setupBackground();

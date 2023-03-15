@@ -10,48 +10,6 @@
 #include "mygame.h"
 #include "tinyUtil.h"
 
-Ship* MakeAShip(const int& tp) {
-    auto ship = new Ship;
-    ship->int_type_ = tp;
-    ship->int_health_ = ship->getSize();
-    ship->placeable = false;
-    const string baseAddress = "Resources/ships/";
-    vector<string> fileNames;
-    fileNames.emplace_back("headAtLeft.bmp");
-    fileNames.emplace_back("headAtTop.bmp");
-    switch (tp) {
-        case 2:
-            for (int i = 0; i < 2; ++i) { fileNames.at(i) = baseAddress + "A/" + fileNames.at(i); }
-            break;
-        case 3:
-            for (int i = 0; i < 2; ++i) { fileNames.at(i) = baseAddress + "B/" + fileNames.at(i); }
-            break;
-        case 4:
-            for (int i = 0; i < 2; ++i) { fileNames.at(i) = baseAddress + "C/" + fileNames.at(i); }
-            break;
-        case 5:
-            for (int i = 0; i < 2; ++i) { fileNames.at(i) = baseAddress + "D/" + fileNames.at(i); }
-            break;
-        case 9:
-            for (int i = 0; i < 2; ++i) { fileNames.at(i) = baseAddress + "E/" + fileNames.at(i); }
-            break;
-        default:
-            exit(-1);
-    }
-    fileNames.push_back("Resources/gridHit.bmp");
-    ship->LoadBitmapByString(fileNames, RGB(255, 255, 255));
-    // ship->SetFrameIndexOfBitmap(1);
-    return ship;
-}
-
-Ship* copyCatAShip(Ship* ship) {
-    Ship* newShip = MakeAShip(ship->int_type_);
-    newShip->shipID = ship->shipID;
-    newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
-    newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());
-    return newShip;
-}
-
 // return the block index if overlap, return 0 if not overlap, return -1 if overlap but not on a block.
 int myIsOverlap(const CPoint& pt1, Ship* ship) {
     auto lt = CPoint(ship->GetLeft(), ship->GetTop());
@@ -73,7 +31,7 @@ int myIsOverlap(const CPoint& pt1, Ship* ship) {
     return 0;
 }
 
-gameBoard copyCatABoard(const gameBoard& copied) {
+gameBoard copyABoard(const gameBoard& copied) {
     gameBoard newBoard;
     newBoard.base_x_ = copied.base_x_;
     newBoard.base_y_ = copied.base_y_;
@@ -90,6 +48,6 @@ gameBoard copyCatABoard(const gameBoard& copied) {
         }
         newBoard.grids_.push_back(curr);
     }
-    for (auto& ship: copied.ships_) { newBoard.ships_.push_back(copyCatAShip(ship)); }
+    for (auto& ship: copied.ships_) { newBoard.ships_.push_back(copyAShip(ship)); }
     return newBoard;
 }

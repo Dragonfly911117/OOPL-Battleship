@@ -2,7 +2,7 @@
 using namespace game_framework;
 
 class gameBoard : public CMovingBitmap {
-    friend gameBoard copyCatABoard(const gameBoard& copied);
+    friend gameBoard copyABoard(const gameBoard& copied);
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
     std::vector<vector<BaseGrid*>> grids_;
     vector<Ship*> ships_;
@@ -11,7 +11,7 @@ class gameBoard : public CMovingBitmap {
     int base_x_ = 0;
     int base_y_ = 0;
     bool is_enemy_ = false;
-
+    
 public:
     // shared methods & variables
     vector<Ship*> getShip();

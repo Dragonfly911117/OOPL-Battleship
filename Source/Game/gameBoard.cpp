@@ -16,10 +16,8 @@ void gameBoard::pickUpShip(const int& sel) {
     const int direction = ships_.at(sel)->GetFrameIndexOfBitmap();
     for (int i = 0; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
         if (x < 10 && y < 10) {
-            auto grid = new EmptyGrid;
-            // ReSharper disable CppStringLiteralToCharPointerConversion
+            const auto grid = new EmptyGrid;
             grid->LoadBitmapA(R"(Resources/emptyGrid.bmp)");
-            // ReSharper restore CppStringLiteralToCharPointerConversion
             switch (direction) {
                 case 0:
                     grids_.at(x + i).at(y)->shipPickingUpHere();
