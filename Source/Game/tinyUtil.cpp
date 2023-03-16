@@ -31,8 +31,8 @@ int myIsOverlap(const CPoint& pt1, Ship* ship) {
     return 0;
 }
 
-gameBoard copyABoard(const gameBoard& copied) {
-    gameBoard newBoard;
+GameBoard copyABoard(const GameBoard& copied) {
+    GameBoard newBoard;
     newBoard.base_x_ = copied.base_x_;
     newBoard.base_y_ = copied.base_y_;
     newBoard.is_enemy_ = true;

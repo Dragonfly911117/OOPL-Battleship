@@ -4,14 +4,15 @@
 #include "buttons.h"
 #include "grids.h"
 #include "Ship.h"
-#include "gameBoard.h"
+#include "GameBoard.h"
+#include "phaseManager.h"
 using namespace game_framework;
 
 int myIsOverlap(const CPoint& pt1, Ship* ship);
-Ship* MakeAShip(const int& tp);
+Ship* makeAShip(const int& tp);
 
 Ship* copyAShip(Ship* ship);
-gameBoard copyABoard(const gameBoard& copied);
+GameBoard copyABoard(const GameBoard& copied);
 // functions that are used to copy stuff is not gonna be used in future
 
 void setupBackground();

@@ -9,7 +9,7 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 
-void gameBoard::pickUpShip(const int& sel) {
+void GameBoard::pickUpShip(const int& sel) {
     currently_sel_ship_ = sel;
     const int x = (ships_.at(sel)->GetLeft() - base_x_) / 60;
     const int y = (ships_.at(sel)->GetTop() - base_x_) / 60;
@@ -32,7 +32,7 @@ void gameBoard::pickUpShip(const int& sel) {
     }
 }
 
-void gameBoard::dropShip(const CPoint& pt) {
+void GameBoard::dropShip(const CPoint& pt) {
     const int x = (pt.x - base_x_) / 60;
     const int y = (pt.y - base_y_) / 60;
     if (x < 0 || x > 9 || y < 0 || y > 9) return;
@@ -75,13 +75,13 @@ void gameBoard::dropShip(const CPoint& pt) {
     }// else: may have to do something    
 }
 
-bool gameBoard::ifAllShipPlaced() const {
+bool GameBoard::ifAllShipPlaced() const {
     if (currently_sel_ship_ != -1) return false;
     for (auto& ship: ships_) { if (ship->GetLeft() >= base_x_ + 10 * 60) return false; }
     return true;
 }
 
-void gameBoard::gettingStart() {
+void GameBoard::gettingStart() {
 
     // wah
     // for (int i = 0; i < ships.size(); ++i) {
@@ -100,7 +100,7 @@ void gameBoard::gettingStart() {
     // }
 }
 
-void gameBoard::whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied) {
+void GameBoard::whatEasesMyPainCannotBeCalledSteal(const GameBoard& copied) {
     this->base_x_ = SIZE_X - 150 - 60 * 10;
     this->base_y_ = 150;
     this->currently_sel_ship_ = -1;
@@ -111,7 +111,7 @@ void gameBoard::whatEasesMyPainCannotBeCalledSteal(const gameBoard& copied) {
 
 }
 
-bool gameBoard::beingHit(const int& x, const int& y) {
+bool GameBoard::beingHit(const int& x, const int& y) {
     if (grids_.at(x).at(y)->GetFrameIndexOfBitmap() == grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1) return false;
     grids_.at(x).at(y)->SetFrameIndexOfBitmap(grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1);
     if (grids_.at(x).at(y)->getShipID() != -1) {
@@ -124,12 +124,12 @@ bool gameBoard::beingHit(const int& x, const int& y) {
     return true;
 }
 
-bool gameBoard::ifAllShipSunk() const {
+bool GameBoard::ifAllShipSunk() const {
     for (auto& i: ships_) { if (i->getHealth() != 0) return false; }
     return true;
 }
 
-void gameBoard::init() {
+void GameBoard::init() {
     currently_sel_ship_ = -1;
     base_y_ = base_x_ = 150;
     vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
@@ -144,22 +144,22 @@ void gameBoard::init() {
         base_x_ += 60;
     }
     for (int i = 2; i < 6; ++i) {
-        ships_.emplace_back(MakeAShip(i));
+        ships_.emplace_back(makeAShip(i));
         ships_.back()->SetTopLeft(base_x_, (i - 2) * 60 + base_y_);
     }
-    ships_.emplace_back(MakeAShip((9)));
+    ships_.emplace_back(makeAShip((9)));
     ships_.back()->SetTopLeft(base_x_, base_y_ + 240);
     base_y_ = base_x_ = 150;
 }
 
-void gameBoard::show() {
+void GameBoard::show() {
     if (! is_enemy_) for (auto& i: ships_) { i->ShowBitmap(); }
     for (auto& i: grids_) { for (auto& j: i) { if (j->ifDisplay()) j->ShowBitmap(); } }
     if (currently_sel_ship_ != -1 && !is_enemy_) ships_.at(currently_sel_ship_)->ShowBitmap();
     for (const auto& i: ship_hit_) i->ShowBitmap();
 }
 
-void gameBoard::rotateShip() {
+void GameBoard::rotateShip() {
     if (currently_sel_ship_ == -1) return;
     ships_.at(currently_sel_ship_)->rotate();
 }

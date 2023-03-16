@@ -32,11 +32,11 @@ int Ship::getSize() {
 
 void Ship::rotate() { this->SetFrameIndexOfBitmap((this->GetFrameIndexOfBitmap() + 1) % 2); }
 
-int gameBoard::getCurrSel() const { return currently_sel_ship_; }
+int GameBoard::getCurrSel() const { return currently_sel_ship_; }
 
-vector<Ship*> gameBoard::getShip() { return ships_; }
+vector<Ship*> GameBoard::getShip() { return ships_; }
 
-Ship* MakeAShip(const int& tp) {
+Ship* makeAShip(const int& tp) {
     const auto ship = new Ship;
     ship->int_type_ = tp;
     ship->int_health_ = ship->getSize();
@@ -71,7 +71,7 @@ Ship* MakeAShip(const int& tp) {
 }
 
 Ship* copyAShip(Ship* ship) {
-    Ship* newShip = MakeAShip(ship->int_type_);
+    Ship* newShip = makeAShip(ship->int_type_);
     newShip->shipID = ship->shipID;
     newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
     newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());

@@ -2,7 +2,7 @@
 #include "grids.h"
 
 class Ship : public BaseGrid {
-    friend Ship* MakeAShip(const int& tp);
+    friend Ship* makeAShip(const int& tp);
     friend Ship* copyAShip(Ship* ship);
     friend int myIsOverlap(const CPoint& pt1, Ship* ship);
     int int_type_;
