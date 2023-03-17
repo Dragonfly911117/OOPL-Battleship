@@ -13,9 +13,7 @@ void PhaseManager_global::init() {
     this->_container.at(_cursorPos)->LoadBitmapA("Resources/cursor.bmp");
 }
 
-PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) {
-    this->_container = objs;
-}
+PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) { this->_container = objs; }
 
 void PhaseManager_menu::init() {
     const vector<string> menuText = {"Single Player", "Multiple Players", "Options", "Exit"};

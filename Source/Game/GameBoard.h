@@ -2,7 +2,7 @@
 #pragma once
 using namespace game_framework;
 
-class GameBoard  {
+class GameBoard {
     friend GameBoard copyABoard(const GameBoard& copied);
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
     vector<vector<BaseGrid*>> grids_;

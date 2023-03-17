@@ -89,7 +89,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
     _cursor.SetTopLeft(point.x - 5, point.y - 5);
     switch (_phase) {
         case menu:
-            
+
             for (int i = 0; i < 4; ++i) {
                 if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i]) && _menuButton[i].GetFrameIndexOfBitmap() == 1) {
 
