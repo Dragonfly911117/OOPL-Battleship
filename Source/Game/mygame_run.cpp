@@ -25,17 +25,18 @@ void CGameStateRun::OnBeginState() {}
 void CGameStateRun::OnMove() {}
 
 void CGameStateRun::OnInit() {
-    this->_phaseManagers.push_back(new PhaseManager_global(*this->_backgrounds));
-    // this->_phaseManagers.push_back(new PhaseManager_menu);
+    vector<CMovingBitmap*> temp = {&this->_backgrounds, &this->_cursor};
+    this->_phaseManagers.emplace_back(new PhaseManager_global({&this->_backgrounds, &this->_cursor}));
+    // this->_phaseManagers.push_back(new PhaseManager_menu());
     // this->_phaseManagers.push_back(new PhaseManager_placement);
-    this->_phaseManagers[0]->init();
-        
+    for (const auto& i: this->_phaseManagers) { i->init(); }
+
     // _cursor.LoadBitmapA("Resources/cursor.bmp");
     // _backgrounds.LoadBitmapA("Resources/menuBg.bmp");
     // _backgrounds.SetTopLeft(0, 0);
 
     buttonsInit(_menuButton, _gameStartButton);
-    _gameStartButton.LoadBitmapByString({"Resources/Btn.bmp", "Resources/BtnBeingPressed.bmp"});
+    _gameStartButton.LoadBitmapByString({"Resources/button.bmp", "Resources/buttonPressed.bmp"});
     _gameStartButton.SetTopLeft(SIZE_X - 150 - _gameStartButton.GetWidth(), SIZE_Y - 150 - _gameStartButton.GetHeight());
     _gameStartButton.setText("Game Start!");
     _player1Board.init();
