@@ -1,14 +1,11 @@
 ﻿#pragma once
 #include "../Library/gameutil.h"
 
-class myBtn;
-class GameBoard;
 using namespace game_framework;
 
 class PhaseManager_base {
 protected:
     const vector<string> _buttonPath = {"Resources/button.bmp", "Resources/buttonPressed.bmp"};
-    vector<CMovingBitmap*> _container;
 
 public:
     virtual ~PhaseManager_base() = default;
@@ -18,9 +15,8 @@ public:
 };
 
 class PhaseManager_global final : public PhaseManager_base {
-    const short _bgPos = 0;
-    const short _cursorPos = 1;
-    const short size = 2;
+    CMovingBitmap* _bg;
+    CMovingBitmap* _cursor;
 
 public:
     explicit PhaseManager_global(const vector<CMovingBitmap*>& objs);//{bg, cursor}
@@ -28,24 +24,19 @@ public:
 };
 
 class PhaseManager_menu final : public PhaseManager_base {
-    // std::vector<CMovingBitmap*> _buttons;
-    const short _btnPos = 0;
-    const short size = 4;
-    vector<myBtn*> _container;
+    std::vector<CMovingBitmap*> _buttons;
 
 public:
-    explicit PhaseManager_menu(const vector<myBtn*>& objs);// size = 4
+    explicit PhaseManager_menu(const initializer_list<CMovingBitmap*>& objs);// size = 4
     void init() override;
 
 };
 
 class PhaseManager_placement final : public PhaseManager_base {
-    vector<myBtn*> _container;
-    GameBoard* _board1 = nullptr;
-    const short _startButtonPos = 0;
-    const short size = 1;
+    CMovingBitmap* _board1 = nullptr;
+    CMovingBitmap* _gameStartButton = nullptr;
 
 public:
-    PhaseManager_placement(GameBoard* const& board1, const vector<myBtn*>& objs);
+    PhaseManager_placement(CMovingBitmap* const board1, CMovingBitmap* const gameStartButton);
     void init() override;
 };

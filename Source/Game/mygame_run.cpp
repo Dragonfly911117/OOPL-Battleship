@@ -8,8 +8,7 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
-// #include "tinyUtil.h"
-#include "phaseManager.h"
+
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -28,18 +27,18 @@ void CGameStateRun::OnMove() {}
 void CGameStateRun::OnInit() {
     vector<CMovingBitmap*> temp = {&this->_backgrounds, &this->_cursor};
     this->_phaseManagers.emplace_back(new PhaseManager_global({&this->_backgrounds, &this->_cursor}));
-    this->_phaseManagers.emplace_back(new PhaseManager_menu({this->_menuButton, this->_menuButton + 1, this->_menuButton + 2, this->_menuButton + 3}));
-    this->_phaseManagers.push_back(new PhaseManager_placement(&this->_player1Board, {&this->_gameStartButton}));
+    // this->_phaseManagers.push_back(new PhaseManager_menu());
+    // this->_phaseManagers.push_back(new PhaseManager_placement);
     for (const auto& i: this->_phaseManagers) { i->init(); }
 
     // _cursor.LoadBitmapA("Resources/cursor.bmp");
     // _backgrounds.LoadBitmapA("Resources/menuBg.bmp");
     // _backgrounds.SetTopLeft(0, 0);
 
-    // buttonsInit(_menuButton, _gameStartButton);
-    // _gameStartButton.LoadBitmapByString({"Resources/button.bmp", "Resources/buttonPressed.bmp"});
-    // _gameStartButton.SetTopLeft(SIZE_X - 150 - _gameStartButton.GetWidth(), SIZE_Y - 150 - _gameStartButton.GetHeight());
-    // _gameStartButton.setText("Game Start!");
+    buttonsInit(_menuButton, _gameStartButton);
+    _gameStartButton.LoadBitmapByString({"Resources/button.bmp", "Resources/buttonPressed.bmp"});
+    _gameStartButton.SetTopLeft(SIZE_X - 150 - _gameStartButton.GetWidth(), SIZE_Y - 150 - _gameStartButton.GetHeight());
+    _gameStartButton.setText("Game Start!");
     _player1Board.init();
 
 }
@@ -89,9 +88,9 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
     _cursor.SetTopLeft(point.x - 5, point.y - 5);
     switch (_phase) {
         case menu:
-
             for (int i = 0; i < 4; ++i) {
-                if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i]) && _menuButton[i].GetFrameIndexOfBitmap() == 1) {
+                if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i])) {
+                    _menuButton[i].released();
 
                     // Remember to remove these two lines
                     startSingleGame();
@@ -140,15 +139,11 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
             //     else if (i.GetFrameIndexOfBitmap() == 1)
             //         i.released();
             // }
-            // for (auto& i: _menuButton) {
-            //     if (CMovingBitmap::IsOverlap(_cursor, i)) {
-            //         break;
-            //     }
-            //     i.released();
-            // }
             break;
         case placement_phase:
-            if (_player1Board.getCurrSel() != -1) { _player1Board.getShip().at(_player1Board.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25); }
+            if (_player1Board.getCurrSel() != -1) { 
+				_player1Board.getShip().at(_player1Board.getCurrSel())->SetTopLeft(point.x - 25, point.y - 25); 
+			}
             break;
 
         default:

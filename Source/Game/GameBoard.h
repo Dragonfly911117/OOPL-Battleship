@@ -1,8 +1,8 @@
-﻿#include "mygame.h"
-#pragma once
+﻿#pragma once
+#include "mygame.h"
 using namespace game_framework;
 
-class GameBoard {
+class GameBoard : public CMovingBitmap {
     friend GameBoard copyABoard(const GameBoard& copied);
     // Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
     vector<vector<BaseGrid*>> grids_;
