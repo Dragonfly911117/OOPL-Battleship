@@ -84,43 +84,43 @@ namespace game_framework {
 		CMovingBitmap();
 
 		/* The function for loading the bitmap. */
-		void  LoadBitmap(int, COLORREF = CLR_INVALID);		// 載入圖，指定圖的編號(resource)及透明色
-		void  LoadBitmap(char*, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色
-		void  LoadBitmap(vector<char*>, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色
-		void  LoadBitmapByString(vector<string>, COLORREF = CLR_INVALID);	// 載入圖，指定圖的檔名及透明色
-		void  LoadEmptyBitmap(int height, int weight);
-		
+		void LoadBitmap(int, COLORREF = CLR_INVALID);                   // 載入圖，指定圖的編號(resource)及透明色
+		void LoadBitmap(char*, COLORREF = CLR_INVALID);                 // 載入圖，指定圖的檔名及透明色
+		void LoadBitmap(vector<char*>, COLORREF = CLR_INVALID);         // 載入圖，指定圖的檔名及透明色
+		void LoadBitmapByString(vector<string>, COLORREF = CLR_INVALID);// 載入圖，指定圖的檔名及透明色
+		void LoadEmptyBitmap(int height, int weight);
+
 		/* Unshow the bitmap. */
-		void  UnshowBitmap();
+		void UnshowBitmap();
 
 		/* Setter */
-		void  SetAnimation(int delay, bool _once);
-		void  SetFrameIndexOfBitmap(int frame);
-		void  SetTopLeft(int, int);			// 將圖的左上角座標移至 (x,y)
+		void SetAnimation(int delay, bool _once);
+		void SetFrameIndexOfBitmap(int frame);
+		void SetTopLeft(int, int);// 將圖的左上角座標移至 (x,y)
 
 		/* Show the bitmap with or without factor. */
-		void  ShowBitmap();					// 將圖貼到螢幕
-		void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
-		
+		void ShowBitmap();             // 將圖貼到螢幕
+		void ShowBitmap(double factor);// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
+
 		/* Getter */
-		int   GetFrameIndexOfBitmap();
-		int   GetFrameSizeOfBitmap();
-		int   GetTop();
-		int   GetLeft();
-		int   GetHeight();
-		int   GetWidth();
+		int GetFrameIndexOfBitmap();
+		int GetFrameSizeOfBitmap();
+		int GetTop();
+		int GetLeft();
+		int GetHeight();
+		int GetWidth();
 		string GetImageFileName();
 		COLORREF GetFilterColor();
 
 		/* Is function */
-		bool  IsAnimation();
-		bool  IsAnimationDone();
-		bool  IsBitmapLoaded();
-		bool  IsOnceAnimation();
+		bool IsAnimation();
+		bool IsAnimationDone();
+		bool IsBitmapLoaded();
+		bool IsOnceAnimation();
 		static bool IsOverlap(CMovingBitmap bmp1, CMovingBitmap bmp2);
-		
+
 		/* Toggle function */
-		void  ToggleAnimation();
+		void ToggleAnimation();
 
 	protected:
 		//! 當前幀的索引值。
@@ -134,14 +134,14 @@ namespace game_framework {
 		//! 儲存物件動畫是否已結束
 		bool isAnimationDone = true;
 		//! 儲存圖片是否已讀取
-		bool isBitmapLoaded = false;	// whether a bitmap has been loaded
+		bool isBitmapLoaded = false;// whether a bitmap has been loaded
 		//! 儲存物件動畫是否為單次動畫
 		bool isOnce = false;
-		vector<CRect>    locations;			// location of the bitmap
+		vector<CRect> locations;// location of the bitmap
 		vector<unsigned> surfaceID;
 		clock_t last_time = clock();
 		//! 儲存物件讀取的圖片路徑
-		string   imageFileName = "";
+		string imageFileName = "";
 		//! 儲存物件過濾的圖片顏色
 		COLORREF filterColor = CLR_INVALID;
 
@@ -152,8 +152,8 @@ namespace game_framework {
 
 	class CTextDraw {
 	public:
-		void static Print(CDC *pdc, int x, int y, string str);
-		void static ChangeFontLog(CDC *pdc, int size, string fontName, COLORREF fontColor, int weight = 500);
+		void static Print(CDC* pdc, int x, int y, string str);
+		void static ChangeFontLog(CDC* pdc, int size, string fontName, COLORREF fontColor, int weight = 500);
 	};
 
 }

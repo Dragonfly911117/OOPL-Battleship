@@ -29,8 +29,7 @@ namespace game_framework {
 	/*! 
 		用於創立一個尚未讀取圖片的物件。
 	*/
-	CMovingBitmap::CMovingBitmap()
-	{
+	CMovingBitmap::CMovingBitmap() {
 		isBitmapLoaded = false;
 	}
 
@@ -39,8 +38,7 @@ namespace game_framework {
 		需要先載入圖片。
 		\return 圖片高度，以像素為單位。
 	*/
-	int CMovingBitmap::GetHeight()
-	{
+	int CMovingBitmap::GetHeight() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Height() is called !!!");
 		return locations[frameIndex].bottom - locations[frameIndex].top;
 	}
@@ -50,8 +48,7 @@ namespace game_framework {
 		需要先載入圖片。
 		\return 圖片左上角的 x 軸座標值。
 	*/
-	int CMovingBitmap::GetLeft()
-	{
+	int CMovingBitmap::GetLeft() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Left() is called !!!");
 		return locations[frameIndex].left;
 	}
@@ -62,14 +59,13 @@ namespace game_framework {
 		\param IDB_BITMAP 圖片資源編號
 		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置顏色）
 	*/
-	void CMovingBitmap::LoadBitmap(int IDB_BITMAP, COLORREF color)
-	{
+	void CMovingBitmap::LoadBitmap(int IDB_BITMAP, COLORREF color) {
 		CBitmap bitmap;
 		BOOL rval = bitmap.LoadBitmap(IDB_BITMAP);
 		GAME_ASSERT(rval, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
 		BITMAP bitmapSize;
 		bitmap.GetBitmap(&bitmapSize);
-		
+
 		InitializeRectByBITMAP(bitmapSize);
 
 		surfaceID.push_back(CDDraw::RegisterBitmap(IDB_BITMAP, color));
@@ -83,17 +79,16 @@ namespace game_framework {
 		\param filepath 圖片相對路徑
 		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 	*/
-	void CMovingBitmap::LoadBitmap(char *filepath, COLORREF color)
-	{
-		HBITMAP hbitmap = (HBITMAP)LoadImage(NULL, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	void CMovingBitmap::LoadBitmap(char* filepath, COLORREF color) {
+		auto hbitmap = static_cast<HBITMAP>(LoadImage(NULL, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 
-		if (hbitmap == NULL) {
+		if (hbitmap == nullptr) {
 			char error_msg[300];
 			sprintf(error_msg, "Loading bitmap	from file \"%s\" failed !!!", filepath);
 			GAME_ASSERT(false, error_msg);
 		}
 
-		CBitmap *bmp = CBitmap::FromHandle(hbitmap); // memory will be deleted automatically
+		CBitmap* bmp = CBitmap::FromHandle(hbitmap);// memory will be deleted automatically
 		BITMAP bitmapSize;
 		bmp->GetBitmap(&bitmapSize);
 
@@ -114,9 +109,8 @@ namespace game_framework {
 		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 		\sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color)
-	{
-		for (int i = 0; i < (int)filepaths.size(); i++) {
+	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color) {
+		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
 			LoadBitmap(filepaths[i], color);
 		}
 	}
@@ -128,14 +122,13 @@ namespace game_framework {
 		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 		\sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color)
-	{
+	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color) {
 
-		for (int i = 0; i < (int)filepaths.size(); i++) {
-			LoadBitmap((char*)filepaths[i].c_str(), color);
+		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
+			LoadBitmap((char*) filepaths[i].c_str(), color);
 		}
 	}
-	
+
 	//! 讀取空白圖片資源。
 	/*!
 		讀取一個特定大小的白色點陣圖。
@@ -143,12 +136,12 @@ namespace game_framework {
 		\param width 圖片寬度
 	*/
 	void CMovingBitmap::LoadEmptyBitmap(int height, int width) {
-		HBITMAP hbitmap = CreateBitmap(width, height, 1, 32, NULL);
-		CBitmap *bmp = CBitmap::FromHandle(hbitmap); // memory will be deleted automatically
+		HBITMAP hbitmap = CreateBitmap(width, height, 1, 32, nullptr);
+		CBitmap* bmp = CBitmap::FromHandle(hbitmap);// memory will be deleted automatically
 
 		/* Fill white color to bitmap */
-		HDC hdc = CreateCompatibleDC(NULL);
-		HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdc, hbitmap);
+		HDC hdc = CreateCompatibleDC(nullptr);
+		auto hOldBitmap = static_cast<HBITMAP>(SelectObject(hdc, hbitmap));
 		PatBlt(hdc, 0, 0, width, height, WHITENESS);
 		SelectObject(hdc, hOldBitmap);
 		DeleteDC(hdc);
@@ -163,14 +156,13 @@ namespace game_framework {
 
 		bmp->DeleteObject();
 	}
-	
+
 	//! 停止顯示圖片。
 	/*!
 		@deprecated 從 v1.0.0 版本後棄用，停止顯示圖片請在 `OnShow()` 時不呼叫 `ShowBitmap()` 即可
 		\sa ShowBitmap()
 	*/
-	void CMovingBitmap::UnshowBitmap()
-	{
+	void CMovingBitmap::UnshowBitmap() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before SetTopLeft() is called !!!");
 		isAnimation = false;
 		this->ShowBitmap(0);
@@ -182,11 +174,10 @@ namespace game_framework {
 		\param x 左上角 x 座標
 		\param y 左上角 y 座標
 	*/
-	void CMovingBitmap::SetTopLeft(int x, int y)
-	{
+	void CMovingBitmap::SetTopLeft(int x, int y) {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before SetTopLeft() is called !!!");
 
-		for (int i = 0; i < int(locations.size()); i++) {
+		for (int i = 0; i < static_cast<int>(locations.size()); i++) {
 			int dx = locations[i].left - x;
 			int dy = locations[i].top - y;
 			locations[i].left = x;
@@ -204,17 +195,17 @@ namespace game_framework {
 		\sa ToggleAnimation()
 	*/
 	void CMovingBitmap::SetAnimation(int delay, bool once) {
-		if(!once) isAnimation = true;
+		if (!once)
+			isAnimation = true;
 		isOnce = once;
 		delayCount = delay;
 	}
-	
+
 	//! 顯示圖片。
 	/*!
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
 	*/
-	void CMovingBitmap::ShowBitmap()
-	{
+	void CMovingBitmap::ShowBitmap() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
 		CDDraw::BltBitmapToBack(surfaceID[frameIndex], locations[frameIndex].left, locations[frameIndex].top);
 		ShowBitmapBySetting();
@@ -225,8 +216,7 @@ namespace game_framework {
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
 		\param factor 放大倍率，需要 VGA 顯卡的支援，否則會變得異常慢。
 	*/
-	void CMovingBitmap::ShowBitmap(double factor)
-	{
+	void CMovingBitmap::ShowBitmap(double factor) {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
 		CDDraw::BltBitmapToBack(surfaceID[frameIndex], locations[frameIndex].left, locations[frameIndex].top, factor);
 		ShowBitmapBySetting();
@@ -238,7 +228,7 @@ namespace game_framework {
 		\param frameIndex 圖片顯示幀的索引值。
 	*/
 	void CMovingBitmap::SetFrameIndexOfBitmap(int frameIndex) {
-		GAME_ASSERT(frameIndex < (int) surfaceID.size(), "選擇圖片時索引出界");
+		GAME_ASSERT(frameIndex < static_cast<int>(surfaceID.size()), "選擇圖片時索引出界");
 		this->frameIndex = frameIndex;
 	}
 
@@ -254,8 +244,7 @@ namespace game_framework {
 	/*!
 		\return 圖片左上角 y 軸的座標值。
 	*/
-	int CMovingBitmap::GetTop()
-	{
+	int CMovingBitmap::GetTop() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Top() is called !!!");
 		return locations[frameIndex].top;
 	}
@@ -264,12 +253,11 @@ namespace game_framework {
 	/*!
 		\return 取得當前圖片寬度。
 	*/
-	int CMovingBitmap::GetWidth()
-	{
+	int CMovingBitmap::GetWidth() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Width() is called !!!");
 		return locations[frameIndex].right - locations[frameIndex].left;
 	}
-	
+
 	//! 啟動單次動畫。
 	/*!
 		將動畫設為初始幀，並且初始化單次動畫的參數值。
@@ -317,7 +305,7 @@ namespace game_framework {
 		\return 回傳物件的幀數。
 	*/
 	int CMovingBitmap::GetFrameSizeOfBitmap() {
-		return (int) surfaceID.size();
+		return static_cast<int>(surfaceID.size());
 	}
 
 	//! 根據 BITMAP 來初始化 CMovingBitmap 內的 location 物件。
@@ -395,7 +383,7 @@ namespace game_framework {
 		\param y 文字顯示的左上角 y 座標
 		\param str 欲顯示的文字
 	*/
-	void CTextDraw::Print(CDC *pDC, int x, int y, string str) {
+	void CTextDraw::Print(CDC* pDC, int x, int y, string str) {
 		x = CDDraw::IsFullScreen() ? x + (RESOLUTION_X - SIZE_X) / 2 : x;
 		y = CDDraw::IsFullScreen() ? y + (RESOLUTION_Y - SIZE_Y) / 2 : y;
 		pDC->TextOut(x, y, str.c_str());
@@ -411,7 +399,7 @@ namespace game_framework {
 		\param fontColor 字體顏色
 		\param weight 字體粗度（預設為 500）
 	*/
-	void CTextDraw::ChangeFontLog(CDC *pDC, int size, string fontName, COLORREF fontColor, int weight) {
+	void CTextDraw::ChangeFontLog(CDC* pDC, int size, string fontName, COLORREF fontColor, int weight) {
 		CFont* fp;
 
 		pDC->SetBkMode(TRANSPARENT);
@@ -426,4 +414,4 @@ namespace game_framework {
 		fp = pDC->SelectObject(&f);
 	}
 
-}         
+}

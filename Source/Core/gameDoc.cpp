@@ -36,40 +36,42 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CGameDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CGameDoc, CDocument)
-                //{{AFX_MSG_MAP(CGameDoc)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-                //}}AFX_MSG_MAP
+				//{{AFX_MSG_MAP(CGameDoc)
+				// NOTE - the ClassWizard will add and remove mapping macros here.
+				//    DO NOT EDIT what you see in these blocks of generated code!
+				//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CGameDoc construction/destruction
 
 CGameDoc::CGameDoc() {
-    // TODO: add one-time construction code here
+	// TODO: add one-time construction code here
 
 }
 
-CGameDoc::~CGameDoc() {}
+CGameDoc::~CGameDoc() {
+}
 
 BOOL CGameDoc::OnNewDocument() {
-    if (!CDocument::OnNewDocument()) return FALSE;
+	if (!CDocument::OnNewDocument())
+		return FALSE;
 
-    // TODO: add reinitialization code here
-    // (SDI documents will reuse this document)
+	// TODO: add reinitialization code here
+	// (SDI documents will reuse this document)
 
-    return TRUE;
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CGameDoc serialization
 
 void CGameDoc::Serialize(CArchive& ar) {
-    if (ar.IsStoring()) {
-        // TODO: add storing code here
-    } else {
-        // TODO: add loading code here
-    }
+	if (ar.IsStoring()) {
+		// TODO: add storing code here
+	} else {
+		// TODO: add loading code here
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
