@@ -41,107 +41,107 @@
 #include "tinyUtil.h"
 
 namespace game_framework {
-    /////////////////////////////////////////////////////////////////////////////
-    // Constants
-    /////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// Constants
+	/////////////////////////////////////////////////////////////////////////////
 
-    enum AUDIO_ID {
-        // 定義各種音效的編號
-        AUDIO_DING,
-        // 0
-        AUDIO_LAKE,
-        // 1
-        AUDIO_NTUT// 2
-    };
+	enum AUDIO_ID {
+		// 定義各種音效的編號
+		AUDIO_DING,
+		// 0
+		AUDIO_LAKE,
+		// 1
+		AUDIO_NTUT// 2
+	};
 
-    /////////////////////////////////////////////////////////////////////////////
-    // 這個class為遊戲的遊戲開頭畫面物件
-    // 每個Member function的Implementation都要弄懂
-    /////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// 這個class為遊戲的遊戲開頭畫面物件
+	// 每個Member function的Implementation都要弄懂
+	/////////////////////////////////////////////////////////////////////////////
 
-    class CGameStateInit : public CGameState {
-    public:
-        CGameStateInit(CGame* g);
-        void OnInit() override;                                // 遊戲的初值及圖形設定
-        void OnBeginState() override;                          // 設定每次重玩所需的變數
-        void OnKeyUp(UINT, UINT, UINT) override;               // 處理鍵盤Up的動作
-        void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
-    protected:
-        void OnShow() override;// 顯示這個狀態的遊戲畫面
-    private:
-        CMovingBitmap startBg;
-    };
+	class CGameStateInit : public CGameState {
+	public:
+		CGameStateInit(CGame* g);
+		void OnInit() override;                                // 遊戲的初值及圖形設定
+		void OnBeginState() override;                          // 設定每次重玩所需的變數
+		void OnKeyUp(UINT, UINT, UINT) override;               // 處理鍵盤Up的動作
+		void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+	protected:
+		void OnShow() override;// 顯示這個狀態的遊戲畫面
+	private:
+		CMovingBitmap startBg;
+	};
 
-    /////////////////////////////////////////////////////////////////////////////
-    // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
-    // 每個Member function的Implementation都要弄懂
-    /////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
+	// 每個Member function的Implementation都要弄懂
+	/////////////////////////////////////////////////////////////////////////////
 
-    enum CGameStateRunPhases {
-        menu,
-        multiply_players,
-        placement_phase,
-        in_game,
-        we_have_a_winner,
-        settings,
-    };
+	enum CGameStateRunPhases {
+		menu,
+		multiply_players,
+		placement_phase,
+		in_game,
+		we_have_a_winner,
+		settings,
+	};
 
-    class CGameStateRun : public CGameState {
-    public:
-        CGameStateRun(CGame* g);
-        ~CGameStateRun() override;
-        void OnBeginState() override;// 設定每次重玩所需的變數
-        void OnInit() override;      // 遊戲的初值及圖形設定
-        void OnKeyDown(UINT, UINT, UINT) override;
-        void OnKeyUp(UINT, UINT, UINT) override;
-        void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
-        void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
-        void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
-        void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
-        void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
+	class CGameStateRun : public CGameState {
+	public:
+		CGameStateRun(CGame* g);
+		~CGameStateRun() override;
+		void OnBeginState() override;// 設定每次重玩所需的變數
+		void OnInit() override;      // 遊戲的初值及圖形設定
+		void OnKeyDown(UINT, UINT, UINT) override;
+		void OnKeyUp(UINT, UINT, UINT) override;
+		void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+		void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
+		void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
+		void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+		void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 
-        void startSingleGame();
-        void start_mutiple_game();
-        void gameStart();
-        void gotoSettings();
-        void gotoExit();
+		void startSingleGame();
+		void start_mutiple_game();
+		void gameStart();
+		void gotoSettings();
+		void gotoExit();
 
-    protected:
-        void OnMove() override;// 移動遊戲元素
-        void OnShow() override;// 顯示這個狀態的遊戲畫面
-    private:
-        // Some phases-shared variables.
-        int int_phase_ = menu;
-        CMovingBitmap cursor;
-        gameBoard player1_board_;
-        gameBoard player2_board_;
+	protected:
+		void OnMove() override;// 移動遊戲元素
+		void OnShow() override;// 顯示這個狀態的遊戲畫面
+	private:
+		// Some phases-shared variables.
+		int int_phase_ = menu;
+		CMovingBitmap cursor;
+		gameBoard player1_board_;
+		gameBoard player2_board_;
 
-        // Variables used ONLY by menu
-        CMovingBitmap menu_bkg_;
-        myBtn menu_btns_[4];
-        myBtn btn_start_;
+		// Variables used ONLY by menu
+		CMovingBitmap menu_bkg_;
+		myBtn menu_btns_[4];
+		myBtn btn_start_;
 
-        // Variables used ONLY by in-game
-        bool is_player1_turn_ = true;
-        void player1Turn(const int& x, const int& y);
-        void player2Turn(const int& x, const int& y);
-    };
+		// Variables used ONLY by in-game
+		bool is_player1_turn_ = true;
+		void player1Turn(const int& x, const int& y);
+		void player2Turn(const int& x, const int& y);
+	};
 
-    /////////////////////////////////////////////////////////////////////////////
-    // 這個class為遊戲的結束狀態(Game Over)
-    // 每個Member function的Implementation都要弄懂
-    /////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	// 這個class為遊戲的結束狀態(Game Over)
+	// 每個Member function的Implementation都要弄懂
+	/////////////////////////////////////////////////////////////////////////////
 
-    class CGameStateOver : public CGameState {
-    public:
-        CGameStateOver(CGame* g);
-        void OnBeginState() override;// 設定每次重玩所需的變數
-        void OnInit() override;
+	class CGameStateOver : public CGameState {
+	public:
+		CGameStateOver(CGame* g);
+		void OnBeginState() override;// 設定每次重玩所需的變數
+		void OnInit() override;
 
-    protected:
-        void OnMove() override;// 移動遊戲元素
-        void OnShow() override;// 顯示這個狀態的遊戲畫面
-    private:
-        int counter;// 倒數之計數器
-    };
+	protected:
+		void OnMove() override;// 移動遊戲元素
+		void OnShow() override;// 顯示這個狀態的遊戲畫面
+	private:
+		int counter;// 倒數之計數器
+	};
 }
