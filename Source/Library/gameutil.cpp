@@ -110,7 +110,11 @@ namespace game_framework {
 	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 	    \sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color) { for (int i = 0; i < static_cast<int>(filepaths.size()); i++) { LoadBitmap(filepaths[i], color); } }
+	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color) {
+		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
+			LoadBitmap(filepaths[i], color);
+		}
+	}
 
 	//! 讀取圖片資源。
 	/*!
@@ -119,7 +123,11 @@ namespace game_framework {
 	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 	    \sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color) { for (int i = 0; i < static_cast<int>(filepaths.size()); i++) { LoadBitmap((char*) filepaths[i].c_str(), color); } }
+	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color) {
+		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
+			LoadBitmap((char*) filepaths[i].c_str(), color);
+		}
+	}
 
 	//! 讀取空白圖片資源。
 	/*!

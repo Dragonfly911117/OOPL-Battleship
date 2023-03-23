@@ -3,6 +3,9 @@
 #include <mmsystem.h>
 #include <ddraw.h>
 
+#include <stdio.h>      /* printf, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
 #include "config.h"
 #include "../Library/audio.h"
 #include "../Library/gameutil.h"
@@ -10,47 +13,92 @@
 #include "mygame.h"
 #include "tinyUtil.h"
 
+#include <random>
+
 // return the block index if overlap, return 0 if not overlap, return -1 if overlap but not on a block.
 int myIsOverlap(const CPoint& pt1, Ship* ship) {
-	auto lt = CPoint(ship->GetLeft(), ship->GetTop());
-	CPoint rb;// dont use GetHeight()  and GetWidth(). They are not the same as the size of the bitmap after rotations.
-	int direction = ship->GetFrameIndexOfBitmap();
-	rb = direction == 0
-		     ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
-		     : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
+	const auto lt = CPoint(ship->GetLeft(), ship->GetTop());
+	const direction d = ship->getDirection();
+	const CPoint rb = d == horizontal
+		                  ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
+		                  : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
 	if (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y) {
 		// which block exactly is clicked
 		for (int i = 1; i <= ship->getSize(); ++i) {
-			CPoint pt2 = direction == 0
-				             ? CPoint(lt.x + i * 60 - 10, lt.y + 50)
-				             : CPoint(lt.x + 50, lt.y + i * 60 - 10);
-			if (pt1.x > pt2.x - 50 && pt1.x < pt2.x && pt1.y > pt2.y - 50 && pt1.y < pt2.y) { return i; }
+			const CPoint pt2 = d == horizontal
+				                   ? CPoint(lt.x + 60 * i - 10, lt.y + 50)
+				                   : CPoint(lt.x + 50, lt.y + 60 * i - 10);
+			if (pt1.x > pt2.x - 50 && pt1.x < pt2.x && pt1.y > pt2.y - 50 && pt1.y < pt2.y) {
+				return i;
+			}
 		}
 		return -1;
 	}
 	return 0;
 }
 
-
-GameBoard copyABoard(const GameBoard& copied) {
-	GameBoard newBoard;
-	newBoard.base_x_ = copied.base_x_;
-	newBoard.base_y_ = copied.base_y_;
-	newBoard.is_enemy_ = true;
-	vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
+GameBoard generateABoard(const int& x) {
+	GameBoard result;
+	result._isEnemy = false;
+	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
+	result._baseX = x;
 	for (int i = 0; i < 10; ++i) {
 		vector<BaseGrid*> curr;
 		for (int j = 0; j < 10; ++j) {
-			auto newGrid = new EmptyGrid;
+			const auto newGrid = new EmptyGrid;
 			newGrid->LoadBitmapByString(fileName);
-			newGrid->setShipID(copied.grids_.at(i).at(j)->getShipID());
-			newGrid->SetTopLeft(copied.grids_.at(i).at(j)->GetLeft() + 1020, copied.grids_.at(i).at(j)->GetTop());
+			newGrid->SetTopLeft(result._baseX + 60 * i, result._baseY + 60 * j);
 			curr.push_back(newGrid);
 		}
-		newBoard.grids_.push_back(curr);
+		result._grids.push_back(curr);
 	}
-	for (auto& ship: copied.ships_) { 
-    newBoard.ships_.push_back(copyAShip(ship)); 
-  }
+	for (int i = 2; i < 6; ++i) {
+		result._ships.emplace_back(makeAShip(i));
+	}
+	result._ships.emplace_back(makeAShip((9)));
+
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::uniform_real_distribution<float> unif(0.0, 590.0);
+
+	for (int i = 0; i < result._ships.size(); ++i) {
+		if (static_cast<int>(unif(generator)) % 2) {
+			result._ships.at(i)->rotate();
+		}
+		result._selectedShip = i;
+		CPoint temp;
+		temp.x = result._baseX + static_cast<int>(unif(generator));
+		temp.y = result._baseY + static_cast<int>(unif(generator));
+		while (! result.dropShip(temp)) {
+			temp.x = result._baseX + static_cast<int>(unif(generator));
+			temp.y = result._baseY + static_cast<int>(unif(generator));
+		}
+	}
+	return result;
+}
+
+GameBoard copyABoard(const GameBoard& copied) {
+	GameBoard newBoard;
+	newBoard._baseX = 1020;
+	newBoard._baseY = copied._baseY;
+	newBoard._isEnemy = true;
+
+	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
+
+	for (int i = 0; i < 10; ++i) {
+		vector<BaseGrid*> curr;
+		for (int j = 0; j < 10; ++j) {
+			const auto newGrid = new EmptyGrid;
+			newGrid->LoadBitmapByString(fileName);
+			newGrid->SetTopLeft(copied.getGridByCoordinate(i, j)->GetLeft() + newBoard._baseX, copied.getGridByCoordinate(i, j)->GetTop());
+			curr.push_back(newGrid);
+		}
+		newBoard._grids.push_back(curr);
+	}
+
+	for (auto& ship: copied._ships) {
+		newBoard._ships.push_back(copyAShip(ship));
+	}
+
 	return newBoard;
 }

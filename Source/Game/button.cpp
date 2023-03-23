@@ -11,13 +11,21 @@
 #include "mygame.h"
 #include "buttons.h"
 
-myBtn::myBtn() { this->text = ""; }
+myBtn::myBtn() {
+	this->_text = "";
+}
 
-void myBtn::setText(const string& str) { this->text = str; }
+void myBtn::setText(const string& str) {
+	this->_text = str;
+}
 
-void myBtn::pressed() { this->SetFrameIndexOfBitmap(1); }
+void myBtn::pressed() {
+	this->SetFrameIndexOfBitmap(1);
+}
 
-void myBtn::released() { this->SetFrameIndexOfBitmap(0); }
+void myBtn::released() {
+	this->SetFrameIndexOfBitmap(0);
+}
 
 void myBtn::showBtn() {
 	this->ShowBitmap();
@@ -32,6 +40,8 @@ void myBtn::showBtn() {
 	} else {
 		CTextDraw::ChangeFontLog(pDC, 40, "ink free", RGB(188, 188, 188), 40);
 	}
-	CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->text);
+	// make the text is in the middle of the button's height
+	CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->_text);
+	
 	CDDraw::ReleaseBackCDC();
 }

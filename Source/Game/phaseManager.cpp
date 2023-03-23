@@ -3,7 +3,9 @@
 #include "buttons.h"
 #include "config.h"
 #include "GameBoard.h"
-PhaseManager_global::PhaseManager_global(const vector<CMovingBitmap*>& objs) { this->_container = objs; }
+PhaseManager_global::PhaseManager_global(const vector<CMovingBitmap*>& objs) {
+	this->_container = objs;
+}
 
 void PhaseManager_global::init() {
 	this->_container.at(_bgPos)->LoadBitmapA("Resources/menuBg.bmp");
@@ -15,7 +17,9 @@ void PhaseManager_global::show() {
 	// Stuff in the this class has nothing to be shown.
 }
 
-PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) { this->_container = objs; }
+PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) {
+	this->_container = objs;
+}
 
 void PhaseManager_menu::init() {
 	const vector<string> menuText = {"Single Player", "Multiple Players", "Options", "Exit"};
@@ -41,11 +45,16 @@ void PhaseManager_placement::init() {
 	this->_container.at(_startButtonPos)->setText("Game Start!");
 	this->_container.at(_startButtonPos)->LoadBitmapByString(_buttonPath);
 	this->_container.at(_startButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_startButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_startButtonPos)->GetHeight());
+	this->_container.at(_randomBoardButtonPos)->setText("Random Board");
+	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString(_buttonPath);
+	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight()*2 - 50);
 	this->_board1->init();
 }
 
 void PhaseManager_placement::show() {
 	this->_board1->show();
-	if (_board1->ifAllShipPlaced())
+	this->_container.at(_randomBoardButtonPos)->showBtn();
+	if (_board1->ifAllShipPlaced()) {
 		this->_container.at(_startButtonPos)->showBtn();
+	}
 }

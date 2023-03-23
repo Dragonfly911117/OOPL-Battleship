@@ -3,34 +3,39 @@ using namespace game_framework;
 
 class BaseGrid;
 class Ship;
+enum direction;
 
 class GameBoard {
 	friend GameBoard copyABoard(const GameBoard& copied);
-	// Since setup pos before  CGameStateRun::OnInit() crashes the game Constructors are NOT used 
-	vector<vector<BaseGrid*>> grids_;
-	vector<Ship*> ships_;       // for all ships
-	vector<BaseGrid*> ship_hit_;// for all grids that have ship on it and are hit, this is for displaying the hit effect
-	int currently_sel_ship_ = -1;
-	int base_x_ = 0;
-	int base_y_ = 0;
-	bool is_enemy_ = false;
-	bool ifAllShipIsPlaceable(const int& x, const int& y, const direction& d) const;
+	friend GameBoard generateABoard(const int& x);
+	vector<vector<BaseGrid*>> _grids;
+	vector<Ship*> _ships;       // for all ships
+	vector<BaseGrid*> _shipHit;// for all grids that have ship on it and are hit, this is for displaying the hit effect
+	int _selectedShip = -1;
+	int _baseX = 150;
+	int _baseY = 150;
+	bool _isEnemy = false;
+	BaseGrid* getGridByCoordinate(const int& x, const int& y) const ;
+	bool ifShipIsPlaceable(const int& x, const int& y, const direction& d) const;
 
 public:
 	// shared methods & variables
 	vector<Ship*> getShip();
 	void show();
+	void setBaseX(const int& x);
+	int getBaseX() const;
 
 	// deployment-phase methods
 	void init();
-	int getCurrSel() const;
+	int getSelectedShipIndex() const;
 	void pickUpShip(const int& shipIndex);
 	void rotateShip();
-	void dropShip(const CPoint& pt);
+	bool dropShip(const CPoint& pt);
 	bool ifAllShipPlaced() const;
 	void gettingStart();
 
 	// main-game-phase methods
-	bool beingHit(const int& x, const int& y);
+	void becomeEnemy();
+	int beingHit(const int& x, const int& y);
 	bool ifAllShipSunk() const;
 };

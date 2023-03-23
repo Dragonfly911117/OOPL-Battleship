@@ -6,8 +6,8 @@ class Ship : public BaseGrid {
 	friend Ship* makeAShip(const int& tp);
 	friend Ship* copyAShip(Ship* ship);
 	friend int myIsOverlap(const CPoint& pt1, Ship* ship);
-	int int_type_;
-	int int_health_;
+	int _type;
+	int _health;
 	void damaged();
 	void sink();
 
