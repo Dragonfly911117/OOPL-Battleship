@@ -28,52 +28,52 @@
 
 class CMainFrame : public CFrameWnd {
 protected:// create from serialization only
-    CMainFrame();
-    DECLARE_DYNCREATE(CMainFrame)
+	CMainFrame();
+	DECLARE_DYNCREATE(CMainFrame)
 
-    // Attributes
+	// Attributes
 public:
 private:
-    bool isFullScreen;
-    int isToolBarVisible;
-    int isStatusBarVisible;
-    CMenu* pMenu;
-    //CRect WindowRect;
-    // Operations
+	bool isFullScreen;
+	int isToolBarVisible;
+	int isStatusBarVisible;
+	CMenu* pMenu;
+	//CRect WindowRect;
+	// Operations
 public:
-    void SetFullScreen(bool);
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMainFrame)
+	void SetFullScreen(bool);
+	// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CMainFrame)
 public:
-    BOOL PreCreateWindow(CREATESTRUCT& cs) override;
+	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
 
 protected:
-    LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam) override;
-    //}}AFX_VIRTUAL
+	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam) override;
+	//}}AFX_VIRTUAL
 
-    // Implementation
+	// Implementation
 public:
-    ~CMainFrame() override;
+	~CMainFrame() override;
 #ifdef _DEBUG
-    void AssertValid() const override;
-    void Dump(CDumpContext& dc) const override;
+	void AssertValid() const override;
+	void Dump(CDumpContext& dc) const override;
 #endif
 
 protected:// control bar embedded members
-    CStatusBar m_wndStatusBar;
-    CToolBar m_wndToolBar;
+	CStatusBar m_wndStatusBar;
+	CToolBar m_wndToolBar;
 
-    // Generated message map functions
+	// Generated message map functions
 protected:
-    //{{AFX_MSG(CMainFrame)
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    afx_msg void OnToggleFullscreen();
-    afx_msg void OnPaint();
-    afx_msg void OnButtonFullscreen();
-    afx_msg void OnSize(UINT nType, int cx, int cy);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CMainFrame)
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnToggleFullscreen();
+	afx_msg void OnPaint();
+	afx_msg void OnButtonFullscreen();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

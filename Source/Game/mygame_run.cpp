@@ -94,6 +94,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 			return;
 		_turnFlag ? player1Turn(x2, y) : player2Turn(x1, y);
 	} else {
+
 	}
 }
 
@@ -168,6 +169,7 @@ void CGameStateRun::OnShow() {
 		_player2Board.show();
 	} else {
 	}
+
 	// cursor.ShowBitmap(); // un-comment this to see where the cursor is 
 }
 
@@ -176,18 +178,22 @@ void CGameStateRun::startSingleGame() { _phase = placement_phase; }
 void CGameStateRun::start_mutiple_game() { _phase = multiply_players; }
 
 void CGameStateRun::gameStart() {
+
 	_player2Board = copyABoard(_player1Board); // can have 
 	_phase = in_game;
+
 }
 
 void CGameStateRun::player1Turn(const int& x, const int& y) {
 	if (x < 0 || x > 9 || y < 0 || y > 9)
 		return;
+
 	if (_player2Board.beingHit(x, y)) {
 		if (_player2Board.ifAllShipSunk())
 			_phase = we_have_a_winner;
 	}
 	_turnFlag = false;
+
 
 }
 
@@ -199,6 +205,7 @@ void CGameStateRun::player2Turn(const int& x, const int& y) {
 			_phase = we_have_a_winner;
 	}
 	_turnFlag = true;
+
 }
 
 void CGameStateRun::gotoSettings() { _phase = settings; }

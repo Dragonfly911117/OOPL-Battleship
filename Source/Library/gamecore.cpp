@@ -43,9 +43,13 @@ namespace game_framework {
 			delete gameStateTable[i];
 	}
 
-	CGame* CGame::Instance() { return &instance; }
+	CGame* CGame::Instance() {
+		return &instance;
+	}
 
-	bool CGame::IsRunning() { return running; }
+	bool CGame::IsRunning() {
+		return running;
+	}
 
 	void CGame::OnDraw() {
 		CDDraw::BltBackColor(DEFAULT_BG_COLOR);// 將 Back Plain 塗黑
@@ -108,7 +112,9 @@ namespace game_framework {
 		//
 		// 啟動亂數
 		//
+
 		srand(static_cast<unsigned>(time(nullptr)));
+
 		//
 		// 開啟DirectX繪圖介面
 		//
@@ -159,7 +165,12 @@ namespace game_framework {
 			running = false;
 	}
 
-	void CGame::OnLButtonDown(UINT nFlags, CPoint point) { if (running) { gameState->OnLButtonDown(nFlags, point); } }
+	void CGame::OnLButtonDown(UINT nFlags, CPoint point) {
+		if (running) {
+			gameState->OnLButtonDown(nFlags, point);
+		}
+	}
+
 
 	void CGame::OnRButtonDown(UINT nFlags, CPoint point) {
 		if (running)
@@ -239,9 +250,13 @@ namespace game_framework {
 		ctimeCount++;
 	}
 
-	DWORD CSpecialEffect::GetEllipseTime() { return timeGetTime() - ctime; }
+	DWORD CSpecialEffect::GetEllipseTime() {
+		return timeGetTime() - ctime;
+	}
 
-	int CSpecialEffect::GetCurrentTimeCount() { return ctimeCount; }
+	int CSpecialEffect::GetCurrentTimeCount() {
+		return ctimeCount;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////
 	// CDDraw: Direct Draw Object
@@ -358,7 +373,9 @@ namespace game_framework {
 		TargetRect.bottom = y + static_cast<int>((BitmapRect[SurfaceID].bottom - BitmapRect[SurfaceID].top) * factor);
 
 
-		if (factor == 0) { return; }
+		if (factor == 0) {
+			return;
+		}
 
 		int blt_flag;
 		if (BitmapColorKey[SurfaceID] != CLR_INVALID)
@@ -537,7 +554,11 @@ namespace game_framework {
 		return true;
 	}
 
-	void CDDraw::GetClientRect(CRect& r) { r = CRect(0, 0, size_x, size_y); }
+
+	void CDDraw::GetClientRect(CRect& r) {
+		r = CRect(0, 0, size_x, size_y);
+	}
+
 
 	void CDDraw::Init(int sx, int sy) {
 		// set target screen size
@@ -559,7 +580,9 @@ namespace game_framework {
 		SetFullScreen(fullscreen);
 	}
 
-	bool CDDraw::IsFullScreen() { return fullscreen; }
+	bool CDDraw::IsFullScreen() {
+		return fullscreen;
+	}
 
 	void CDDraw::LoadBitmap(int i, int IDB_BITMAP) {
 		CBitmap bitmap;
@@ -595,7 +618,6 @@ namespace game_framework {
 	}
 
 	void CDDraw::LoadBitmap(int i, char* filename) {
-
 		auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 		GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
 		CBitmap* bmp = CBitmap::FromHandle(hbitmap);// will be deleted automatically
@@ -883,7 +905,9 @@ namespace game_framework {
 		game = g;// 設定game的pointer
 	}
 
-	void CGameState::GotoGameState(int state) { game->SetGameState(state); }
+	void CGameState::GotoGameState(int state) {
+		game->SetGameState(state);
+	}
 
 	void CGameState::ShowInitProgress(int percent, string message) {
 		if (!SHOW_LOAD_PROGRESS)

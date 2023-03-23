@@ -199,7 +199,10 @@ namespace game_framework {
 		}
 	}
 
-	CAudio* CAudio::Instance() { return &audio; }
+
+	CAudio* CAudio::Instance() {
+		return &audio;
+	}
 
 	bool CAudio::Load(unsigned id, char* lpzFileName) {
 		if (!isOpened)

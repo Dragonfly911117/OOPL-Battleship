@@ -27,14 +27,18 @@ namespace game_framework {
 
 	//! CMovingBitmap 建構子
 	/*! 
-	    用於創立一個尚未讀取圖片的物件。
+
+		用於創立一個尚未讀取圖片的物件。
 	*/
-	CMovingBitmap::CMovingBitmap() { isBitmapLoaded = false; }
+	CMovingBitmap::CMovingBitmap() {
+		isBitmapLoaded = false;
+	}
 
 	//! 取得 CMovingBitmap 物件的圖片高度。
 	/*!
-	    需要先載入圖片。
-	    \return 圖片高度，以像素為單位。
+		需要先載入圖片。
+		\return 圖片高度，以像素為單位。
+
 	*/
 	int CMovingBitmap::GetHeight() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Height() is called !!!");
@@ -79,7 +83,6 @@ namespace game_framework {
 	*/
 	void CMovingBitmap::LoadBitmap(char* filepath, COLORREF color) {
 		auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
-
 		if (hbitmap == nullptr) {
 			char error_msg[300];
 			sprintf(error_msg, "Loading bitmap	from file \"%s\" failed !!!", filepath);
@@ -223,13 +226,15 @@ namespace game_framework {
 
 	//! 取得當前圖片顯示幀的索引值。
 	/*!
-	    \return 圖片顯示幀的索引值。
+		\return 圖片顯示幀的索引值。
 	*/
-	int CMovingBitmap::GetFrameIndexOfBitmap() { return frameIndex; }
+	int CMovingBitmap::GetFrameIndexOfBitmap() {
+		return frameIndex;
+	}
 
 	//! 取得當前圖片左上角 y 軸的座標值。
 	/*!
-	    \return 圖片左上角 y 軸的座標值。
+		\return 圖片左上角 y 軸的座標值。
 	*/
 	int CMovingBitmap::GetTop() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Top() is called !!!");
@@ -238,6 +243,7 @@ namespace game_framework {
 
 	//! 取得當前圖片寬度。
 	/*!
+
 	    \return 取得當前圖片寬度。
 	*/
 	int CMovingBitmap::GetWidth() {
@@ -247,6 +253,7 @@ namespace game_framework {
 
 	//! 啟動單次動畫。
 	/*!
+
 	    將動畫設為初始幀，並且初始化單次動畫的參數值。
 	*/
 	void CMovingBitmap::ToggleAnimation() {
@@ -257,37 +264,47 @@ namespace game_framework {
 
 	//! 物件是否為動畫物件。
 	/*!
-	    \return 布林值，表示物件是否為動畫物件。
+		\return 布林值，表示物件是否為動畫物件。
 	*/
-	bool CMovingBitmap::IsAnimation() { return isAnimation; }
+	bool CMovingBitmap::IsAnimation() {
+		return isAnimation;
+	}
 
 	//! 動畫物件是否已執行完動畫。
 	/*!
-	    \return 布林值，表示動畫物件是否已執行完動畫。
+		\return 布林值，表示動畫物件是否已執行完動畫。
 	*/
-	bool CMovingBitmap::IsAnimationDone() { return isAnimationDone; }
+	bool CMovingBitmap::IsAnimationDone() {
+		return isAnimationDone;
+	}
 
 	//! 動畫物件是否為單次動畫物件。
 	/*!
-	    \return 布林值，表示動畫物件是否為單次動畫物件。
+		\return 布林值，表示動畫物件是否為單次動畫物件。
 	*/
-	bool CMovingBitmap::IsOnceAnimation() { return isOnce; }
+	bool CMovingBitmap::IsOnceAnimation() {
+		return isOnce;
+	}
 
 	//! 物件是否已讀取點陣圖。
 	/*!
-	    \return 布林值，表示物件是否已讀取點陣圖。
+		\return 布林值，表示物件是否已讀取點陣圖。
 	*/
-	bool CMovingBitmap::IsBitmapLoaded() { return isBitmapLoaded; }
+	bool CMovingBitmap::IsBitmapLoaded() {
+		return isBitmapLoaded;
+	}
 
 	//! 回傳物件的幀數。
 	/*!
-	    \return 回傳物件的幀數。
+		\return 回傳物件的幀數。
 	*/
-	int CMovingBitmap::GetFrameSizeOfBitmap() { return static_cast<int>(surfaceID.size()); }
+	int CMovingBitmap::GetFrameSizeOfBitmap() {
+		return static_cast<int>(surfaceID.size());
+	}
 
 	//! 根據 BITMAP 來初始化 CMovingBitmap 內的 location 物件。
 	/*!
-	    \param bitmapSize 已初始化過的 BITMAP 物件，帶有點陣圖的高與寬
+		\param bitmapSize 已初始化過的 BITMAP 物件，帶有點陣圖的高與寬
 	*/
 	void CMovingBitmap::InitializeRectByBITMAP(BITMAP bitmapSize) {
 		const unsigned NX = 0;
@@ -305,7 +322,10 @@ namespace game_framework {
 		if (isAnimation == true && clock() - last_time >= delayCount) {
 			frameIndex += 1;
 			last_time = clock();
-			if (frameIndex == surfaceID.size() && animationCount > 0) { animationCount -= 1; }
+
+			if (frameIndex == surfaceID.size() && animationCount > 0) {
+				animationCount -= 1;
+			}
 			if (frameIndex == surfaceID.size() && (isOnce || animationCount == 0)) {
 				isAnimation = false;
 				isAnimationDone = true;
@@ -318,21 +338,27 @@ namespace game_framework {
 
 	//! 取得物件載入圖片名稱。
 	/*!
-	    \return 回傳圖片名稱，若圖片尚未載入，則回傳一空字串。
+
+		\return 回傳圖片名稱，若圖片尚未載入，則回傳一空字串。
 	*/
-	string CMovingBitmap::GetImageFileName() { return imageFileName; }
+	string CMovingBitmap::GetImageFileName() {
+		return imageFileName;
+	}
 
 	//! 取得物件過濾顏色。
 	/*!
-	    \return 回傳過濾顏色，若物件未設定過濾顏色，回傳 `CLR_INVALID`。
+		\return 回傳過濾顏色，若物件未設定過濾顏色，回傳 `CLR_INVALID`。
 	*/
-	COLORREF CMovingBitmap::GetFilterColor() { return filterColor; }
+	COLORREF CMovingBitmap::GetFilterColor() {
+		return filterColor;
+	}
 
 	//! 兩物件是否交疊。
 	/*!
-	    \param bmp1 第一個 CMovingBitmap 物件
-	    \param bmp2 第二個 CMovingBitmap 物件
-	    \return 回傳布林值，代表兩物件是否交疊。
+		\param bmp1 第一個 CMovingBitmap 物件
+		\param bmp2 第二個 CMovingBitmap 物件
+		\return 回傳布林值，代表兩物件是否交疊。
+
 	*/
 	bool CMovingBitmap::IsOverlap(CMovingBitmap bmp1, CMovingBitmap bmp2) {
 		CRect rect;
