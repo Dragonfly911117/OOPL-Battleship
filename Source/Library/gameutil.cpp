@@ -27,6 +27,7 @@ namespace game_framework {
 
 	//! CMovingBitmap 建構子
 	/*! 
+
 		用於創立一個尚未讀取圖片的物件。
 	*/
 	CMovingBitmap::CMovingBitmap() {
@@ -37,6 +38,7 @@ namespace game_framework {
 	/*!
 		需要先載入圖片。
 		\return 圖片高度，以像素為單位。
+
 	*/
 	int CMovingBitmap::GetHeight() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Height() is called !!!");
@@ -45,8 +47,8 @@ namespace game_framework {
 
 	//! 取得 CMovingBitmap 物件的左上角的 x 軸座標值。
 	/*!
-		需要先載入圖片。
-		\return 圖片左上角的 x 軸座標值。
+	    需要先載入圖片。
+	    \return 圖片左上角的 x 軸座標值。
 	*/
 	int CMovingBitmap::GetLeft() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Left() is called !!!");
@@ -55,9 +57,9 @@ namespace game_framework {
 
 	//! 讀取圖片資源。
 	/*!
-		透過資源編號 `IDB_BITMAP` 來讀取對應的圖片，並且過濾特定顏色 `color`。
-		\param IDB_BITMAP 圖片資源編號
-		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置顏色）
+	    透過資源編號 `IDB_BITMAP` 來讀取對應的圖片，並且過濾特定顏色 `color`。
+	    \param IDB_BITMAP 圖片資源編號
+	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置顏色）
 	*/
 	void CMovingBitmap::LoadBitmap(int IDB_BITMAP, COLORREF color) {
 		CBitmap bitmap;
@@ -75,13 +77,12 @@ namespace game_framework {
 
 	//! 讀取圖片資源。
 	/*!
-		透過圖片相對路徑 `filepath` 來讀取對應的圖片，並且過濾特定顏色 `color`。
-		\param filepath 圖片相對路徑
-		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
+	    透過圖片相對路徑 `filepath` 來讀取對應的圖片，並且過濾特定顏色 `color`。
+	    \param filepath 圖片相對路徑
+	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
 	*/
 	void CMovingBitmap::LoadBitmap(char* filepath, COLORREF color) {
-		auto hbitmap = static_cast<HBITMAP>(LoadImage(NULL, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
-
+		auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filepath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 		if (hbitmap == nullptr) {
 			char error_msg[300];
 			sprintf(error_msg, "Loading bitmap	from file \"%s\" failed !!!", filepath);
@@ -104,36 +105,27 @@ namespace game_framework {
 
 	//! 讀取圖片資源。
 	/*!
-		透過圖片相對路徑集 `filepaths` 來讀取多個圖片，並且過濾特定顏色 `color`。
-		\param filepaths 圖片相對路徑集
-		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
-		\sa https://en.cppreference.com/w/cpp/container/vector
+	    透過圖片相對路徑集 `filepaths` 來讀取多個圖片，並且過濾特定顏色 `color`。
+	    \param filepaths 圖片相對路徑集
+	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
+	    \sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color) {
-		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
-			LoadBitmap(filepaths[i], color);
-		}
-	}
+	void CMovingBitmap::LoadBitmap(vector<char*> filepaths, COLORREF color) { for (int i = 0; i < static_cast<int>(filepaths.size()); i++) { LoadBitmap(filepaths[i], color); } }
 
 	//! 讀取圖片資源。
 	/*!
-		透過圖片相對路徑集 `filepaths` 來讀取多個圖片，並且過濾特定顏色 `color`。
-		\param filepaths 圖片相對路徑集
-		\param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
-		\sa https://en.cppreference.com/w/cpp/container/vector
+	    透過圖片相對路徑集 `filepaths` 來讀取多個圖片，並且過濾特定顏色 `color`。
+	    \param filepaths 圖片相對路徑集
+	    \param color 欲過濾的顏色（預設為 `CLR_INVALID`，可利用 `RGB(<R>, <G>, <B>`) 來設置過濾顏色）
+	    \sa https://en.cppreference.com/w/cpp/container/vector
 	*/
-	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color) {
-
-		for (int i = 0; i < static_cast<int>(filepaths.size()); i++) {
-			LoadBitmap((char*) filepaths[i].c_str(), color);
-		}
-	}
+	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color) { for (int i = 0; i < static_cast<int>(filepaths.size()); i++) { LoadBitmap((char*) filepaths[i].c_str(), color); } }
 
 	//! 讀取空白圖片資源。
 	/*!
-		讀取一個特定大小的白色點陣圖。
-		\param height 圖片長度
-		\param width 圖片寬度
+	    讀取一個特定大小的白色點陣圖。
+	    \param height 圖片長度
+	    \param width 圖片寬度
 	*/
 	void CMovingBitmap::LoadEmptyBitmap(int height, int width) {
 		HBITMAP hbitmap = CreateBitmap(width, height, 1, 32, nullptr);
@@ -159,8 +151,8 @@ namespace game_framework {
 
 	//! 停止顯示圖片。
 	/*!
-		@deprecated 從 v1.0.0 版本後棄用，停止顯示圖片請在 `OnShow()` 時不呼叫 `ShowBitmap()` 即可
-		\sa ShowBitmap()
+	    @deprecated 從 v1.0.0 版本後棄用，停止顯示圖片請在 `OnShow()` 時不呼叫 `ShowBitmap()` 即可
+	    \sa ShowBitmap()
 	*/
 	void CMovingBitmap::UnshowBitmap() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before SetTopLeft() is called !!!");
@@ -170,9 +162,9 @@ namespace game_framework {
 
 	//! 設置圖片至畫布指定座標上。
 	/*!
-		將會把圖片左上角設置至指定座標上。
-		\param x 左上角 x 座標
-		\param y 左上角 y 座標
+	    將會把圖片左上角設置至指定座標上。
+	    \param x 左上角 x 座標
+	    \param y 左上角 y 座標
 	*/
 	void CMovingBitmap::SetTopLeft(int x, int y) {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before SetTopLeft() is called !!!");
@@ -189,10 +181,10 @@ namespace game_framework {
 
 	//! 設置圖片是否為動畫。
 	/*!
-		若 CMovingBitmap 讀入多個圖片，則可以使用此函數來設定物件為動畫。
-		\param delay 動畫切換延遲（以毫秒為單位）
-		\param once 動畫是否為一次性動畫，若是則需要以 `ToggleAnimation()` 來呼叫動畫啟動。
-		\sa ToggleAnimation()
+	    若 CMovingBitmap 讀入多個圖片，則可以使用此函數來設定物件為動畫。
+	    \param delay 動畫切換延遲（以毫秒為單位）
+	    \param once 動畫是否為一次性動畫，若是則需要以 `ToggleAnimation()` 來呼叫動畫啟動。
+	    \sa ToggleAnimation()
 	*/
 	void CMovingBitmap::SetAnimation(int delay, bool once) {
 		if (!once)
@@ -203,7 +195,7 @@ namespace game_framework {
 
 	//! 顯示圖片。
 	/*!
-		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
+	    僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
 	*/
 	void CMovingBitmap::ShowBitmap() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
@@ -213,8 +205,8 @@ namespace game_framework {
 
 	//! 顯示圖片。
 	/*!
-		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
-		\param factor 放大倍率，需要 VGA 顯卡的支援，否則會變得異常慢。
+	    僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
+	    \param factor 放大倍率，需要 VGA 顯卡的支援，否則會變得異常慢。
 	*/
 	void CMovingBitmap::ShowBitmap(double factor) {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
@@ -224,8 +216,8 @@ namespace game_framework {
 
 	//! 設置當前圖片顯示幀的索引值。
 	/*!
-		圖片顯示幀的索引值以 0 開始。
-		\param frameIndex 圖片顯示幀的索引值。
+	    圖片顯示幀的索引值以 0 開始。
+	    \param frameIndex 圖片顯示幀的索引值。
 	*/
 	void CMovingBitmap::SetFrameIndexOfBitmap(int frameIndex) {
 		GAME_ASSERT(frameIndex < static_cast<int>(surfaceID.size()), "選擇圖片時索引出界");
@@ -251,7 +243,8 @@ namespace game_framework {
 
 	//! 取得當前圖片寬度。
 	/*!
-		\return 取得當前圖片寬度。
+
+	    \return 取得當前圖片寬度。
 	*/
 	int CMovingBitmap::GetWidth() {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Width() is called !!!");
@@ -260,7 +253,8 @@ namespace game_framework {
 
 	//! 啟動單次動畫。
 	/*!
-		將動畫設為初始幀，並且初始化單次動畫的參數值。
+
+	    將動畫設為初始幀，並且初始化單次動畫的參數值。
 	*/
 	void CMovingBitmap::ToggleAnimation() {
 		frameIndex = 0;
@@ -328,6 +322,7 @@ namespace game_framework {
 		if (isAnimation == true && clock() - last_time >= delayCount) {
 			frameIndex += 1;
 			last_time = clock();
+
 			if (frameIndex == surfaceID.size() && animationCount > 0) {
 				animationCount -= 1;
 			}
@@ -343,6 +338,7 @@ namespace game_framework {
 
 	//! 取得物件載入圖片名稱。
 	/*!
+
 		\return 回傳圖片名稱，若圖片尚未載入，則回傳一空字串。
 	*/
 	string CMovingBitmap::GetImageFileName() {
@@ -362,6 +358,7 @@ namespace game_framework {
 		\param bmp1 第一個 CMovingBitmap 物件
 		\param bmp2 第二個 CMovingBitmap 物件
 		\return 回傳布林值，代表兩物件是否交疊。
+
 	*/
 	bool CMovingBitmap::IsOverlap(CMovingBitmap bmp1, CMovingBitmap bmp2) {
 		CRect rect;
@@ -377,11 +374,11 @@ namespace game_framework {
 
 	//! 在畫面上印出文字。
 	/*!
-		我們將 pDC 取得的責任交給 caller，你必須要取得當前的 pDC 指標，然後記得釋放。
-		\param pDC，一個 CDC 指標，可使用 `CDDraw::GetBackCDC()` 取得。
-		\param x 文字顯示的左上角 x 座標
-		\param y 文字顯示的左上角 y 座標
-		\param str 欲顯示的文字
+	    我們將 pDC 取得的責任交給 caller，你必須要取得當前的 pDC 指標，然後記得釋放。
+	    \param pDC，一個 CDC 指標，可使用 `CDDraw::GetBackCDC()` 取得。
+	    \param x 文字顯示的左上角 x 座標
+	    \param y 文字顯示的左上角 y 座標
+	    \param str 欲顯示的文字
 	*/
 	void CTextDraw::Print(CDC* pDC, int x, int y, string str) {
 		x = CDDraw::IsFullScreen() ? x + (RESOLUTION_X - SIZE_X) / 2 : x;
@@ -391,13 +388,13 @@ namespace game_framework {
 
 	//! 設定當前文字的屬性。
 	/*!
-		我們將 pDC 取得的責任交給 caller，你必須要取得當前的 pDC 指標，然後記得釋放。
-		此設定會在設定的 pDC 指標被釋放時失去設定值。
-		\param pDC，一個 CDC 指標，可使用 `CDDraw::GetBackCDC()` 取得。
-		\param size 文字的大小（以 pt 為單位，但因技術有限，並不一定會完全符合 pt 為單位的大小）
-		\param fontName 字體名稱
-		\param fontColor 字體顏色
-		\param weight 字體粗度（預設為 500）
+	    我們將 pDC 取得的責任交給 caller，你必須要取得當前的 pDC 指標，然後記得釋放。
+	    此設定會在設定的 pDC 指標被釋放時失去設定值。
+	    \param pDC，一個 CDC 指標，可使用 `CDDraw::GetBackCDC()` 取得。
+	    \param size 文字的大小（以 pt 為單位，但因技術有限，並不一定會完全符合 pt 為單位的大小）
+	    \param fontName 字體名稱
+	    \param fontColor 字體顏色
+	    \param weight 字體粗度（預設為 500）
 	*/
 	void CTextDraw::ChangeFontLog(CDC* pDC, int size, string fontName, COLORREF fontColor, int weight) {
 		CFont* fp;

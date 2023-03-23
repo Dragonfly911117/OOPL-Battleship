@@ -112,7 +112,9 @@ namespace game_framework {
 		//
 		// 啟動亂數
 		//
-		srand(static_cast<unsigned>(time(NULL)));
+
+		srand(static_cast<unsigned>(time(nullptr)));
+
 		//
 		// 開啟DirectX繪圖介面
 		//
@@ -168,6 +170,7 @@ namespace game_framework {
 			gameState->OnLButtonDown(nFlags, point);
 		}
 	}
+
 
 	void CGame::OnRButtonDown(UINT nFlags, CPoint point) {
 		if (running)
@@ -551,9 +554,11 @@ namespace game_framework {
 		return true;
 	}
 
+
 	void CDDraw::GetClientRect(CRect& r) {
 		r = CRect(0, 0, size_x, size_y);
 	}
+
 
 	void CDDraw::Init(int sx, int sy) {
 		// set target screen size
@@ -613,8 +618,7 @@ namespace game_framework {
 	}
 
 	void CDDraw::LoadBitmap(int i, char* filename) {
-
-		auto hbitmap = static_cast<HBITMAP>(LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+		auto hbitmap = static_cast<HBITMAP>(LoadImage(nullptr, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 		GAME_ASSERT(hbitmap != NULL, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
 		CBitmap* bmp = CBitmap::FromHandle(hbitmap);// will be deleted automatically
 		CDC mDC;
