@@ -10,22 +10,33 @@
 #include "mygame.h"
 #include "grids.h"
 
-bool BaseGrid::ifDisplay() { return displayFlag; }
+bool BaseGrid::ifDisplay() {
+	return _displayFlag;
+}
+
 
 void BaseGrid::shipDroppingHere(const int& id) {
-	placeable = displayFlag = false;
-	shipID = id;
+	_placeable = _displayFlag = false;
+	_shipId = id;
 }
 
 void BaseGrid::shipPickingUpHere() {
-	placeable = displayFlag = true;
-	shipID = -1;
+	_placeable = _displayFlag = true;
+	_shipId = -1;
 }
 
-bool BaseGrid::ifPlaceable() { return placeable; }
+bool BaseGrid::ifPlaceable() {
+	return _placeable;
+}
 
-CPoint BaseGrid::getCoordinate() { return CPoint(this->GetLeft(), this->GetTop()); }
+CPoint BaseGrid::getCoordinate() {
+	return CPoint(this->GetLeft(), this->GetTop());
+}
 
-int BaseGrid::getShipID() { return shipID; }
+int BaseGrid::getShipID() {
+	return _shipId;
+}
 
-void BaseGrid::setShipID(const int& id) { shipID = id; }
+void BaseGrid::setShipID(const int& id) {
+	_shipId = id;
+}

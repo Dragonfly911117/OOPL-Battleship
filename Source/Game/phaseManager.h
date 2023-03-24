@@ -21,7 +21,7 @@ public:
 class PhaseManager_global final : public PhaseManager_base {
 	const short _bgPos = 0;
 	const short _cursorPos = 1;
-	const short size = 2;
+	const short _size = 2;
 
 public:
 	explicit PhaseManager_global(const vector<CMovingBitmap*>& objs);//{bg, cursor}
@@ -46,8 +46,8 @@ class PhaseManager_placement final : public PhaseManager_base {
 	vector<myBtn*> _container;
 	GameBoard* _board1 = nullptr;
 	const short _startButtonPos = 0;
-	const short size = 1;
-
+	const short _randomBoardButtonPos = 1;
+	const short _size = 2;
 public:
 	PhaseManager_placement(GameBoard* const& board1, const vector<myBtn*>& objs);
 	void init() override;

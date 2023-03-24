@@ -128,6 +128,7 @@ namespace game_framework {
 
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
+		myBtn _randomBoardButton;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		void player1Turn(const int& x, const int& y);
 		void player2Turn(const int& x, const int& y);

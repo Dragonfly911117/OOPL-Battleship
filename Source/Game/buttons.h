@@ -5,7 +5,7 @@ using namespace game_framework;
 
 class myBtn : public CMovingBitmap {
 protected:
-	std::string text;
+	std::string _text;
 
 public:
 	myBtn();

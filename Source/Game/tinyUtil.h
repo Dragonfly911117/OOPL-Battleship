@@ -13,6 +13,7 @@ Ship* makeAShip(const int& tp);
 
 Ship* copyAShip(Ship* ship);
 GameBoard copyABoard(const GameBoard& copied);
+GameBoard generateABoard(const int& x);
 // functions that are used to copy stuff is not gonna be used in future
 
 void setupBackground();

@@ -44,4 +44,6 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 	GotoGameState(GAME_STATE_RUN);// 切換至GAME_STATE_RUN
 }
 
-void CGameStateInit::OnShow() { startBg.ShowBitmap(); }
+void CGameStateInit::OnShow() {
+	startBg.ShowBitmap();
+}

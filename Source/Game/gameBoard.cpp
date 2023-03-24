@@ -10,33 +10,41 @@
 
 #include "mygame.h"
 
+#include <assert.h>
+
 void GameBoard::pickUpShip(const int& shipIndex) {
-	currently_sel_ship_ = shipIndex;
-	const int x = (ships_.at(shipIndex)->GetLeft() - base_x_) / 60;
-	const int y = (ships_.at(shipIndex)->GetTop() - base_x_) / 60;
-	const direction d = ships_.at(shipIndex)->getDirection();
-	for (int i = 0; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
+	_selectedShip = shipIndex;
+	const int x = (_ships.at(shipIndex)->GetLeft() - _baseX) / 60;
+	const int y = (_ships.at(shipIndex)->GetTop() - _baseX) / 60;
+	const direction d = _ships.at(shipIndex)->getDirection();
+	for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 		if (x < 10 && y < 10) {
 			const auto grid = new EmptyGrid;
 			grid->LoadBitmapA(R"(Resources/emptyGrid.bmp)");
-			if (d == horizontal)
-				grids_.at(x + i).at(y)->shipPickingUpHere();
-			else if (d == vertical)
-				grids_.at(x).at(y + i)->shipPickingUpHere();
-			else
+			if (d == horizontal) {
+				getGridByCoordinate(x + i, y)->shipPickingUpHere();
+			} else if (d == vertical) {
+				getGridByCoordinate(x, y + i)->shipPickingUpHere();
+			} else {
 				continue;
+			}
 		}
 	}
 }
 
-bool GameBoard::ifAllShipIsPlaceable(const int& x, const int& y, const direction& d) const {
-	for (int i = 0; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
+BaseGrid* GameBoard::getGridByCoordinate(const int& x, const int& y) const {
+	assert(x >= 0 && x < 10 && y >= 0 && y < 10);
+	return _grids.at(x).at(y);
+}
+
+bool GameBoard::ifShipIsPlaceable(const int& x, const int& y, const direction& d) const {
+	for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 		if (d == horizontal) {
-			if (x + i >= 10 || !grids_.at(x + i).at(y)->ifPlaceable()) {
+			if (x + i >= 10 || !getGridByCoordinate(x + i, y)->ifPlaceable()) {
 				return false;
 			}
 		} else if (d == vertical) {
-			if (y + i >= 10 || !grids_.at(x).at(y + i)->ifPlaceable()) {
+			if (y + i >= 10 || !getGridByCoordinate(x, y + i)->ifPlaceable()) {
 				return false;
 			}
 		}
@@ -44,32 +52,36 @@ bool GameBoard::ifAllShipIsPlaceable(const int& x, const int& y, const direction
 	return true;
 }
 
-void GameBoard::dropShip(const CPoint& pt) {
-	const int x = (pt.x - base_x_) / 60;
-	const int y = (pt.y - base_y_) / 60;
+bool GameBoard::dropShip(const CPoint& pt) {
+	const int x = (pt.x - _baseX) / 60;
+	const int y = (pt.y - _baseY) / 60;
 	if (x < 0 || x > 9 || y < 0 || y > 9)
-		return;
-	const direction d = ships_.at(currently_sel_ship_)->getDirection();
-	const bool flag = ifAllShipIsPlaceable(x, y, d);
+		return false;
+	const direction d = _ships.at(_selectedShip)->getDirection();
+	const bool flag = ifShipIsPlaceable(x, y, d);
 	if (flag) {
-		ships_.at(currently_sel_ship_)->SetTopLeft(grids_.at(x).at(y)->GetLeft(), grids_.at(x).at(y)->GetTop());
-		for (int i = 0; i < ships_.at(currently_sel_ship_)->getSize(); ++i) {
+		const CPoint newPos(getGridByCoordinate(x,y)->GetLeft(), getGridByCoordinate(x,y)->GetTop());
+		_ships.at(_selectedShip)->SetTopLeft(newPos.x, newPos.y);
+		for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 			if (d == horizontal) {
-				grids_.at(x + i).at(y)->shipDroppingHere(currently_sel_ship_);
+				getGridByCoordinate(x + i, y)->shipDroppingHere(_selectedShip);
 			} else if (d == vertical) {
-				grids_.at(x).at(y + i)->shipDroppingHere(currently_sel_ship_);
+				getGridByCoordinate(x, y + i)->shipDroppingHere(_selectedShip);
 			} else {
 			}
 		}
-		currently_sel_ship_ = -1;
-	}// else: may have to do something    
+		_selectedShip = -1;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool GameBoard::ifAllShipPlaced() const {
-	if (currently_sel_ship_ != -1)
+	if (_selectedShip != -1)
 		return false;
-	for (auto& ship: ships_) {
-		if (ship->GetLeft() >= base_x_ + 10 * 60)
+	for (auto& ship: _ships) {
+		if (ship->GetLeft() >= _baseX + 10 * 60)
 			return false;
 	}
 	return true;
@@ -94,22 +106,26 @@ void GameBoard::gettingStart() {
 	// }
 }
 
-bool GameBoard::beingHit(const int& x, const int& y) {
-	if (grids_.at(x).at(y)->GetFrameIndexOfBitmap() == grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1)
-		return false;
-	grids_.at(x).at(y)->SetFrameIndexOfBitmap(grids_.at(x).at(y)->GetFrameSizeOfBitmap() - 1);
-	if (grids_.at(x).at(y)->getShipID() != -1) {
-		ships_.at(grids_.at(x).at(y)->getShipID())->beingHit();
+void GameBoard::becomeEnemy() {
+	_isEnemy = true;
+}
+
+int GameBoard::beingHit(const int& x, const int& y) {
+	if (getGridByCoordinate(x, y)->GetFrameIndexOfBitmap() == getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1)
+		return INT_MAX;
+	getGridByCoordinate(x, y)->SetFrameIndexOfBitmap(getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1);
+	if (getGridByCoordinate(x, y)->getShipID() != -1) {
+		_ships.at(getGridByCoordinate(x, y)->getShipID())->beingHit();
 		const auto temp = new BaseGrid;
 		temp->LoadBitmapA("Resources/shipHit.bmp");
-		temp->SetTopLeft(grids_.at(x).at(y)->GetLeft(), grids_.at(x).at(y)->GetTop());
-		ship_hit_.push_back(temp);
+		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
+		_shipHit.push_back(temp);
 	}
-	return true;
+	return getGridByCoordinate(x, y)->getShipID();
 }
 
 bool GameBoard::ifAllShipSunk() const {
-	for (auto& i: ships_) {
+	for (auto& i: _ships) {
 		if (i->getHealth() != 0)
 			return false;
 	}
@@ -117,46 +133,58 @@ bool GameBoard::ifAllShipSunk() const {
 }
 
 void GameBoard::init() {
-	currently_sel_ship_ = -1;
-	base_y_ = base_x_ = 150;
+	_selectedShip = -1;
+	_baseY = _baseX = 150;
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
 		vector<BaseGrid*> curr(10);
 		for (int j = 0; j < 10; ++j) {
 			curr.at(j) = new EmptyGrid;
 			curr.at(j)->LoadBitmapByString(fileName);
-			curr.at(j)->SetTopLeft(base_x_ + 60 * i, 60 * j + base_y_);
+			curr.at(j)->SetTopLeft(_baseX + 60 * i, _baseY + 60 * j);
 		}
-		grids_.push_back(curr);
+		_grids.push_back(curr);
 	}
 	for (int i = 2; i < 6; ++i) {
-		ships_.emplace_back(makeAShip(i));
-		ships_.back()->SetTopLeft(base_x_ + (60 * 10), (i - 2) * 60 + base_y_);
+		_ships.emplace_back(makeAShip(i));
+		_ships.back()->SetTopLeft(_baseX + (60 * 10), _baseY + 60 * (i - 2));
 	}
-	ships_.emplace_back(makeAShip((9)));
-	ships_.back()->SetTopLeft(base_x_ + 60 * 10, base_y_ + 240);
-	// base_y_ = base_x_ = 150;
+	_ships.emplace_back(makeAShip((9)));
+	_ships.back()->SetTopLeft(_baseX + 60 * 10, _baseY + 240);
+	// _baseY = _baseX = 150;
 }
 
 void GameBoard::show() {
-	if (! is_enemy_)
-		for (auto& i: ships_) {
+	if (!_isEnemy) {
+		for (auto& i: _ships) {
 			i->ShowBitmap();
 		}
-	for (auto& i: grids_) {
+	}
+	for (auto& i: _grids) {
 		for (auto& j: i) {
 			if (j->ifDisplay())
 				j->ShowBitmap();
 		}
 	}
-	if (currently_sel_ship_ != -1 && !is_enemy_)
-		ships_.at(currently_sel_ship_)->ShowBitmap();
-	for (const auto& i: ship_hit_)
+	if (_selectedShip != -1 && !_isEnemy) {
+		_ships.at(_selectedShip)->ShowBitmap();
+	}
+	for (const auto& i: _shipHit) {
 		i->ShowBitmap();
+	}
+}
+
+void GameBoard::setBaseX(const int& x) {
+	_baseX = x;
+}
+
+int GameBoard::getBaseX() const {
+	return _baseX;
 }
 
 void GameBoard::rotateShip() {
-	if (currently_sel_ship_ == -1)
+	if (_selectedShip == -1) {
 		return;
-	ships_.at(currently_sel_ship_)->rotate();
+	}
+	_ships.at(_selectedShip)->rotate();
 }

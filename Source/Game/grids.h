@@ -4,9 +4,9 @@ using namespace game_framework;
 
 class BaseGrid : public CMovingBitmap {
 protected:
-	int shipID = -1;
-	bool placeable = true;
-	bool displayFlag = true;
+	int _shipId = -1;
+	bool _placeable = true;
+	bool _displayFlag = true;
 
 public:
 	void shipDroppingHere(const int& id);
