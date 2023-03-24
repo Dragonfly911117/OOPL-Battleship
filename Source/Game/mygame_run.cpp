@@ -20,22 +20,27 @@ CGameStateRun::CGameStateRun(CGame* g)
 	: CGameState(g) {
 }
 
-CGameStateRun::~CGameStateRun() {
-	for (auto& i: this->_phaseManagers) {
-		delete i;
-	}// TODO : delete all sub-objects' pointers. Perhaps do it in PhaseManager's destructor.
 
-}
 
 void CGameStateRun::OnInit() {
-	const vector<CMovingBitmap*> temp = {&this->_backgrounds, &this->_cursor};
+	_menuButton.resize(4);
+	
+	vector<shared_ptr<CMovingBitmap>> temp;
+	temp.emplace_back(&_backgrounds);
+	temp.emplace_back(&_cursor);
 	this->_phaseManagers.emplace_back(new PhaseManager_global(temp));
 
-	vector<myBtn*> temp2({_menuButton, _menuButton + 1, _menuButton + 2, _menuButton + 3});
+	vector<shared_ptr<myBtn>> temp2;
+	for (auto& i : this->_menuButton) {
+		temp2.emplace_back(&i);
+	}
 	this->_phaseManagers.emplace_back(new PhaseManager_menu(temp2));
+	temp2.clear();
 
-	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
-	this->_phaseManagers.emplace_back(new PhaseManager_placement(&this->_player1Board, temp2));
+	const shared_ptr<GameBoard> tmp(&_player1Board);
+	temp2.emplace_back(&_gameStartButton);
+	temp2.emplace_back(&_randomBoardButton);
+	this->_phaseManagers.emplace_back(new PhaseManager_placement(tmp, temp2));
 
 	for (const auto& i: this->_phaseManagers) {
 		i->init();
@@ -54,14 +59,15 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == 27)
-		exit(27);
+	if (nChar == 27) {
+		gotoExit();
+	}
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 	_cursor.SetTopLeft(point.x - 5, point.y - 5);
 	const int x1 = (point.x - 150) / 60;
-	const int x2 = (point.x -  _player2Board.getBaseX()) / 60;
+	const int x2 = (point.x - _player2Board.getBaseX()) / 60;
 	const int y = (point.y - 150) / 60;
 	if (_phase == menu) {
 		for (auto& i: _menuButton) {

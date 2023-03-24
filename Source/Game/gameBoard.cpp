@@ -32,7 +32,7 @@ void GameBoard::pickUpShip(const int& shipIndex) {
 	}
 }
 
-BaseGrid* GameBoard::getGridByCoordinate(const int& x, const int& y) const {
+shared_ptr<BaseGrid> GameBoard::getGridByCoordinate(const int& x, const int& y) const {
 	assert(x >= 0 && x < 10 && y >= 0 && y < 10);
 	return _grids.at(x).at(y);
 }
@@ -60,7 +60,7 @@ bool GameBoard::dropShip(const CPoint& pt) {
 	const direction d = _ships.at(_selectedShip)->getDirection();
 	const bool flag = ifShipIsPlaceable(x, y, d);
 	if (flag) {
-		const CPoint newPos(getGridByCoordinate(x,y)->GetLeft(), getGridByCoordinate(x,y)->GetTop());
+		const CPoint newPos(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_ships.at(_selectedShip)->SetTopLeft(newPos.x, newPos.y);
 		for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 			if (d == horizontal) {
@@ -116,7 +116,7 @@ int GameBoard::beingHit(const int& x, const int& y) {
 	getGridByCoordinate(x, y)->SetFrameIndexOfBitmap(getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1);
 	if (getGridByCoordinate(x, y)->getShipID() != -1) {
 		_ships.at(getGridByCoordinate(x, y)->getShipID())->beingHit();
-		const auto temp = new BaseGrid;
+		shared_ptr<BaseGrid>temp(new BaseGrid);
 		temp->LoadBitmapA("Resources/shipHit.bmp");
 		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_shipHit.push_back(temp);
@@ -137,9 +137,9 @@ void GameBoard::init() {
 	_baseY = _baseX = 150;
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
-		vector<BaseGrid*> curr(10);
+		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {
-			curr.at(j) = new EmptyGrid;
+			curr.at(j).reset(new EmptyGrid);
 			curr.at(j)->LoadBitmapByString(fileName);
 			curr.at(j)->SetTopLeft(_baseX + 60 * i, _baseY + 60 * j);
 		}
@@ -182,7 +182,7 @@ int GameBoard::getBaseX() const {
 	return _baseX;
 }
 
-void GameBoard::rotateShip() {
+void GameBoard::rotateShip() const {
 	if (_selectedShip == -1) {
 		return;
 	}

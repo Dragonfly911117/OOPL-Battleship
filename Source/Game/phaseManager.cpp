@@ -3,7 +3,7 @@
 #include "buttons.h"
 #include "config.h"
 #include "GameBoard.h"
-PhaseManager_global::PhaseManager_global(const vector<CMovingBitmap*>& objs) {
+PhaseManager_global::PhaseManager_global(const vector<shared_ptr<CMovingBitmap>>& objs) {
 	this->_container = objs;
 }
 
@@ -17,7 +17,7 @@ void PhaseManager_global::show() {
 	// Stuff in the this class has nothing to be shown.
 }
 
-PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) {
+PhaseManager_menu::PhaseManager_menu(const vector<shared_ptr<myBtn>>& objs) {
 	this->_container = objs;
 }
 
@@ -36,7 +36,7 @@ void PhaseManager_menu::show() {
 	}
 }
 
-PhaseManager_placement::PhaseManager_placement(GameBoard* const& board1, const vector<myBtn*>& objs) {
+PhaseManager_placement::PhaseManager_placement(shared_ptr<GameBoard> const& board1, const vector<shared_ptr<myBtn>>& objs) {
 	this->_board1 = board1;
 	this->_container = objs;
 }

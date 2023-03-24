@@ -16,7 +16,7 @@
 #include <random>
 
 // return the block index if overlap, return 0 if not overlap, return -1 if overlap but not on a block.
-int myIsOverlap(const CPoint& pt1, Ship* ship) {
+int myIsOverlap(const CPoint& pt1, shared_ptr<Ship> ship) {
 	const auto lt = CPoint(ship->GetLeft(), ship->GetTop());
 	const direction d = ship->getDirection();
 	const CPoint rb = d == horizontal
@@ -43,12 +43,12 @@ GameBoard generateABoard(const int& x) {
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 	result._baseX = x;
 	for (int i = 0; i < 10; ++i) {
-		vector<BaseGrid*> curr;
+		vector<shared_ptr<BaseGrid>> curr;
 		for (int j = 0; j < 10; ++j) {
-			const auto newGrid = new EmptyGrid;
+			shared_ptr<EmptyGrid> newGrid(new EmptyGrid);
 			newGrid->LoadBitmapByString(fileName);
 			newGrid->SetTopLeft(result._baseX + 60 * i, result._baseY + 60 * j);
-			curr.push_back(newGrid);
+			curr.emplace_back(newGrid);
 		}
 		result._grids.push_back(curr);
 	}
@@ -86,9 +86,9 @@ GameBoard copyABoard(const GameBoard& copied) {
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 
 	for (int i = 0; i < 10; ++i) {
-		vector<BaseGrid*> curr;
+		vector<shared_ptr<BaseGrid>> curr;
 		for (int j = 0; j < 10; ++j) {
-			const auto newGrid = new EmptyGrid;
+			shared_ptr<EmptyGrid> newGrid(new EmptyGrid);
 			newGrid->LoadBitmapByString(fileName);
 			newGrid->SetTopLeft(copied.getGridByCoordinate(i, j)->GetLeft() + newBoard._baseX, copied.getGridByCoordinate(i, j)->GetTop());
 			curr.push_back(newGrid);

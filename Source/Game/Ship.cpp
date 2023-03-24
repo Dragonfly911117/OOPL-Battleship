@@ -53,12 +53,12 @@ int GameBoard::getSelectedShipIndex() const {
 	return _selectedShip;
 }
 
-vector<Ship*> GameBoard::getShip() {
+vector<shared_ptr<Ship>> GameBoard::getShip() {
 	return _ships;
 }
 
-Ship* makeAShip(const int& tp) {
-	const auto ship = new Ship;
+shared_ptr<Ship> makeAShip(const int& tp) {
+	shared_ptr<Ship> ship = make_shared<Ship>();
 	ship->_type = tp;
 	ship->_health = ship->getSize();
 	ship->_placeable = false;
@@ -74,8 +74,8 @@ Ship* makeAShip(const int& tp) {
 	return ship;
 }
 
-Ship* copyAShip(Ship* ship) {
-	Ship* newShip = makeAShip(ship->_type);
+shared_ptr<Ship> copyAShip(shared_ptr<Ship> ship) {
+	shared_ptr<Ship> newShip = makeAShip(ship->_type);
 	newShip->_shipId = ship->_shipId;
 	newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
 	newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());

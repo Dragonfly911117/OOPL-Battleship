@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <memory>
 using namespace game_framework;
 
 class BaseGrid;
@@ -8,19 +9,19 @@ enum direction;
 class GameBoard {
 	friend GameBoard copyABoard(const GameBoard& copied);
 	friend GameBoard generateABoard(const int& x);
-	vector<vector<BaseGrid*>> _grids;
-	vector<Ship*> _ships;       // for all ships
-	vector<BaseGrid*> _shipHit;// for all grids that have ship on it and are hit, this is for displaying the hit effect
+	vector<vector<shared_ptr<BaseGrid>>> _grids;
+	vector<shared_ptr<Ship>> _ships;       // for all ships
+	vector<shared_ptr<BaseGrid>> _shipHit;// for all grids that have ship on it and are hit, this is for displaying the hit effect
 	int _selectedShip = -1;
 	int _baseX = 150;
 	int _baseY = 150;
 	bool _isEnemy = false;
-	BaseGrid* getGridByCoordinate(const int& x, const int& y) const ;
+	shared_ptr<BaseGrid> getGridByCoordinate(const int& x, const int& y) const ;
 	bool ifShipIsPlaceable(const int& x, const int& y, const direction& d) const;
 
 public:
 	// shared methods & variables
-	vector<Ship*> getShip();
+	vector<shared_ptr<Ship>> getShip();
 	void show();
 	void setBaseX(const int& x);
 	int getBaseX() const;
@@ -29,7 +30,7 @@ public:
 	void init();
 	int getSelectedShipIndex() const;
 	void pickUpShip(const int& shipIndex);
-	void rotateShip();
+	void rotateShip() const;
 	bool dropShip(const CPoint& pt);
 	bool ifAllShipPlaced() const;
 	void gettingStart();
