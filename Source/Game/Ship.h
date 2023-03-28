@@ -6,7 +6,7 @@ enum direction { horizontal, vertical };
 class Ship : public BaseGrid {
 	friend shared_ptr<Ship> makeAShip(const int& tp);
 	friend shared_ptr<Ship> copyAShip(shared_ptr<Ship> ship);
-	friend int myIsOverlap(const CPoint& pt1, shared_ptr<Ship> ship);
+	// friend int myIsOverlap(const CPoint& pt1, Ship* ship);
 	int _type;
 	int _health;
 	void damaged();

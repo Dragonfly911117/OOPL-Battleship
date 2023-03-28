@@ -42,6 +42,6 @@ void myBtn::showBtn() {
 	}
 	// make the text is in the middle of the button's height
 	CTextDraw::Print(pDC, this->GetLeft() + 10, this->GetTop() + GetHeight() / 2, this->_text);
-	
+
 	CDDraw::ReleaseBackCDC();
 }

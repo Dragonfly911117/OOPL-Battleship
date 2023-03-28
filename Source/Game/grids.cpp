@@ -14,13 +14,12 @@ bool BaseGrid::ifDisplay() {
 	return _displayFlag;
 }
 
-
 void BaseGrid::shipDroppingHere(const int& id) {
 	_placeable = _displayFlag = false;
 	_shipId = id;
 }
 
-void BaseGrid::shipPickingUpHere() {
+void BaseGrid::pickUpShip() {
 	_placeable = _displayFlag = true;
 	_shipId = -1;
 }

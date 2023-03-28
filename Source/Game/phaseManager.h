@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "../Library/gameutil.h"
 
-#include <memory>
-
 class myBtn;
 class GameBoard;
 using namespace game_framework;
@@ -10,7 +8,7 @@ using namespace game_framework;
 class PhaseManager_base {
 protected:
 	const vector<string> _buttonPath = {"Resources/button.bmp", "Resources/buttonPressed.bmp"};
-	vector<shared_ptr<CMovingBitmap>> _container;
+	vector<CMovingBitmap*> _container;
 
 public:
 	virtual ~PhaseManager_base() = default;
@@ -26,32 +24,33 @@ class PhaseManager_global final : public PhaseManager_base {
 	const short _size = 2;
 
 public:
-	explicit PhaseManager_global(const vector<shared_ptr<CMovingBitmap>>& objs);//{bg, cursor}
+	explicit PhaseManager_global(const vector<CMovingBitmap*>& objs);//{bg, cursor}
 	void init() override;
 	void show() override;
 };
 
 class PhaseManager_menu final : public PhaseManager_base {
-	// std::vector<shared_ptr<CMovingBitmap>> _buttons;
+	// std::vector<CMovingBitmap*> _buttons;
 	const short _btnPos = 0;
 	const short size = 4;
-	vector<shared_ptr<myBtn>> _container;
+	vector<myBtn*> _container;
 
 public:
-	explicit PhaseManager_menu(const vector<shared_ptr<myBtn>>& objs);// size = 4
+	explicit PhaseManager_menu(const vector<myBtn*>& objs);// size = 4
 	void init() override;
 	void show() override;
 
 };
 
 class PhaseManager_placement final : public PhaseManager_base {
-	vector<shared_ptr<myBtn>> _container;
-	shared_ptr<GameBoard> _board1 = nullptr;
+	vector<myBtn*> _container;
+	GameBoard* _board1 = nullptr;
 	const short _startButtonPos = 0;
 	const short _randomBoardButtonPos = 1;
 	const short _size = 2;
+
 public:
-	PhaseManager_placement(shared_ptr<GameBoard> const& board1, const vector<shared_ptr<myBtn>>& objs);
+	PhaseManager_placement(GameBoard* const& board1, const vector<myBtn*>& objs);
 	void init() override;
 	void show() override;
 };

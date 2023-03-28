@@ -7,7 +7,7 @@
 #include "../Library/audio.h"
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
-
+#include"GameBoard.h"
 #include "mygame.h"
 
 #include <assert.h>
@@ -19,22 +19,19 @@ void GameBoard::pickUpShip(const int& shipIndex) {
 	const direction d = _ships.at(shipIndex)->getDirection();
 	for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 		if (x < 10 && y < 10) {
-			const auto grid = new EmptyGrid;
-			grid->LoadBitmapA(R"(Resources/emptyGrid.bmp)");
 			if (d == horizontal) {
-				getGridByCoordinate(x + i, y)->shipPickingUpHere();
+				getGridByCoordinate(x + i, y)->pickUpShip();
 			} else if (d == vertical) {
-				getGridByCoordinate(x, y + i)->shipPickingUpHere();
+				getGridByCoordinate(x, y + i)->pickUpShip();
 			} else {
-				continue;
 			}
 		}
 	}
 }
 
-shared_ptr<BaseGrid> GameBoard::getGridByCoordinate(const int& x, const int& y) const {
+BaseGrid* GameBoard::getGridByCoordinate(const int& x, const int& y) const {
 	assert(x >= 0 && x < 10 && y >= 0 && y < 10);
-	return _grids.at(x).at(y);
+	return _grids.at(x).at(y).get();
 }
 
 bool GameBoard::ifShipIsPlaceable(const int& x, const int& y, const direction& d) const {
@@ -50,6 +47,17 @@ bool GameBoard::ifShipIsPlaceable(const int& x, const int& y, const direction& d
 		}
 	}
 	return true;
+}
+
+GameBoard& GameBoard::operator=(const GameBoard& copied) {
+	_grids = copied._grids;
+	_ships = copied._ships;
+	_shipHit = copied._shipHit;
+	_selectedShip = copied._selectedShip;
+	_baseX = copied._baseX;
+	_baseY = copied._baseY;
+	_isEnemy = copied._isEnemy;
+	return *this;
 }
 
 bool GameBoard::dropShip(const CPoint& pt) {
@@ -72,9 +80,8 @@ bool GameBoard::dropShip(const CPoint& pt) {
 		}
 		_selectedShip = -1;
 		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 bool GameBoard::ifAllShipPlaced() const {
@@ -116,7 +123,7 @@ int GameBoard::beingHit(const int& x, const int& y) {
 	getGridByCoordinate(x, y)->SetFrameIndexOfBitmap(getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1);
 	if (getGridByCoordinate(x, y)->getShipID() != -1) {
 		_ships.at(getGridByCoordinate(x, y)->getShipID())->beingHit();
-		shared_ptr<BaseGrid>temp(new BaseGrid);
+		shared_ptr<BaseGrid> temp(new BaseGrid);
 		temp->LoadBitmapA("Resources/shipHit.bmp");
 		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_shipHit.push_back(temp);
@@ -182,7 +189,7 @@ int GameBoard::getBaseX() const {
 	return _baseX;
 }
 
-void GameBoard::rotateShip() const {
+void GameBoard::rotateShip() {
 	if (_selectedShip == -1) {
 		return;
 	}

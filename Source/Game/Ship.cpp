@@ -58,7 +58,7 @@ vector<shared_ptr<Ship>> GameBoard::getShip() {
 }
 
 shared_ptr<Ship> makeAShip(const int& tp) {
-	shared_ptr<Ship> ship = make_shared<Ship>();
+	shared_ptr<Ship> ship(new Ship);
 	ship->_type = tp;
 	ship->_health = ship->getSize();
 	ship->_placeable = false;
@@ -75,7 +75,7 @@ shared_ptr<Ship> makeAShip(const int& tp) {
 }
 
 shared_ptr<Ship> copyAShip(shared_ptr<Ship> ship) {
-	shared_ptr<Ship> newShip = makeAShip(ship->_type);
+	shared_ptr<Ship> newShip = (makeAShip(ship->_type));
 	newShip->_shipId = ship->_shipId;
 	newShip->SetFrameIndexOfBitmap(ship->GetFrameIndexOfBitmap());
 	newShip->SetTopLeft(ship->GetLeft() + 1020, ship->GetTop());

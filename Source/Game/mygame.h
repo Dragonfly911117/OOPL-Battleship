@@ -109,7 +109,7 @@ namespace game_framework {
 	protected:
 		void OnMove() override;// 移動遊戲元素
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
-    
+
 	private:
 		// phase Mangers
 		/**
@@ -144,7 +144,6 @@ namespace game_framework {
 		CGameStateOver(CGame* g);
 		void OnBeginState() override;// 設定每次重玩所需的變數
 		void OnInit() override;
-
 
 	protected:
 		void OnMove() override;// 移動遊戲元素

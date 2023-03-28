@@ -21,26 +21,17 @@ CGameStateRun::CGameStateRun(CGame* g)
 }
 
 
-
 void CGameStateRun::OnInit() {
 	_menuButton.resize(4);
-	
-	vector<shared_ptr<CMovingBitmap>> temp;
-	temp.emplace_back(&_backgrounds);
-	temp.emplace_back(&_cursor);
+	_phase = menu;
+	const vector<CMovingBitmap*> temp = {&this->_backgrounds, &this->_cursor};
 	this->_phaseManagers.emplace_back(new PhaseManager_global(temp));
 
-	vector<shared_ptr<myBtn>> temp2;
-	for (auto& i : this->_menuButton) {
-		temp2.emplace_back(&i);
-	}
+	vector<myBtn*> temp2 = {_menuButton.data(), &_menuButton[1], &_menuButton[2], &_menuButton[3]};
 	this->_phaseManagers.emplace_back(new PhaseManager_menu(temp2));
-	temp2.clear();
 
-	const shared_ptr<GameBoard> tmp(&_player1Board);
-	temp2.emplace_back(&_gameStartButton);
-	temp2.emplace_back(&_randomBoardButton);
-	this->_phaseManagers.emplace_back(new PhaseManager_placement(tmp, temp2));
+	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
+	this->_phaseManagers.emplace_back(new PhaseManager_placement(&this->_player1Board, temp2));
 
 	for (const auto& i: this->_phaseManagers) {
 		i->init();
@@ -59,9 +50,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == 27) {
-		gotoExit();
-	}
+	if (nChar == 27)
+		exit(27);
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -131,7 +121,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 		if (CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
 		    _randomBoardButton.GetFrameIndexOfBitmap() == 1) {
 			_randomBoardButton.released();
-			_player1Board = generateABoard(150);
+			_player1Board = generateABoard(_player1Board.getBaseX());
 		}
 		if (_player1Board.ifAllShipPlaced()) {
 			if (CMovingBitmap::IsOverlap(_cursor, _gameStartButton) &&

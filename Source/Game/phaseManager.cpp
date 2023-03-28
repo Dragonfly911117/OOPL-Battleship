@@ -3,7 +3,8 @@
 #include "buttons.h"
 #include "config.h"
 #include "GameBoard.h"
-PhaseManager_global::PhaseManager_global(const vector<shared_ptr<CMovingBitmap>>& objs) {
+
+PhaseManager_global::PhaseManager_global(const vector<CMovingBitmap*>& objs) {
 	this->_container = objs;
 }
 
@@ -17,7 +18,7 @@ void PhaseManager_global::show() {
 	// Stuff in the this class has nothing to be shown.
 }
 
-PhaseManager_menu::PhaseManager_menu(const vector<shared_ptr<myBtn>>& objs) {
+PhaseManager_menu::PhaseManager_menu(const vector<myBtn*>& objs) {
 	this->_container = objs;
 }
 
@@ -31,12 +32,12 @@ void PhaseManager_menu::init() {
 }
 
 void PhaseManager_menu::show() {
-	for (auto& i: this->_container) {
+	for (const auto& i: this->_container) {
 		i->showBtn();
 	}
 }
 
-PhaseManager_placement::PhaseManager_placement(shared_ptr<GameBoard> const& board1, const vector<shared_ptr<myBtn>>& objs) {
+PhaseManager_placement::PhaseManager_placement(GameBoard* const& board1, const vector<myBtn*>& objs) {
 	this->_board1 = board1;
 	this->_container = objs;
 }
@@ -47,7 +48,7 @@ void PhaseManager_placement::init() {
 	this->_container.at(_startButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_startButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_startButtonPos)->GetHeight());
 	this->_container.at(_randomBoardButtonPos)->setText("Random Board");
 	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString(_buttonPath);
-	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight()*2 - 50);
+	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight() * 2 - 50);
 	this->_board1->init();
 }
 
