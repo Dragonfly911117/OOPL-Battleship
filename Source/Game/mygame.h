@@ -89,7 +89,7 @@ namespace game_framework {
 	class CGameStateRun : public CGameState {
 	public:
 		CGameStateRun(CGame* g);
-		~CGameStateRun() override;
+		// ~CGameStateRun() override;
 		void OnBeginState() override;// 設定每次重玩所需的變數
 		void OnInit() override;      // 遊戲的初值及圖形設定
 		void OnKeyDown(UINT, UINT, UINT) override;
@@ -109,13 +109,13 @@ namespace game_framework {
 	protected:
 		void OnMove() override;// 移動遊戲元素
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
-    
+
 	private:
 		// phase Mangers
 		/**
 		 * \brief 0 for global, 1 for menu, 2 for in-placement
 		 */
-		vector<PhaseManager_base*> _phaseManagers;
+		vector<shared_ptr<PhaseManager_base>> _phaseManagers;
 		// phases-shared variables
 		int _phase = menu;
 		CMovingBitmap _cursor;
@@ -124,7 +124,7 @@ namespace game_framework {
 
 		// Variables used ONLY by menu
 		CMovingBitmap _backgrounds;
-		myBtn _menuButton[4];
+		vector<myBtn> _menuButton;
 
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
@@ -144,7 +144,6 @@ namespace game_framework {
 		CGameStateOver(CGame* g);
 		void OnBeginState() override;// 設定每次重玩所需的變數
 		void OnInit() override;
-
 
 	protected:
 		void OnMove() override;// 移動遊戲元素

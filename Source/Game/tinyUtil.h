@@ -8,8 +8,8 @@
 #include "phaseManager.h"
 using namespace game_framework;
 
-int myIsOverlap(const CPoint& pt1, Ship* ship);
-Ship* makeAShip(const int& tp);
+int myIsOverlap(const CPoint& pt1, Ship& ship);
+shared_ptr<Ship> makeAShip(const int& tp);
 
 Ship* copyAShip(Ship* ship);
 GameBoard copyABoard(const GameBoard& copied);

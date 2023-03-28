@@ -10,7 +10,7 @@ protected:
 
 public:
 	void shipDroppingHere(const int& id);
-	void shipPickingUpHere();
+	void pickUpShip();
 	bool ifPlaceable();
 	CPoint getCoordinate();
 	int getShipID();

@@ -16,15 +16,15 @@
 #include <random>
 
 // return the block index if overlap, return 0 if not overlap, return -1 if overlap but not on a block.
-int myIsOverlap(const CPoint& pt1, Ship* ship) {
-	const auto lt = CPoint(ship->GetLeft(), ship->GetTop());
-	const direction d = ship->getDirection();
+int myIsOverlap(const CPoint& pt1, Ship& ship) {
+	const auto lt = CPoint(ship.GetLeft(), ship.GetTop());
+	const direction d = ship.getDirection();
 	const CPoint rb = d == horizontal
-		                  ? CPoint(lt.x + ship->getSize() * 60 - 10, lt.y + 50)
-		                  : CPoint(lt.x + 50, lt.y + ship->getSize() * 60 - 10);
+		                  ? CPoint(lt.x + ship.getSize() * 60 - 10, lt.y + 50)
+		                  : CPoint(lt.x + 50, lt.y + ship.getSize() * 60 - 10);
 	if (pt1.x > lt.x && pt1.x < rb.x && pt1.y > lt.y && pt1.y < rb.y) {
 		// which block exactly is clicked
-		for (int i = 1; i <= ship->getSize(); ++i) {
+		for (int i = 1; i <= ship.getSize(); ++i) {
 			const CPoint pt2 = d == horizontal
 				                   ? CPoint(lt.x + 60 * i - 10, lt.y + 50)
 				                   : CPoint(lt.x + 50, lt.y + 60 * i - 10);
@@ -43,12 +43,11 @@ GameBoard generateABoard(const int& x) {
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 	result._baseX = x;
 	for (int i = 0; i < 10; ++i) {
-		vector<BaseGrid*> curr;
+		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {
-			const auto newGrid = new EmptyGrid;
-			newGrid->LoadBitmapByString(fileName);
-			newGrid->SetTopLeft(result._baseX + 60 * i, result._baseY + 60 * j);
-			curr.push_back(newGrid);
+			curr.at(j).reset(new BaseGrid);
+			curr.at(j)->LoadBitmapByString(fileName);
+			curr.at(j)->SetTopLeft(result._baseX + 60 * i, result._baseY + 60 * j);
 		}
 		result._grids.push_back(curr);
 	}
@@ -86,18 +85,18 @@ GameBoard copyABoard(const GameBoard& copied) {
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 
 	for (int i = 0; i < 10; ++i) {
-		vector<BaseGrid*> curr;
+		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {
-			const auto newGrid = new EmptyGrid;
-			newGrid->LoadBitmapByString(fileName);
-			newGrid->SetTopLeft(copied.getGridByCoordinate(i, j)->GetLeft() + newBoard._baseX, copied.getGridByCoordinate(i, j)->GetTop());
-			curr.push_back(newGrid);
+			curr.at(j).reset(new BaseGrid);
+			curr.at(j)->LoadBitmapByString(fileName);
+			curr.at(j)->SetTopLeft(copied.getGridByCoordinate(i, j)->GetLeft() + newBoard._baseX, copied.getGridByCoordinate(i, j)->GetTop());
+
 		}
-		newBoard._grids.push_back(curr);
+		newBoard._grids.emplace_back(curr);
 	}
 
 	for (auto& ship: copied._ships) {
-		newBoard._ships.push_back(copyAShip(ship));
+		newBoard._ships.emplace_back(copyAShip(ship));
 	}
 
 	return newBoard;
