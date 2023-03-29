@@ -5,6 +5,7 @@
 #include "grids.h"
 #include "Ship.h"
 #include "GameBoard.h"
+#include "Robot.h"
 #include "phaseManager.h"
 using namespace game_framework;
 

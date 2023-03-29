@@ -86,6 +86,8 @@ namespace game_framework {
 		settings,
 	};
 
+	
+
 	class CGameStateRun : public CGameState {
 	public:
 		CGameStateRun(CGame* g);
@@ -101,7 +103,7 @@ namespace game_framework {
 		void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 
 		void startSingleGame();
-		void start_mutiple_game();
+		void startMultiplePlayersGame();
 		void gameStart();
 		void gotoSettings();
 		void gotoExit();
@@ -118,6 +120,8 @@ namespace game_framework {
 		vector<shared_ptr<PhaseManager_base>> _phaseManagers;
 		// phases-shared variables
 		int _phase = menu;
+		bool _playWithRobot = false;
+		Robot _bot;
 		CMovingBitmap _cursor;
 		GameBoard _player1Board;
 		GameBoard _player2Board;
@@ -130,8 +134,8 @@ namespace game_framework {
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
 		bool _turnFlag = true;// true for player 1, false for player 2
-		void player1Turn(const int& x, const int& y);
-		void player2Turn(const int& x, const int& y);
+		bool player1Turn(const int& x, const int& y);
+		bool player2Turn(const int& x, const int& y);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

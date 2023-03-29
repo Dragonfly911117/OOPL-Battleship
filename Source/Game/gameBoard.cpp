@@ -123,7 +123,7 @@ int GameBoard::beingHit(const int& x, const int& y) {
 	getGridByCoordinate(x, y)->SetFrameIndexOfBitmap(getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1);
 	if (getGridByCoordinate(x, y)->getShipID() != -1) {
 		_ships.at(getGridByCoordinate(x, y)->getShipID())->beingHit();
-		shared_ptr<BaseGrid> temp(new BaseGrid);
+		const shared_ptr<BaseGrid> temp(new BaseGrid);
 		temp->LoadBitmapA("Resources/shipHit.bmp");
 		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_shipHit.push_back(temp);

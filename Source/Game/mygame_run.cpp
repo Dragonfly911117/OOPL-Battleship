@@ -10,6 +10,7 @@
 #include "mygame.h"
 // #include "tinyUtil.h"
 #include "phaseManager.h"
+#include  "Robot.h"
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -19,7 +20,6 @@ using namespace game_framework;
 CGameStateRun::CGameStateRun(CGame* g)
 	: CGameState(g) {
 }
-
 
 void CGameStateRun::OnInit() {
 	_menuButton.resize(4);
@@ -92,7 +92,12 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 			return;
 		if ((x2 < 0 || x2 > 9 && _turnFlag) && (x1 < 0 || x1 > 9 && !_turnFlag))
 			return;
-		_turnFlag ? player1Turn(x2, y) : player2Turn(x1, y);
+		if (_turnFlag) {
+			player1Turn(x2, y);
+		} else if (!_playWithRobot) {
+			// if play with robot, player2Turn will be called in CGameStateRun::OnMove()
+			player2Turn(x1, y);
+		}
 	} else {
 	}
 }
@@ -109,7 +114,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 				if (i == 0) {
 					startSingleGame();
 				} else if (i == 1) {
-					start_mutiple_game();
+					startMultiplePlayersGame();
 				} else if (i == 2) {
 					gotoSettings();
 				} else if (i == 3) {
@@ -182,38 +187,51 @@ void CGameStateRun::startSingleGame() {
 	_phase = placement_phase;
 }
 
-void CGameStateRun::start_mutiple_game() {
+void CGameStateRun::startMultiplePlayersGame() {
 	_phase = multiply_players;
 }
 
 void CGameStateRun::gameStart() {
 	// _player2Board = copyABoard(_player1Board);// can have
 	_player2Board = generateABoard(1020);
+	_playWithRobot = true;
 	_phase = in_game;
 }
 
-void CGameStateRun::player1Turn(const int& x, const int& y) {
+bool CGameStateRun::player1Turn(const int& x, const int& y) {
 	if (x < 0 || x > 9 || y < 0 || y > 9)
-		return;
-	if (_player2Board.beingHit(x, y) >= 0) {
+		return false;
+	const int result = _player2Board.beingHit(x, y);
+	if (result >= 0) {
 		if (_player2Board.ifAllShipSunk()) {
 			_phase = we_have_a_winner;
 		}
-		return;
+		if (result != INT_MAX) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	_turnFlag = false;
+	return false;
 }
 
-void CGameStateRun::player2Turn(const int& x, const int& y) {
+bool CGameStateRun::player2Turn(const int& x, const int& y) {
 	if (x < 0 || x > 9 || y < 0 || y > 9)
-		return;
-	if (_player1Board.beingHit(x, y) >= 0) {
+		return false;
+	const int result = _player1Board.beingHit(x, y);
+	if (result >= 0) {
 		if (_player1Board.ifAllShipSunk()) {
 			_phase = we_have_a_winner;
 		}
-		return;
+		if (result != INT_MAX) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	_turnFlag = true;
+	return false;
 }
 
 void CGameStateRun::gotoSettings() {
@@ -230,6 +248,17 @@ void CGameStateRun::OnBeginState() {
 }
 
 void CGameStateRun::OnMove() {
+	if (_playWithRobot && !_turnFlag) {
+		CPoint pt;
+		if (_bot.getDifficulty() == robotEnums::noob) {
+			pt = _bot.noobModeFire();
+		} else if (_bot.getDifficulty() == robotEnums::normal) {
+			pt = _bot.normalModeFire();
+		} else if (_bot.getDifficulty() == robotEnums::hard) {
+			pt = _bot.hardModeFire();
+		}
+		_bot.getFeedback(player2Turn(pt.x, pt.y));
+	}
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {
