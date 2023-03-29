@@ -14,9 +14,9 @@ struct std::equal_to<CPoint> {
 	bool operator()(const CPoint& p1, const CPoint& p2) const;
 };
 
-namespace robotEnums {
+namespace robot_enums {
 	enum difficulty {
-		noob, normal, hard
+		infinite_monkey, normal, hard
 	};
 
 	enum direction {
@@ -26,18 +26,17 @@ namespace robotEnums {
 
 class Robot {
 	CPoint _lastCoordinate;
-	robotEnums::difficulty _difficulty = robotEnums::normal;
-	robotEnums::direction _lastDirection = robotEnums::direction::up;
+	robot_enums::difficulty _difficulty = robot_enums::hard;
+	robot_enums::direction _lastDirection = robot_enums::direction::up;
 	bool _vertFlag = false;
 	std::stack<CPoint> _dfsStack;
 	std::unordered_set<CPoint> _map;
 	static CPoint randomlyPickCoordinate();
 
 public:
-	CPoint noobModeFire();  // fire randomly
-	CPoint normalModeFire();// if hit, fire its adjacent coordinates 'tll miss
-	CPoint hardModeFire();  // have some additional strategies TODO: search for strategies
-	void ifLastFireHits(const bool& flag);
+	CPoint infiniteMonkeyModeFire(); // fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
+	CPoint normalModeFire(); // if hit, fire its adjacent coordinates 'tll miss
+	CPoint hardModeFire(); // have some additional strategies 
 	void getFeedback(const bool& res);
-	robotEnums::difficulty getDifficulty() const;
+	robot_enums::difficulty getDifficulty() const;
 };

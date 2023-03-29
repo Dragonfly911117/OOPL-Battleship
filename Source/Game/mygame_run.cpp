@@ -250,11 +250,11 @@ void CGameStateRun::OnBeginState() {
 void CGameStateRun::OnMove() {
 	if (_playWithRobot && !_turnFlag) {
 		CPoint pt;
-		if (_bot.getDifficulty() == robotEnums::noob) {
-			pt = _bot.noobModeFire();
-		} else if (_bot.getDifficulty() == robotEnums::normal) {
+		if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
+			pt = _bot.infiniteMonkeyModeFire();
+		} else if (_bot.getDifficulty() == robot_enums::normal) {
 			pt = _bot.normalModeFire();
-		} else if (_bot.getDifficulty() == robotEnums::hard) {
+		} else if (_bot.getDifficulty() == robot_enums::hard) {
 			pt = _bot.hardModeFire();
 		}
 		_bot.getFeedback(player2Turn(pt.x, pt.y));
