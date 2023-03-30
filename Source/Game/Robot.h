@@ -6,7 +6,7 @@
 
 template<>
 struct std::hash<CPoint> {
-	size_t operator()(const CPoint& p) const;
+	size_t operator()(const CPoint& p) const noexcept;
 };
 
 template<>
@@ -31,6 +31,10 @@ class Robot {
 	bool _vertFlag = false;
 	std::stack<CPoint> _dfsStack;
 	std::unordered_set<CPoint> _map;
+
+	int _cheatCountdown = 10;
+	std::deque<CPoint> _cheatSheet;
+
 	static CPoint randomlyPickCoordinate();
 
 public:
@@ -38,6 +42,7 @@ public:
 	CPoint normalModeFire(); // if hit, fire its adjacent coordinates 'tll miss
 	CPoint hardModeFire(); // have some additional strategies
 	CPoint darkSoulModeFire(); // U died. Basically, it cheats
+	void gatherEnemyShipCoordinates(const std::deque<CPoint>& pt);
 	void getFeedback(const bool& res);
 	robot_enums::difficulty getDifficulty() const;
 	void setDifficulty(const int& i);

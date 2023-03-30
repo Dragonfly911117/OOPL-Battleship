@@ -15,6 +15,7 @@ shared_ptr<Ship> makeAShip(const int& tp);
 Ship* copyAShip(Ship* ship);
 GameBoard copyABoard(const GameBoard& copied);
 GameBoard generateABoard(const int& x, const bool& isEnemy = false);
+deque<CPoint> getShipCoordinates(const GameBoard& board);
 // functions that are used to copy stuff is not gonna be used in future
 
 void setupBackground();

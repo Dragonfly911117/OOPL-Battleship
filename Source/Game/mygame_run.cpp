@@ -222,6 +222,9 @@ void CGameStateRun::startMultiplePlayersGame() {
 void CGameStateRun::gameStart() {
 	// _player2Board = copyABoard(_player1Board);// can have
 	if (_phase == single_placement_phase) {
+		if (_bot.getDifficulty() == robot_enums::dark_soul) {
+			_bot.gatherEnemyShipCoordinates(getShipCoordinates(_player1Board));
+		}
 		_player2Board = generateABoard(1020, true);
 		_phase = single_game;
 	} else if (_phase == multiply_players) {
@@ -264,15 +267,20 @@ void CGameStateRun::OnBeginState() {
 
 void CGameStateRun::OnMove() {
 	if (_playWithRobot && !_turnFlag) {
-		CPoint pt;
-		if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
-			pt = _bot.infiniteMonkeyModeFire();
-		} else if (_bot.getDifficulty() == robot_enums::normal) {
-			pt = _bot.normalModeFire();
-		} else if (_bot.getDifficulty() == robot_enums::hard) {
-			pt = _bot.hardModeFire();
+		if (clock() - _lastTimeBotPlayed > _botPlayDelay) {
+			_lastTimeBotPlayed = clock();
+			CPoint pt;
+			if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
+				pt = _bot.infiniteMonkeyModeFire();
+			} else if (_bot.getDifficulty() == robot_enums::normal) {
+				pt = _bot.normalModeFire();
+			} else if (_bot.getDifficulty() == robot_enums::hard) {
+				pt = _bot.hardModeFire();
+			} else if (_bot.getDifficulty() ==  robot_enums::dark_soul) {
+				pt = _bot.darkSoulModeFire();
+			}
+			_bot.getFeedback(turn(pt, 2));
 		}
-		_bot.getFeedback(turn(pt, 2));
 	}
 }
 

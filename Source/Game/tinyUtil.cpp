@@ -76,6 +76,18 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	return result;
 }
 
+deque<CPoint> getShipCoordinates(const GameBoard& board) {
+	deque<CPoint>res;
+	for (int i = 0; i < board._grids.size(); ++i) {
+		for (int j = 0; j < board._grids.at(i).size(); ++j) {
+			if (board._grids.at(i).at(j)->getShipId() != -1) {
+				res.emplace_back(CPoint(i, j));
+			}
+		}
+	}
+	return res;
+}
+
 GameBoard copyABoard(const GameBoard& copied) {
 	GameBoard newBoard;
 	newBoard._baseX = 1020;

@@ -2,7 +2,7 @@
 #include "Robot.h"
 #include <random>
 
-size_t std::hash<CPoint>::operator()(const CPoint& p) const {
+size_t std::hash<CPoint>::operator()(const CPoint& p) const noexcept {
 	return hash<int>()(p.x) ^ hash<int>()(p.y);
 }
 
@@ -79,7 +79,19 @@ CPoint Robot::hardModeFire() {
 }
 
 CPoint Robot::darkSoulModeFire() {
-	return hardModeFire();
+	if (_cheatCountdown-- < 0 && !_cheatSheet.empty()) {
+		const CPoint pt = _cheatSheet.front();
+		_cheatSheet.pop_front();
+		_lastCoordinate = pt;
+		return pt;
+	} else {
+		return hardModeFire();
+	}
+
+}
+
+void Robot::gatherEnemyShipCoordinates(const std::deque<CPoint>& pt) {
+	_cheatSheet = pt;
 }
 
 void Robot::getFeedback(const bool& res) {
