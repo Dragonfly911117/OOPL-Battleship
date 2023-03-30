@@ -13,9 +13,10 @@ public:
 	void pickUpShip();
 	bool ifPlaceable();
 	CPoint getCoordinate();
-	int getShipID();
-	void setShipID(const int& id);
-	bool ifDisplay();
+	int getShipId();
+	void setShipId(const int& id);
+	bool getDisplayFlag();
+	void setDisplayFlag(const bool& flag);
 };
 
 class EmptyGrid : public BaseGrid {

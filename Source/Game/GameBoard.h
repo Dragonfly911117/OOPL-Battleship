@@ -8,7 +8,7 @@ enum direction;
 
 class GameBoard {
 	friend GameBoard copyABoard(const GameBoard& copied);
-	friend GameBoard generateABoard(const int& x);
+	friend GameBoard generateABoard(const int& x, const bool& isEnemy);
 	vector<vector<shared_ptr<BaseGrid>>> _grids;
 	vector<shared_ptr<Ship>> _ships;      // for all ships
 	vector<shared_ptr<BaseGrid>> _shipHit;// for all grids that have ship on it and are hit, this is for displaying the hit effect

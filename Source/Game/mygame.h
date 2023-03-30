@@ -79,10 +79,12 @@ namespace game_framework {
 
 	enum CGameStateRunPhases {
 		menu,
-		multiply_players,
-		placement_phase,
-		in_game,
-		we_have_a_winner,
+		difficulty_choosing,
+		single_placement_phase,
+		single_game,
+		multiply_players, // may have some more phases for multiple players
+		p1_wins,
+		p2_wins,
 		settings,
 	};
 
@@ -96,10 +98,10 @@ namespace game_framework {
 		void OnInit() override;      // 遊戲的初值及圖形設定
 		void OnKeyDown(UINT, UINT, UINT) override;
 		void OnKeyUp(UINT, UINT, UINT) override;
-		void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
-		void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
-		void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+		void OnLButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
+		void OnLButtonUp(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
+		void OnMouseMove(UINT nFlags, CPoint point) override; // 處理滑鼠的動作 
+		void OnRButtonDown(UINT nFlags, CPoint point) override; // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 
 		void startSingleGame();
@@ -109,15 +111,15 @@ namespace game_framework {
 		void gotoExit();
 
 	protected:
-		void OnMove() override;// 移動遊戲元素
-		void OnShow() override;// 顯示這個狀態的遊戲畫面
+		void OnMove() override; // 移動遊戲元素
+		void OnShow() override; // 顯示這個狀態的遊戲畫面
 
 	private:
 		// phase Mangers
 		/**
 		 * \brief 0 for global, 1 for menu, 2 for in-placement
 		 */
-		vector<shared_ptr<PhaseManager_base>> _phaseManagers;
+		
 		// phases-shared variables
 		int _phase = menu;
 		bool _playWithRobot = false;
@@ -127,15 +129,15 @@ namespace game_framework {
 		GameBoard _player2Board;
 
 		// Variables used ONLY by menu
-		CMovingBitmap _backgrounds;
+		CMovingBitmap _background;
 		vector<myBtn> _menuButton;
+		vector<myBtn> _difficultyButton;
 
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
 		bool _turnFlag = true;// true for player 1, false for player 2
-		bool player1Turn(const int& x, const int& y);
-		bool player2Turn(const int& x, const int& y);
+		bool turn(const CPoint& point, const int& player);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

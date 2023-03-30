@@ -6,7 +6,7 @@
 #include "Ship.h"
 #include "GameBoard.h"
 #include "Robot.h"
-#include "phaseManager.h"
+#include "PhaseInitializer.h"
 using namespace game_framework;
 
 int myIsOverlap(const CPoint& pt1, Ship& ship);
@@ -14,7 +14,7 @@ shared_ptr<Ship> makeAShip(const int& tp);
 
 Ship* copyAShip(Ship* ship);
 GameBoard copyABoard(const GameBoard& copied);
-GameBoard generateABoard(const int& x);
+GameBoard generateABoard(const int& x, const bool& isEnemy = false);
 // functions that are used to copy stuff is not gonna be used in future
 
 void setupBackground();

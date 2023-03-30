@@ -16,7 +16,7 @@ struct std::equal_to<CPoint> {
 
 namespace robot_enums {
 	enum difficulty {
-		infinite_monkey, normal, hard
+		infinite_monkey, normal, hard, dark_soul
 	};
 
 	enum direction {
@@ -36,7 +36,9 @@ class Robot {
 public:
 	CPoint infiniteMonkeyModeFire(); // fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
 	CPoint normalModeFire(); // if hit, fire its adjacent coordinates 'tll miss
-	CPoint hardModeFire(); // have some additional strategies 
+	CPoint hardModeFire(); // have some additional strategies
+	CPoint darkSoulModeFire(); // U died. Basically, it cheats
 	void getFeedback(const bool& res);
 	robot_enums::difficulty getDifficulty() const;
+	void setDifficulty(const int& i);
 };

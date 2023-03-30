@@ -69,13 +69,17 @@ CPoint Robot::hardModeFire() {
 				}
 			}
 		}
+		_map.insert(pt);
 	} else {
 		pt = _dfsStack.top();
 		_dfsStack.pop();
 	}
 	_lastCoordinate = pt;
-	_map.insert(pt);
 	return pt;
+}
+
+CPoint Robot::darkSoulModeFire() {
+	return hardModeFire();
 }
 
 void Robot::getFeedback(const bool& res) {
@@ -118,4 +122,8 @@ void Robot::getFeedback(const bool& res) {
 
 robot_enums::difficulty Robot::getDifficulty() const {
 	return _difficulty;
+}
+
+void Robot::setDifficulty(const int& i) {
+	_difficulty = static_cast<robot_enums::difficulty>(i);
 }

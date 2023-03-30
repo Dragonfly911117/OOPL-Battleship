@@ -37,9 +37,9 @@ int myIsOverlap(const CPoint& pt1, Ship& ship) {
 	return 0;
 }
 
-GameBoard generateABoard(const int& x) {
+GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	GameBoard result;
-	result._isEnemy = false;
+	result._isEnemy = isEnemy;
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 	result._baseX = x;
 	for (int i = 0; i < 10; ++i) {

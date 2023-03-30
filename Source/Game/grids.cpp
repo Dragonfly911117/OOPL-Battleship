@@ -10,8 +10,12 @@
 #include "mygame.h"
 #include "grids.h"
 
-bool BaseGrid::ifDisplay() {
+bool BaseGrid::getDisplayFlag() {
 	return _displayFlag;
+}
+
+void BaseGrid::setDisplayFlag(const bool& flag) {
+	_displayFlag = flag;
 }
 
 void BaseGrid::shipDroppingHere(const int& id) {
@@ -32,10 +36,10 @@ CPoint BaseGrid::getCoordinate() {
 	return CPoint(this->GetLeft(), this->GetTop());
 }
 
-int BaseGrid::getShipID() {
+int BaseGrid::getShipId() {
 	return _shipId;
 }
 
-void BaseGrid::setShipID(const int& id) {
+void BaseGrid::setShipId(const int& id) {
 	_shipId = id;
 }
