@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <deque>
 #include <memory>
 using namespace game_framework;
 
@@ -8,7 +9,8 @@ enum direction;
 
 class GameBoard {
 	friend GameBoard copyABoard(const GameBoard& copied);
-	friend GameBoard generateABoard(const int& x);
+	friend GameBoard generateABoard(const int& x, const bool& isEnemy);
+	friend deque<CPoint> getShipCoordinates(const GameBoard& board);
 	vector<vector<shared_ptr<BaseGrid>>> _grids;
 	vector<shared_ptr<Ship>> _ships;      // for all ships
 	vector<shared_ptr<BaseGrid>> _shipHit;// for all grids that have ship on it and are hit, this is for displaying the hit effect

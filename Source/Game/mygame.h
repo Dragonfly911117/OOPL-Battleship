@@ -79,10 +79,12 @@ namespace game_framework {
 
 	enum CGameStateRunPhases {
 		menu,
-		multiply_players,
-		placement_phase,
-		in_game,
-		we_have_a_winner,
+		difficulty_choosing,
+		single_placement_phase,
+		single_game,
+		multiply_players,// may have some more phases for multiple players
+		p1_wins,
+		p2_wins,
 		settings,
 	};
 
@@ -101,7 +103,7 @@ namespace game_framework {
 		void OnRButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 
 		void startSingleGame();
-		void start_mutiple_game();
+		void startMultiplePlayersGame();
 		void gameStart();
 		void gotoSettings();
 		void gotoExit();
@@ -115,23 +117,27 @@ namespace game_framework {
 		/**
 		 * \brief 0 for global, 1 for menu, 2 for in-placement
 		 */
-		vector<shared_ptr<PhaseManager_base>> _phaseManagers;
+
 		// phases-shared variables
 		int _phase = menu;
+		bool _playWithRobot = false;
+		Robot _bot;
 		CMovingBitmap _cursor;
 		GameBoard _player1Board;
 		GameBoard _player2Board;
 
 		// Variables used ONLY by menu
-		CMovingBitmap _backgrounds;
+		CMovingBitmap _background;
 		vector<myBtn> _menuButton;
+		vector<myBtn> _difficultyButton;
 
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
+		clock_t _lastTimeBotPlayed;
+		const int _botPlayDelay = 100;
 		bool _turnFlag = true;// true for player 1, false for player 2
-		void player1Turn(const int& x, const int& y);
-		void player2Turn(const int& x, const int& y);
+		bool turn(const CPoint& point, const int& player);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

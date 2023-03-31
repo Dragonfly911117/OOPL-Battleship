@@ -9,7 +9,8 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 // #include "tinyUtil.h"
-#include "phaseManager.h"
+#include "PhaseInitializer.h"
+#include  "Robot.h"
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -20,27 +21,29 @@ CGameStateRun::CGameStateRun(CGame* g)
 	: CGameState(g) {
 }
 
-
 void CGameStateRun::OnInit() {
 	_menuButton.resize(4);
+	_difficultyButton.resize(4);
 	_phase = menu;
-	const vector<CMovingBitmap*> temp = {&this->_backgrounds, &this->_cursor};
-	this->_phaseManagers.emplace_back(new PhaseManager_global(temp));
+	vector<shared_ptr<PhaseInitializer_base>> initializer;
+	const vector<CMovingBitmap*> temp = {&this->_background, &this->_cursor};
+	initializer.emplace_back(new PhaseInitializer_global(temp));
 
-	vector<myBtn*> temp2 = {_menuButton.data(), &_menuButton[1], &_menuButton[2], &_menuButton[3]};
-	this->_phaseManagers.emplace_back(new PhaseManager_menu(temp2));
+	vector<myBtn*> temp2 = {&_menuButton[0], &_menuButton[1], &_menuButton[2], &_menuButton[3],
+	                        &_difficultyButton[0], &_difficultyButton[1], &_difficultyButton[2], &_difficultyButton[3]};
+	initializer.emplace_back(new PhaseInitializer_menu(temp2));
 
 	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
-	this->_phaseManagers.emplace_back(new PhaseManager_placement(&this->_player1Board, temp2));
+	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2));
 
-	for (const auto& i: this->_phaseManagers) {
+	for (const auto& i: initializer) {
 		i->init();
 	}
 
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (_phase == placement_phase) {
+	if (_phase == single_placement_phase) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			if (nChar == 52 || nChar == 82) {
 				_player1Board.rotateShip();
@@ -66,7 +69,15 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 				break;
 			}
 		}
-	} else if (_phase == placement_phase) {
+
+	} else if (_phase == difficulty_choosing) {
+		for (auto& i: _difficultyButton) {
+			if (CMovingBitmap::IsOverlap(_cursor, i)) {
+				i.pressed();
+				break;
+			}
+		}
+	} else if (_phase == single_placement_phase) {
 		if (_player1Board.getSelectedShipIndex() == -1) {
 			const auto ships = _player1Board.getShip();
 			for (int i = 0; i < 5; ++i) {
@@ -87,12 +98,17 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 				_gameStartButton.pressed();
 			}
 		}
-	} else if (_phase == in_game) {
+	} else if (_phase == single_game) {
 		if (y < 0 || y > 9)
 			return;
 		if ((x2 < 0 || x2 > 9 && _turnFlag) && (x1 < 0 || x1 > 9 && !_turnFlag))
 			return;
-		_turnFlag ? player1Turn(x2, y) : player2Turn(x1, y);
+		if (_turnFlag) {
+			turn(CPoint(x2, y), 1);
+		} else if (!_playWithRobot) {
+			// if play with robot, player2Turn will be called in CGameStateRun::OnMove()
+			turn(CPoint(x1, y), 2);
+		}
 	} else {
 	}
 }
@@ -100,16 +116,13 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 	_cursor.SetTopLeft(point.x - 5, point.y - 5);
 	if (_phase == menu) {
-		// Remember to remove these two lines
-		// startSingleGame();
-		// return;
 		for (int i = 0; i < 4; ++i) {
 			if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i]) &&
 			    _menuButton[i].GetFrameIndexOfBitmap() == 1) {
 				if (i == 0) {
 					startSingleGame();
 				} else if (i == 1) {
-					start_mutiple_game();
+					startMultiplePlayersGame();
 				} else if (i == 2) {
 					gotoSettings();
 				} else if (i == 3) {
@@ -117,7 +130,17 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 				}
 			}
 		}
-	} else if (_phase == placement_phase) {
+	} else if (_phase == difficulty_choosing) {
+		for (int i = 0; i < _difficultyButton.size();++i) {
+			 if (CMovingBitmap::IsOverlap(_cursor, _difficultyButton[i]) &&
+			    _difficultyButton[i].GetFrameIndexOfBitmap() == 1) {
+			 	_difficultyButton[i].released();
+			 	_bot.setDifficulty(i);
+			 	break;
+			 }
+		}
+		_phase = single_placement_phase;
+	} else if (_phase == single_placement_phase) {
 		if (CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
 		    _randomBoardButton.GetFrameIndexOfBitmap() == 1) {
 			_randomBoardButton.released();
@@ -155,7 +178,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
 		//     }
 		//     i.released();
 		// }
-	} else if (_phase == placement_phase) {
+	} else if (_phase == single_placement_phase) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
 		}
@@ -164,13 +187,22 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
 }
 
 void CGameStateRun::OnShow() {
-	_backgrounds.ShowBitmap();
+	_background.ShowBitmap();
 	if (_phase == menu) {
-		_phaseManagers.at(1)->show();
-	} else if (_phase == placement_phase) {
-		_phaseManagers.at(2)->show();
-	} else if (_phase == in_game) {
-		// Perhaps consider making a new PhaseManager for this one.
+		for (auto& i: _menuButton) {
+			i.showBtn();
+		}
+	} else if (_phase == difficulty_choosing) {
+		for (auto& i: _difficultyButton) {
+			i.showBtn();
+		}
+	} else if (_phase == single_placement_phase) {
+		_player1Board.show();
+		_randomBoardButton.showBtn();
+		if (_player1Board.ifAllShipPlaced()) {
+			_gameStartButton.showBtn();
+		}
+	} else if (_phase == single_game || _phase == multiply_players) {
 		_player1Board.show();
 		_player2Board.show();
 	} else {
@@ -179,41 +211,45 @@ void CGameStateRun::OnShow() {
 }
 
 void CGameStateRun::startSingleGame() {
-	_phase = placement_phase;
+	_phase = difficulty_choosing;
+	_playWithRobot = true;
 }
 
-void CGameStateRun::start_mutiple_game() {
+void CGameStateRun::startMultiplePlayersGame() {
 	_phase = multiply_players;
 }
 
 void CGameStateRun::gameStart() {
 	// _player2Board = copyABoard(_player1Board);// can have
-	_player2Board = generateABoard(1020);
-	_phase = in_game;
+	if (_phase == single_placement_phase) {
+		if (_bot.getDifficulty() == robot_enums::dark_soul) {
+			_bot.gatherEnemyShipCoordinates(getShipCoordinates(_player1Board));
+		}
+		_player2Board = generateABoard(1020, true);
+		_phase = single_game;
+	} else if (_phase == multiply_players) {
+		// idk
+	}
+	// _phase = in_game;
 }
 
-void CGameStateRun::player1Turn(const int& x, const int& y) {
-	if (x < 0 || x > 9 || y < 0 || y > 9)
-		return;
-	if (_player2Board.beingHit(x, y) >= 0) {
-		if (_player2Board.ifAllShipSunk()) {
-			_phase = we_have_a_winner;
+bool CGameStateRun::turn(const CPoint& point, const int& player) {
+	if (point.x < 0 || point.x > 9 || point.y < 0 || point.y > 9)
+		return false;
+	auto& board = player == 1 ? _player2Board : _player1Board;
+	const int result = board.beingHit(point.x, point.y);
+	if (result >= 0) {
+		if (board.ifAllShipSunk()) {
+			_phase = player == 1 ? p2_wins : p1_wins;
 		}
-		return;
-	}
-	_turnFlag = false;
-}
-
-void CGameStateRun::player2Turn(const int& x, const int& y) {
-	if (x < 0 || x > 9 || y < 0 || y > 9)
-		return;
-	if (_player1Board.beingHit(x, y) >= 0) {
-		if (_player1Board.ifAllShipSunk()) {
-			_phase = we_have_a_winner;
+		if (result != INT_MAX) {
+			return true;
+		} else {
+			return false;
 		}
-		return;
 	}
-	_turnFlag = true;
+	_turnFlag = !_turnFlag;
+	return false;
 }
 
 void CGameStateRun::gotoSettings() {
@@ -230,6 +266,22 @@ void CGameStateRun::OnBeginState() {
 }
 
 void CGameStateRun::OnMove() {
+	if (_playWithRobot && !_turnFlag) {
+		if (clock() - _lastTimeBotPlayed > _botPlayDelay) {
+			_lastTimeBotPlayed = clock();
+			CPoint pt;
+			if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
+				pt = _bot.infiniteMonkeyModeFire();
+			} else if (_bot.getDifficulty() == robot_enums::normal) {
+				pt = _bot.normalModeFire();
+			} else if (_bot.getDifficulty() == robot_enums::hard) {
+				pt = _bot.hardModeFire();
+			} else if (_bot.getDifficulty() ==  robot_enums::dark_soul) {
+				pt = _bot.darkSoulModeFire();
+			}
+			_bot.getFeedback(turn(pt, 2));
+		}
+	}
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point) {

@@ -37,9 +37,9 @@ int myIsOverlap(const CPoint& pt1, Ship& ship) {
 	return 0;
 }
 
-GameBoard generateABoard(const int& x) {
+GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	GameBoard result;
-	result._isEnemy = false;
+	result._isEnemy = isEnemy;
 	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
 	result._baseX = x;
 	for (int i = 0; i < 10; ++i) {
@@ -74,6 +74,18 @@ GameBoard generateABoard(const int& x) {
 		}
 	}
 	return result;
+}
+
+deque<CPoint> getShipCoordinates(const GameBoard& board) {
+	deque<CPoint>res;
+	for (int i = 0; i < board._grids.size(); ++i) {
+		for (int j = 0; j < board._grids.at(i).size(); ++j) {
+			if (board._grids.at(i).at(j)->getShipId() != -1) {
+				res.emplace_back(CPoint(i, j));
+			}
+		}
+	}
+	return res;
 }
 
 GameBoard copyABoard(const GameBoard& copied) {

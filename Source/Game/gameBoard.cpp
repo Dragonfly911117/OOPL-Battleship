@@ -121,14 +121,14 @@ int GameBoard::beingHit(const int& x, const int& y) {
 	if (getGridByCoordinate(x, y)->GetFrameIndexOfBitmap() == getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1)
 		return INT_MAX;
 	getGridByCoordinate(x, y)->SetFrameIndexOfBitmap(getGridByCoordinate(x, y)->GetFrameSizeOfBitmap() - 1);
-	if (getGridByCoordinate(x, y)->getShipID() != -1) {
-		_ships.at(getGridByCoordinate(x, y)->getShipID())->beingHit();
-		shared_ptr<BaseGrid> temp(new BaseGrid);
+	if (getGridByCoordinate(x, y)->getShipId() != -1) {
+		_ships.at(getGridByCoordinate(x, y)->getShipId())->beingHit();
+		const shared_ptr<BaseGrid> temp(new BaseGrid);
 		temp->LoadBitmapA("Resources/shipHit.bmp");
 		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_shipHit.push_back(temp);
 	}
-	return getGridByCoordinate(x, y)->getShipID();
+	return getGridByCoordinate(x, y)->getShipId();
 }
 
 bool GameBoard::ifAllShipSunk() const {
@@ -169,7 +169,7 @@ void GameBoard::show() {
 	}
 	for (auto& i: _grids) {
 		for (auto& j: i) {
-			if (j->ifDisplay())
+			if (j->getDisplayFlag() || _isEnemy)
 				j->ShowBitmap();
 		}
 	}
