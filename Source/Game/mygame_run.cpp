@@ -35,6 +35,7 @@ void CGameStateRun::OnInit() {
 
 	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
 	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2));
+	initializer.emplace_back(new PhaseInitializer_placement(&this->_player2Board, temp2));
 
 	for (const auto& i: initializer) {
 		i->init();
@@ -47,6 +48,18 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			if (nChar == 52 || nChar == 82) {
 				_player1Board.rotateShip();
+			}
+		}
+	} else if (_phase == multiply_players) {
+		if ((_player1Board.getSelectedShipIndex() != -1) &&
+			!_player1Board.ifAllShipPlaced()) {
+			if (nChar == 52 || nChar == 82) {
+				_player1Board.rotateShip();
+			}
+		} else if ((_player2Board.getSelectedShipIndex() != -1) &&
+			!_player2Board.ifAllShipPlaced()) {
+			if (nChar == 52 || nChar == 82) {
+				_player2Board.rotateShip();
 			}
 		}
 	}
@@ -98,7 +111,48 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 				_gameStartButton.pressed();
 			}
 		}
-	} else if (_phase == single_game) {
+	}else if (_phase == multiply_players) {
+		if (!_player1Board.ifAllShipPlaced()){
+			if (_player1Board.getSelectedShipIndex() == -1) {
+				const auto ships = _player1Board.getShip();
+				for (int i = 0; i < 5; ++i) {
+					// if (myIsOverlap(point, ships.at(i)) != 0) {
+					if (CMovingBitmap::IsOverlap(_cursor, *ships.at(i))) {
+						_player1Board.pickUpShip(i);
+						break;
+					}
+				}
+			}
+			else {
+				_player1Board.dropShip(point);
+			}
+			if (CMovingBitmap::IsOverlap(_cursor, _randomBoardButton)) {
+				_randomBoardButton.pressed();
+			}
+		} else if (!_player2Board.ifAllShipPlaced()) {
+			if (_player2Board.getSelectedShipIndex() == -1) {
+				const auto ships = _player2Board.getShip();
+				for (int i = 0; i < 5; ++i) {
+					// if (myIsOverlap(point, ships.at(i)) != 0) {
+					if (CMovingBitmap::IsOverlap(_cursor, *ships.at(i))) {
+						_player2Board.pickUpShip(i);
+						break;
+					}
+				}
+			}
+			else {
+				_player2Board.dropShip(point);
+			}
+			if (CMovingBitmap::IsOverlap(_cursor, _randomBoardButton)) {
+				_randomBoardButton.pressed();
+			}
+		}
+		if (_player1Board.ifAllShipPlaced() && _player2Board.ifAllShipPlaced()) {
+			if (CMovingBitmap::IsOverlap(_cursor, _gameStartButton)) {
+				_gameStartButton.pressed();
+			}
+		}
+	}else if (_phase == single_game) {
 		if (y < 0 || y > 9)
 			return;
 		if ((x2 < 0 || x2 > 9 && _turnFlag) && (x1 < 0 || x1 > 9 && !_turnFlag))
@@ -142,20 +196,41 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 		_phase = single_placement_phase;
 	} else if (_phase == single_placement_phase) {
 		if (CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
-		    _randomBoardButton.GetFrameIndexOfBitmap() == 1) {
+			_randomBoardButton.GetFrameIndexOfBitmap() == 1) {
 			_randomBoardButton.released();
 			_player1Board = generateABoard(_player1Board.getBaseX());
 		}
 		if (_player1Board.ifAllShipPlaced()) {
 			if (CMovingBitmap::IsOverlap(_cursor, _gameStartButton) &&
-			    _gameStartButton.GetFrameIndexOfBitmap() == 1) {
+				_gameStartButton.GetFrameIndexOfBitmap() == 1) {
+				_gameStartButton.released();
+				gameStart();
+				// start game
+			}
+		}
+	} else if (_phase == multiply_players) {                         //// multiply_players; RANDOM;...
+		if (!_player1Board.ifAllShipPlaced() && 
+			CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
+			_randomBoardButton.GetFrameIndexOfBitmap() == 1) {
+			_randomBoardButton.released();
+			_player1Board = generateABoard(_player1Board.getBaseX());
+		}
+		else if (_player1Board.ifAllShipPlaced() && 
+			CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
+			_randomBoardButton.GetFrameIndexOfBitmap() == 1) {
+			_randomBoardButton.released();
+			_player2Board = generateABoard(_player2Board.getBaseX());
+		}
+		if (_player2Board.ifAllShipPlaced() && _player2Board.ifAllShipPlaced()) {
+			if (CMovingBitmap::IsOverlap(_cursor, _gameStartButton) &&
+				_gameStartButton.GetFrameIndexOfBitmap() == 1) {
 				_gameStartButton.released();
 				gameStart();
 				// start game
 			}
 		}
 	} else {
-
+		
 	}
 
 }
@@ -182,6 +257,14 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
 		}
+	}
+	else if (_phase == multiply_players) {
+		if (_player1Board.getSelectedShipIndex() != -1 && !_player1Board.ifAllShipPlaced()) {
+			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
+		}
+		else if (_player2Board.getSelectedShipIndex() != -1){
+			_player2Board.getShip().at(_player2Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
+		}
 	} else {
 	}
 }
@@ -202,7 +285,21 @@ void CGameStateRun::OnShow() {
 		if (_player1Board.ifAllShipPlaced()) {
 			_gameStartButton.showBtn();
 		}
-	} else if (_phase == single_game || _phase == multiply_players) {
+	}
+	else if (_phase == multiply_players) {
+		_randomBoardButton.showBtn();
+		if (!_player1Board.ifAllShipPlaced()) {
+			_player1Board.show();
+		}
+		else {
+			_player2Board.show();
+		}if (_player1Board.ifAllShipPlaced() &&
+			_player2Board.ifAllShipPlaced()) {
+			_gameStartButton.showBtn();
+		}
+	} else if ((_phase == single_game || _phase == multiply_players) &&
+		_player1Board.ifAllShipPlaced() &&
+		_player2Board.ifAllShipPlaced()){
 		_player1Board.show();
 		_player2Board.show();
 	} else {
