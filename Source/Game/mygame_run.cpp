@@ -152,7 +152,8 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 				_gameStartButton.pressed();
 			}
 		}
-	}else if (_phase == single_game) {
+	}else if (_phase == single_game ||
+		_phase == multi_game) {
 		if (y < 0 || y > 9)
 			return;
 		if ((x2 < 0 || x2 > 9 && _turnFlag) && (x1 < 0 || x1 > 9 && !_turnFlag))
@@ -219,7 +220,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 			CMovingBitmap::IsOverlap(_cursor, _randomBoardButton) &&
 			_randomBoardButton.GetFrameIndexOfBitmap() == 1) {
 			_randomBoardButton.released();
-			_player2Board = generateABoard(_player2Board.getBaseX());
+			_player2Board = generateABoard(1020, false);
 		}
 		if (_player2Board.ifAllShipPlaced() && _player2Board.ifAllShipPlaced()) {
 			if (CMovingBitmap::IsOverlap(_cursor, _gameStartButton) &&
@@ -297,7 +298,7 @@ void CGameStateRun::OnShow() {
 			_player2Board.ifAllShipPlaced()) {
 			_gameStartButton.showBtn();
 		}
-	} else if ((_phase == single_game || _phase == multiply_players) &&
+	} else if ((_phase == single_game || _phase == multi_game) &&
 		_player1Board.ifAllShipPlaced() &&
 		_player2Board.ifAllShipPlaced()){
 		_player1Board.show();
@@ -326,6 +327,8 @@ void CGameStateRun::gameStart() {
 		_phase = single_game;
 	} else if (_phase == multiply_players) {
 		// idk
+		// _player2Board = generateABoard(1020, true);
+		_phase = multi_game;
 	}
 	// _phase = in_game;
 }

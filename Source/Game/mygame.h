@@ -83,6 +83,7 @@ namespace game_framework {
 		single_placement_phase,
 		single_game,
 		multiply_players,// may have some more phases for multiple players
+		multi_game,
 		p1_wins,
 		p2_wins,
 		settings,
