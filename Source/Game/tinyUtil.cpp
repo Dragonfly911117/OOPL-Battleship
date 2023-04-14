@@ -40,8 +40,11 @@ int myIsOverlap(const CPoint& pt1, Ship& ship) {
 GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	GameBoard result;
 	result._isEnemy = isEnemy;
-	const vector<string> fileName = {"Resources/emptyGrid.bmp", "Resources/gridHit.bmp"};
+	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	result._baseX = x;
+	result._background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
+	result._background.SetTopLeft(result._baseX - 10, result._baseY - 10);
+	result._background.SetFrameIndexOfBitmap(isEnemy ? 1 : 0);
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {
@@ -77,7 +80,7 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 }
 
 deque<CPoint> getShipCoordinates(const GameBoard& board) {
-	deque<CPoint>res;
+	deque<CPoint> res;
 	for (int i = 0; i < board._grids.size(); ++i) {
 		for (int j = 0; j < board._grids.at(i).size(); ++j) {
 			if (board._grids.at(i).at(j)->getShipId() != -1) {

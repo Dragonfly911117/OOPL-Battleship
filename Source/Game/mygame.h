@@ -134,8 +134,8 @@ namespace game_framework {
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
-		clock_t _lastTimeBotPlayed;
-		const int _botPlayDelay = 100;
+		clock_t _lastTimePlayerPlayed;
+		const int _botPlayDelay = 200;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
 	};

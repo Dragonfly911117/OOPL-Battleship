@@ -203,8 +203,10 @@ void CGameStateRun::OnShow() {
 			_gameStartButton.showBtn();
 		}
 	} else if (_phase == single_game || _phase == multiply_players) {
-		_player1Board.show();
-		_player2Board.show();
+		if (_player2Board.ifAllCMovingBitmapLoaded() && _player1Board.ifAllCMovingBitmapLoaded()){
+			_player1Board.show();
+			_player2Board.show();
+		}
 	} else {
 	}
 	// cursor.ShowBitmap(); // un-comment this to see where the cursor is 
@@ -243,12 +245,17 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 			_phase = player == 1 ? p2_wins : p1_wins;
 		}
 		if (result != INT_MAX) {
+			_lastTimePlayerPlayed = clock();
 			return true;
 		} else {
+			_lastTimePlayerPlayed = clock();
 			return false;
 		}
 	}
+	_player2Board.setMyTurn(player == 1);
+	_player1Board.setMyTurn(player == 2);
 	_turnFlag = !_turnFlag;
+	_lastTimePlayerPlayed = clock();
 	return false;
 }
 
@@ -267,8 +274,7 @@ void CGameStateRun::OnBeginState() {
 
 void CGameStateRun::OnMove() {
 	if (_playWithRobot && !_turnFlag) {
-		if (clock() - _lastTimeBotPlayed > _botPlayDelay) {
-			_lastTimeBotPlayed = clock();
+		if (clock() - _lastTimePlayerPlayed > _botPlayDelay) {
 			CPoint pt;
 			if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
 				pt = _bot.infiniteMonkeyModeFire();
@@ -280,6 +286,7 @@ void CGameStateRun::OnMove() {
 				pt = _bot.darkSoulModeFire();
 			}
 			_bot.getFeedback(turn(pt, 2));
+			_lastTimePlayerPlayed = clock();
 		}
 	}
 }

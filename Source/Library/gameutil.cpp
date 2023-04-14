@@ -298,7 +298,7 @@ namespace game_framework {
 	/*!
 		\return 布林值，表示物件是否已讀取點陣圖。
 	*/
-	bool CMovingBitmap::IsBitmapLoaded() {
+	bool CMovingBitmap::IsBitmapLoaded() const {
 		return isBitmapLoaded;
 	}
 

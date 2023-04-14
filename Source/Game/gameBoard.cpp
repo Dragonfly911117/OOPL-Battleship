@@ -57,6 +57,7 @@ GameBoard& GameBoard::operator=(const GameBoard& copied) {
 	_baseX = copied._baseX;
 	_baseY = copied._baseY;
 	_isEnemy = copied._isEnemy;
+	_background = copied._background;
 	return *this;
 }
 
@@ -139,9 +140,15 @@ bool GameBoard::ifAllShipSunk() const {
 	return true;
 }
 
+void GameBoard::setMyTurn(const bool& isMyTurn) {
+	_background.SetFrameIndexOfBitmap(isMyTurn ? 0 : 1);
+}
+
 void GameBoard::init() {
 	_selectedShip = -1;
 	_baseY = _baseX = 150;
+	_background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
+	_background.SetTopLeft(_baseX - 10, _baseY - 10);
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);
@@ -162,6 +169,7 @@ void GameBoard::init() {
 }
 
 void GameBoard::show() {
+	_background.ShowBitmap();
 	if (!_isEnemy) {
 		for (auto& i: _ships) {
 			i->ShowBitmap();
@@ -187,6 +195,26 @@ void GameBoard::setBaseX(const int& x) {
 
 int GameBoard::getBaseX() const {
 	return _baseX;
+}
+
+bool GameBoard::ifAllCMovingBitmapLoaded() const {
+	if (!_background.IsBitmapLoaded())
+		return false;
+	for (const auto& i: _ships) {
+		if (!i->IsBitmapLoaded())
+			return false;
+	}
+	for (const auto& i: _grids) {
+		for (const auto& j: i) {
+			if (!j->IsBitmapLoaded())
+				return false;
+		}
+	}
+	for (const auto& i: _shipHit) {
+		if (!i->IsBitmapLoaded())
+			return false;
+	}
+	return true;
 }
 
 void GameBoard::rotateShip() {
