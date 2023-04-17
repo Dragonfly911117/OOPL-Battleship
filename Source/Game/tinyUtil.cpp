@@ -71,7 +71,7 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 		CPoint temp;
 		temp.x = result._baseX + static_cast<int>(unif(generator));
 		temp.y = result._baseY + static_cast<int>(unif(generator));
-		while (! result.dropShip(temp)) {
+		while (!result.dropShip(temp)) {
 			temp.x = result._baseX + static_cast<int>(unif(generator));
 			temp.y = result._baseY + static_cast<int>(unif(generator));
 		}

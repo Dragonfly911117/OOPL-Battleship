@@ -23,4 +23,6 @@ public:
 
 	// main-game phase
 	void beingHit();
+	void reset();
+
 };

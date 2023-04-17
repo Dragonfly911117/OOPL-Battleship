@@ -111,8 +111,30 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 			// if play with robot, player2Turn will be called in CGameStateRun::OnMove()
 			turn(CPoint(x1, y), 2);
 		}
-	} else {
+	} else if (_phase == ending) {
+		if (CMovingBitmap::IsOverlap(_cursor, _restartButton)) {
+			_restartButton.pressed();
+		} else if (CMovingBitmap::IsOverlap(_cursor, _exitButton)) {
+			_exitButton.pressed();
+		}
 	}
+}
+
+void CGameStateRun::restart() {
+	// reset both board
+	_player1Board.reset();
+	_player2Board.reset();
+	// reset phase
+	_phase = menu;
+	// reset turn flag
+	_turnFlag = true;
+	// reset the bot
+	if (_playWithRobot) {
+		_bot.reset();
+	}
+	// no need to reset button
+	_playWithRobot = false;
+
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
@@ -121,6 +143,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 		for (int i = 0; i < 4; ++i) {
 			if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i]) &&
 			    _menuButton[i].GetFrameIndexOfBitmap() == 1) {
+				_menuButton[i].released();
 				if (i == 0) {
 					startSingleGame();
 				} else if (i == 1) {
@@ -155,6 +178,16 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 				gameStart();
 				// start game
 			}
+		}
+	} else if (_phase == ending) {
+		if (CMovingBitmap::IsOverlap(_cursor, _restartButton) &&
+		    _restartButton.GetFrameIndexOfBitmap() == 1) {
+			_restartButton.released();
+			restart();
+		} else if (CMovingBitmap::IsOverlap(_cursor, _exitButton) &&
+		           _exitButton.GetFrameIndexOfBitmap() == 1) {
+			_exitButton.released();
+			GotoGameState(GAME_STATE_OVER);
 		}
 	} else {
 
@@ -209,7 +242,7 @@ void CGameStateRun::OnShow() {
 			_player1Board.show();
 			_player2Board.show();
 		}
-	} else if (_phase == p1_wins || _phase == p2_wins) {
+	} else if (_phase == ending) {
 		_restartButton.showBtn();
 		_exitButton.showBtn();
 
@@ -250,15 +283,14 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 	const int result = board.beingHit(point.x, point.y);
 	if (result >= 0) {
 		if (board.ifAllShipSunk()) {
-			_phase = player == 1 ? p2_wins : p1_wins;
+			_phase = ending;
 		}
 		if (result != INT_MAX) {
 			_lastTimePlayerPlayed = clock();
 			return true;
-		} else {
-			_lastTimePlayerPlayed = clock();
-			return false;
 		}
+		_lastTimePlayerPlayed = clock();
+		return false;
 	}
 	_player2Board.setMyTurn(player == 1);
 	_player1Board.setMyTurn(player == 2);
@@ -282,7 +314,7 @@ void CGameStateRun::OnBeginState() {
 
 void CGameStateRun::OnMove() {
 	if (_playWithRobot && !_turnFlag) {
-		if (clock() - _lastTimePlayerPlayed > _botPlayDelay) {
+		if (clock() - _lastTimePlayerPlayed > bot_play_delay) {
 			CPoint pt;
 			if (_bot.getDifficulty() == robot_enums::infinite_monkey) {
 				pt = _bot.infiniteMonkeyModeFire();

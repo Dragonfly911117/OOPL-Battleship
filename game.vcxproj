@@ -32,8 +32,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
         <ConfigurationType>Application</ConfigurationType>
-        <UseOfMfc>Dynamic</UseOfMfc>
         <PlatformToolset>v141</PlatformToolset>
+        <UseOfMfc>Dynamic</UseOfMfc>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
         <ConfigurationType>Application</ConfigurationType>
@@ -88,6 +88,10 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
         <IncludePath>$(SolutionDir)\Source\Core;$(IncludePath)</IncludePath>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      <LibraryPath>C:\Program Files\Microsoft DirectX SDK %28February 2010%29\Lib\x86;$(LibraryPath);.\Source\Core</LibraryPath>
+      <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);.\Source\Core</IncludePath>
+    </PropertyGroup>
     <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
         <Midl>
             <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -99,13 +103,11 @@
             </HeaderFileName>
         </Midl>
         <ClCompile>
-            <Optimization>Disabled</Optimization>
             <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <MinimalRebuild>true</MinimalRebuild>
             <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
             <RuntimeTypeInfo>true</RuntimeTypeInfo>
-            <PrecompiledHeader>Use</PrecompiledHeader>
-            <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+            <PrecompiledHeaderFile>.\Source\Core\stdafx.h</PrecompiledHeaderFile>
             <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
             <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
             <ObjectFileName>.\Debug/</ObjectFileName>
@@ -154,9 +156,7 @@
             <StringPooling>true</StringPooling>
             <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
             <FunctionLevelLinking>true</FunctionLevelLinking>
-            <PrecompiledHeader>Use</PrecompiledHeader>
-            <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-            <PrecompiledHeaderOutputFile>.\Release/game.pch</PrecompiledHeaderOutputFile>
+            <PrecompiledHeader>Create</PrecompiledHeader>
             <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
             <ObjectFileName>.\Release/</ObjectFileName>
             <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>

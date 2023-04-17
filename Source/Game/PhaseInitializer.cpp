@@ -14,7 +14,6 @@ void PhaseInitializer_global::init() {
 	this->_container.at(_cursorPos)->LoadBitmapA("Resources/cursor.bmp");
 }
 
-
 PhaseInitializer_menu::PhaseInitializer_menu(const vector<myBtn*>& objs) {
 	this->_container = objs;
 }
@@ -50,8 +49,8 @@ PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
 void PhaseInitializer_ending::init() {
 	this->_container.at(_restartButtonPos)->setText("Return to menu");
 	this->_container.at(_restartButtonPos)->LoadBitmapByString(_buttonPath);
-	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2- this->_container.at(_restartButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
+	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_restartButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
 	this->_container.at(_exitButtonPos)->setText("Exit");
 	this->_container.at(_exitButtonPos)->LoadBitmapByString(_buttonPath);
-	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight() );
+	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight());
 }
