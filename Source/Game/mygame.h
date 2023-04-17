@@ -138,6 +138,11 @@ namespace game_framework {
 		const int _botPlayDelay = 200;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
+
+		// Variables used ONLY by ending
+		CMovingBitmap _endingBackground;
+		myBtn _restartButton;
+		myBtn _exitButton;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -155,6 +160,5 @@ namespace game_framework {
 		void OnMove() override;// 移動遊戲元素
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
 	private:
-		int counter;// 倒數之計數器
 	};
 }

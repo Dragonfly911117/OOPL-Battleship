@@ -36,6 +36,8 @@ void CGameStateRun::OnInit() {
 	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
 	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2));
 
+	temp2 = {&this->_restartButton, &this->_exitButton};
+	initializer.emplace_back(new PhaseInitializer_ending(temp2));
 	for (const auto& i: initializer) {
 		i->init();
 	}
@@ -131,13 +133,13 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 			}
 		}
 	} else if (_phase == difficulty_choosing) {
-		for (int i = 0; i < _difficultyButton.size();++i) {
-			 if (CMovingBitmap::IsOverlap(_cursor, _difficultyButton[i]) &&
+		for (int i = 0; i < _difficultyButton.size(); ++i) {
+			if (CMovingBitmap::IsOverlap(_cursor, _difficultyButton[i]) &&
 			    _difficultyButton[i].GetFrameIndexOfBitmap() == 1) {
-			 	_difficultyButton[i].released();
-			 	_bot.setDifficulty(i);
-			 	break;
-			 }
+				_difficultyButton[i].released();
+				_bot.setDifficulty(i);
+				break;
+			}
 		}
 		_phase = single_placement_phase;
 	} else if (_phase == single_placement_phase) {
@@ -203,10 +205,14 @@ void CGameStateRun::OnShow() {
 			_gameStartButton.showBtn();
 		}
 	} else if (_phase == single_game || _phase == multiply_players) {
-		if (_player2Board.ifAllCMovingBitmapLoaded() && _player1Board.ifAllCMovingBitmapLoaded()){
+		if (_player2Board.ifAllCMovingBitmapLoaded() && _player1Board.ifAllCMovingBitmapLoaded()) {
 			_player1Board.show();
 			_player2Board.show();
 		}
+	} else if (_phase == p1_wins || _phase == p2_wins) {
+		_restartButton.showBtn();
+		_exitButton.showBtn();
+
 	} else {
 	}
 	// cursor.ShowBitmap(); // un-comment this to see where the cursor is 
@@ -231,6 +237,8 @@ void CGameStateRun::gameStart() {
 		_phase = single_game;
 	} else if (_phase == multiply_players) {
 		// idk
+	} else {
+
 	}
 	// _phase = in_game;
 }
@@ -282,7 +290,7 @@ void CGameStateRun::OnMove() {
 				pt = _bot.normalModeFire();
 			} else if (_bot.getDifficulty() == robot_enums::hard) {
 				pt = _bot.hardModeFire();
-			} else if (_bot.getDifficulty() ==  robot_enums::dark_soul) {
+			} else if (_bot.getDifficulty() == robot_enums::dark_soul) {
 				pt = _bot.darkSoulModeFire();
 			}
 			_bot.getFeedback(turn(pt, 2));

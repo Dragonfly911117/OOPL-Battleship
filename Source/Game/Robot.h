@@ -32,7 +32,7 @@ class Robot {
 	std::stack<CPoint> _dfsStack;
 	std::unordered_set<CPoint> _map;
 
-	int _cheatCountdown = 10;
+	int _cheatCountdown = 0;
 	std::deque<CPoint> _cheatSheet;
 
 	static CPoint randomlyPickCoordinate();
