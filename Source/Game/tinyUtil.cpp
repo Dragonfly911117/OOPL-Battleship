@@ -44,7 +44,8 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	result._baseX = x;
 	result._background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
 	result._background.SetTopLeft(result._baseX - 10, result._baseY - 10);
-	result._background.SetFrameIndexOfBitmap(isEnemy ? 1 : 0);
+	// result._background.SetFrameIndexOfBitmap(isEnemy ? 1 : 0);
+	result._background.SetFrameIndexOfBitmap(1);
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {

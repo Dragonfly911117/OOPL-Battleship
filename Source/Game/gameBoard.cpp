@@ -141,7 +141,7 @@ bool GameBoard::ifAllShipSunk() const {
 }
 
 void GameBoard::setMyTurn(const bool& isMyTurn) {
-	_background.SetFrameIndexOfBitmap(isMyTurn ? 0 : 1);
+	_background.SetFrameIndexOfBitmap(isMyTurn ? 1 : 0);
 }
 
 void GameBoard::reset() {
@@ -168,6 +168,7 @@ void GameBoard::init() {
 	_baseY = _baseX = 150;
 	_background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
 	_background.SetTopLeft(_baseX - 10, _baseY - 10);
+	_background.SetFrameIndexOfBitmap(1);
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);

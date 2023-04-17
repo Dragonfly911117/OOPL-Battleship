@@ -261,7 +261,7 @@ void CGameStateRun::startMultiplePlayersGame() {
 }
 
 void CGameStateRun::gameStart() {
-	// _player2Board = copyABoard(_player1Board);// can have
+	
 	if (_phase == single_placement_phase) {
 		if (_bot.getDifficulty() == robot_enums::dark_soul) {
 			_bot.gatherEnemyShipCoordinates(getShipCoordinates(_player1Board));
@@ -273,6 +273,8 @@ void CGameStateRun::gameStart() {
 	} else {
 
 	}
+	_player1Board.setMyTurn(false);
+	_player2Board.setMyTurn(true);
 	// _phase = in_game;
 }
 
@@ -292,8 +294,8 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 		_lastTimePlayerPlayed = clock();
 		return false;
 	}
-	_player2Board.setMyTurn(player == 1);
-	_player1Board.setMyTurn(player == 2);
+	_player2Board.setMyTurn(player == 2);
+	_player1Board.setMyTurn(player == 1);
 	_turnFlag = !_turnFlag;
 	_lastTimePlayerPlayed = clock();
 	return false;
