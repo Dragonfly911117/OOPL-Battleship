@@ -83,8 +83,7 @@ namespace game_framework {
 		single_placement_phase,
 		single_game,
 		multiply_players,// may have some more phases for multiple players
-		p1_wins,
-		p2_wins,
+		ending,
 		settings,
 	};
 
@@ -97,6 +96,7 @@ namespace game_framework {
 		void OnKeyDown(UINT, UINT, UINT) override;
 		void OnKeyUp(UINT, UINT, UINT) override;
 		void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
+		void restart();
 		void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 		void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
@@ -134,10 +134,15 @@ namespace game_framework {
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
-		clock_t _lastTimeBotPlayed;
-		const int _botPlayDelay = 100;
+		clock_t _lastTimePlayerPlayed;
+		constexpr static  int bot_play_delay = 200;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
+
+		// Variables used ONLY by ending
+		CMovingBitmap _endingBackground;
+		myBtn _restartButton;
+		myBtn _exitButton;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -155,6 +160,5 @@ namespace game_framework {
 		void OnMove() override;// 移動遊戲元素
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
 	private:
-		int counter;// 倒數之計數器
 	};
 }

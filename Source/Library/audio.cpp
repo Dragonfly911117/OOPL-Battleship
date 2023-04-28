@@ -199,7 +199,6 @@ namespace game_framework {
 		}
 	}
 
-
 	CAudio* CAudio::Instance() {
 		return &audio;
 	}

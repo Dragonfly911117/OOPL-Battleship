@@ -25,25 +25,26 @@ namespace robot_enums {
 }
 
 class Robot {
+	constexpr static int default_cheat_count = 0;
 	CPoint _lastCoordinate;
 	robot_enums::difficulty _difficulty = robot_enums::hard;
 	robot_enums::direction _lastDirection = robot_enums::direction::up;
 	bool _vertFlag = false;
 	std::stack<CPoint> _dfsStack;
 	std::unordered_set<CPoint> _map;
-
-	int _cheatCountdown = 10;
+	int _cheatCount = default_cheat_count;
 	std::deque<CPoint> _cheatSheet;
 
 	static CPoint randomlyPickCoordinate();
 
 public:
-	CPoint infiniteMonkeyModeFire(); // fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
-	CPoint normalModeFire(); // if hit, fire its adjacent coordinates 'tll miss
-	CPoint hardModeFire(); // have some additional strategies
-	CPoint darkSoulModeFire(); // U died. Basically, it cheats
+	CPoint infiniteMonkeyModeFire();// fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
+	CPoint normalModeFire();        // If hit, fire its adjacent coordinates 'tll miss.
+	CPoint hardModeFire();          // have some additional strategies
+	CPoint darkSoulModeFire();      // hard mode 'till the _cheatCount is 0, then cheat
 	void gatherEnemyShipCoordinates(const std::deque<CPoint>& pt);
 	void getFeedback(const bool& res);
 	robot_enums::difficulty getDifficulty() const;
 	void setDifficulty(const int& i);
+	void reset();
 };
