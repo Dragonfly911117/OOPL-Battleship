@@ -11,6 +11,7 @@
 // #include "tinyUtil.h"
 #include "PhaseInitializer.h"
 #include  "Robot.h"
+#include "audioIDEnum.h"
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -105,13 +106,19 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 			return;
 		if ((x2 < 0 || x2 > 9 && _turnFlag) && (x1 < 0 || x1 > 9 && !_turnFlag))
 			return;
+		bool hit = false;
 		if (_turnFlag) {
-			turn(CPoint(x2, y), 1);
+			hit = turn(CPoint(x2, y), 1);
+			
 		} else if (!_playWithRobot) {
 			// if play with robot, player2Turn will be called in CGameStateRun::OnMove()
-			turn(CPoint(x1, y), 2);
+			hit = turn(CPoint(x1, y), 2);
 		}
-	} else if (_phase == ending) {
+		if (hit) {
+			CAudio* audio = CAudio::Instance();
+			audio->Play(AudioID::player_hit);
+		}
+	} else if (_phase == p1_wins || _phase == p2_wins) {
 		if (CMovingBitmap::IsOverlap(_cursor, _restartButton)) {
 			_restartButton.pressed();
 		} else if (CMovingBitmap::IsOverlap(_cursor, _exitButton)) {
@@ -119,7 +126,6 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 		}
 	}
 }
-
 void CGameStateRun::restart() {
 	// reset both board
 	_player1Board.reset();
@@ -179,7 +185,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 				// start game
 			}
 		}
-	} else if (_phase == ending) {
+	} else if (_phase == p1_wins || _phase == p2_wins) {
 		if (CMovingBitmap::IsOverlap(_cursor, _restartButton) &&
 		    _restartButton.GetFrameIndexOfBitmap() == 1) {
 			_restartButton.released();
@@ -217,8 +223,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
 		}
-	} else {
-	}
+	} else{}
 }
 
 void CGameStateRun::OnShow() {
@@ -242,7 +247,7 @@ void CGameStateRun::OnShow() {
 			_player1Board.show();
 			_player2Board.show();
 		}
-	} else if (_phase == ending) {
+	} else if (_phase == p1_wins || _phase == p2_wins) {
 		_restartButton.showBtn();
 		_exitButton.showBtn();
 
@@ -261,7 +266,7 @@ void CGameStateRun::startMultiplePlayersGame() {
 }
 
 void CGameStateRun::gameStart() {
-	
+	// _player2Board = copyABoard(_player1Board);// can have
 	if (_phase == single_placement_phase) {
 		if (_bot.getDifficulty() == robot_enums::dark_soul) {
 			_bot.gatherEnemyShipCoordinates(getShipCoordinates(_player1Board));
@@ -285,7 +290,7 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 	const int result = board.beingHit(point.x, point.y);
 	if (result >= 0) {
 		if (board.ifAllShipSunk()) {
-			_phase = ending;
+			_phase = player != 1 ? p2_wins : p1_wins;
 		}
 		if (result != INT_MAX) {
 			_lastTimePlayerPlayed = clock();
@@ -294,8 +299,8 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 		_lastTimePlayerPlayed = clock();
 		return false;
 	}
-	_player2Board.setMyTurn(player == 2);
-	_player1Board.setMyTurn(player == 1);
+	_player2Board.setMyTurn(player == 1);
+	_player1Board.setMyTurn(player == 2);
 	_turnFlag = !_turnFlag;
 	_lastTimePlayerPlayed = clock();
 	return false;
@@ -327,8 +332,25 @@ void CGameStateRun::OnMove() {
 			} else if (_bot.getDifficulty() == robot_enums::dark_soul) {
 				pt = _bot.darkSoulModeFire();
 			}
-			_bot.getFeedback(turn(pt, 2));
+			const bool hit = turn(pt, 2);
+			if (hit) {
+				CAudio* audio = CAudio::Instance();
+				audio->Play(AudioID::bot_hit + _hitAudioPos.second);
+				if (++_hitAudioPos.second == AudioID::hit_buffer) {
+					_hitAudioPos.second = 0;
+				}
+					
+			}
+			_bot.getFeedback(hit);
 			_lastTimePlayerPlayed = clock();
+		}
+	}
+	auto* audio = CAudio::Instance();
+	if (_phase == p1_wins){
+	} else if (_phase == p2_wins) {
+		if (_playWithRobot && ! _endingThemeStarted) {
+			audio->Play(AudioID::defeated);
+			_endingThemeStarted = true;
 		}
 	}
 }

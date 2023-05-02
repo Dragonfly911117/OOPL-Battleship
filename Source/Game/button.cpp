@@ -9,6 +9,7 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
+#include "audioIDEnum.h"
 #include "buttons.h"
 
 myBtn::myBtn() {
@@ -24,6 +25,8 @@ void myBtn::pressed() {
 }
 
 void myBtn::released() {
+	CAudio* audio = CAudio::Instance();
+	audio->Play(AudioID::click);
 	this->SetFrameIndexOfBitmap(0);
 }
 
