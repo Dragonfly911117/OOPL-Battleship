@@ -107,7 +107,8 @@
             <MinimalRebuild>true</MinimalRebuild>
             <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
             <RuntimeTypeInfo>true</RuntimeTypeInfo>
-            <PrecompiledHeaderFile>.\Source\Core\stdafx.h</PrecompiledHeaderFile>
+            <PrecompiledHeader>Use</PrecompiledHeader>
+            <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
             <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
             <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
             <ObjectFileName>.\Debug/</ObjectFileName>

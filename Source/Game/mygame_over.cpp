@@ -1,3 +1,4 @@
+#include "audioIDEnum.h"
 #include "stdafx.h"
 #include "config.h"
 #include "../Core/Resource.h"
@@ -26,6 +27,8 @@ void CGameStateOver::OnBeginState() {
 }
 
 void CGameStateOver::OnInit() {
+	
+	 
 }
 
 void CGameStateOver::OnShow() {

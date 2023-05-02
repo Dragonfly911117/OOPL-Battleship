@@ -25,7 +25,7 @@ namespace robot_enums {
 }
 
 class Robot {
-	constexpr static int default_cheat_count = 0;
+	const int default_cheat_count = 10;
 	CPoint _lastCoordinate;
 	robot_enums::difficulty _difficulty = robot_enums::hard;
 	robot_enums::direction _lastDirection = robot_enums::direction::up;

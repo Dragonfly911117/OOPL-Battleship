@@ -122,6 +122,7 @@ namespace game_framework {
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
 		pair<short, short> _hitAudioPos; // first for player 1, second for player 2
+		short _missAudioPos = 0;
 		
 		// Variables used ONLY by ending
 		CMovingBitmap _endingBackground;
