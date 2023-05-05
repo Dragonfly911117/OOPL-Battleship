@@ -191,14 +191,16 @@ void GameBoard::init() {
 void GameBoard::show() {
 	_background.ShowBitmap();
 	if (!_isEnemy) {
+	// if (true){ // for debug 
 		for (auto& i: _ships) {
 			i->ShowBitmap();
 		}
 	}
 	for (auto& i: _grids) {
 		for (auto& j: i) {
-			if (j->getDisplayFlag() || _isEnemy)
+			if (j->getDisplayFlag() || _isEnemy) {
 				j->ShowBitmap();
+			}
 		}
 	}
 	if (_selectedShip != -1 && !_isEnemy) {
