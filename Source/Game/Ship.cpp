@@ -34,11 +34,6 @@ void Ship::beingHit() {
 	}
 }
 
-void Ship::reset() {
-	_health = this->getSize();
-	this->SetFrameIndexOfBitmap(0);
-}
-
 int Ship::getSize() {
 	// {2, 3, 4, 5, 9} ->{ 2, 3, 3, 4, 5}
 	if (_type < 4)

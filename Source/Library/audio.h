@@ -93,6 +93,7 @@ namespace game_framework {
 	private:
 		class Info {
 		public:
+
 			Info() {
 				repeat = isGood = false;
 			}

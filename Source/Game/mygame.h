@@ -42,6 +42,19 @@
 
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
+	// Constants
+	/////////////////////////////////////////////////////////////////////////////
+
+	enum AUDIO_ID {
+		// 定義各種音效的編號
+		AUDIO_DING,
+		// 0
+		AUDIO_LAKE,
+		// 1
+		AUDIO_NTUT// 2
+	};
+
+	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
@@ -70,6 +83,8 @@ namespace game_framework {
 		single_placement_phase,
 		single_game,
 		multiply_players,// may have some more phases for multiple players
+		multi_game,
+		turnplay2,
 		p1_wins,
 		p2_wins,
 		settings,
@@ -84,7 +99,6 @@ namespace game_framework {
 		void OnKeyDown(UINT, UINT, UINT) override;
 		void OnKeyUp(UINT, UINT, UINT) override;
 		void OnLButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
-		void restart();
 		void OnLButtonUp(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作
 		void OnMouseMove(UINT nFlags, CPoint point) override;  // 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point) override;// 處理滑鼠的動作
@@ -101,6 +115,11 @@ namespace game_framework {
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
 
 	private:
+		// phase Mangers
+		/**
+		 * \brief 0 for global, 1 for menu, 2 for in-placement
+		 */
+
 		// phases-shared variables
 		int _phase = menu;
 		bool _playWithRobot = false;
@@ -117,18 +136,10 @@ namespace game_framework {
 		// Variables used ONLY by in-game
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
-		clock_t _lastTimePlayerPlayed;
-		const int bot_play_delay = 200;
+		clock_t _lastTimeBotPlayed;
+		const int _botPlayDelay = 100;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
-		pair<short, short> _hitAudioPos; // first for player 1, second for player 2
-		short _missAudioPos = 0;
-		
-		// Variables used ONLY by ending
-		CMovingBitmap _endingBackground;
-		myBtn _restartButton;
-		myBtn _exitButton;
-		bool _endingThemeStarted = false;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -146,5 +157,6 @@ namespace game_framework {
 		void OnMove() override;// 移動遊戲元素
 		void OnShow() override;// 顯示這個狀態的遊戲畫面
 	private:
+		int counter;// 倒數之計數器
 	};
 }

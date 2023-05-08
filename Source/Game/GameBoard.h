@@ -18,8 +18,6 @@ class GameBoard {
 	int _baseX = 150;
 	int _baseY = 150;
 	bool _isEnemy = false;
-	CMovingBitmap _background;
-
 	BaseGrid* getGridByCoordinate(const int& x, const int& y) const;
 	bool ifShipIsPlaceable(const int& x, const int& y, const direction& d) const;
 
@@ -30,7 +28,6 @@ public:
 	void show();
 	void setBaseX(const int& x);
 	int getBaseX() const;
-	bool ifAllCMovingBitmapLoaded() const;
 
 	// deployment-phase methods
 	void init();
@@ -45,6 +42,4 @@ public:
 	void becomeEnemy();
 	int beingHit(const int& x, const int& y);
 	bool ifAllShipSunk() const;
-	void setMyTurn(const bool& isMyTurn);
-	void reset();
 };

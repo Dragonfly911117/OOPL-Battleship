@@ -171,6 +171,7 @@ namespace game_framework {
 		}
 	}
 
+
 	void CGame::OnRButtonDown(UINT nFlags, CPoint point) {
 		if (running)
 			gameState->OnRButtonDown(nFlags, point);
@@ -553,9 +554,11 @@ namespace game_framework {
 		return true;
 	}
 
+
 	void CDDraw::GetClientRect(CRect& r) {
 		r = CRect(0, 0, size_x, size_y);
 	}
+
 
 	void CDDraw::Init(int sx, int sy) {
 		// set target screen size

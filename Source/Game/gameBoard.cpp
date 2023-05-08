@@ -20,10 +20,12 @@ void GameBoard::pickUpShip(const int& shipIndex) {
 	for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 		if (x < 10 && y < 10) {
 			if (d == horizontal) {
-				getGridByCoordinate(x + i, y)->pickUpShip();
-			} else if (d == vertical) {
+				getGridByCoordinate( x + i, y)->pickUpShip();
+			}
+			else if (d == vertical) {
 				getGridByCoordinate(x, y + i)->pickUpShip();
-			} else {
+			}
+			else {
 			}
 		}
 	}
@@ -57,7 +59,6 @@ GameBoard& GameBoard::operator=(const GameBoard& copied) {
 	_baseX = copied._baseX;
 	_baseY = copied._baseY;
 	_isEnemy = copied._isEnemy;
-	_background = copied._background;
 	return *this;
 }
 
@@ -140,35 +141,9 @@ bool GameBoard::ifAllShipSunk() const {
 	return true;
 }
 
-void GameBoard::setMyTurn(const bool& isMyTurn) {
-	_background.SetFrameIndexOfBitmap(isMyTurn ? 1 : 0);
-}
-
-void GameBoard::reset() {
-	for (int i = 0; i < 10; ++i) {
-		for (int j = 0; j < 10; ++j) {
-			_grids.at(i).at(j).reset(new EmptyGrid);
-			_grids.at(i).at(j)->LoadBitmapByString({R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"});
-			_grids.at(i).at(j)->SetTopLeft(_baseX + 60 * i, _baseY + 60 * j);
-		}
-	}
-	for (auto& i: _ships) {
-		i->reset();
-	}
-	for (int i = 0; i < _ships.size(); ++i) {
-		_ships.at(i)->SetTopLeft(_baseX + (60 * 10), _baseY + 60 * (i));
-	}
-	// _ships.back()->SetTopLeft(_baseX + 60 * 10, _baseY + 240);
-	_shipHit.clear();
-	_selectedShip = -1;
-}
-
 void GameBoard::init() {
 	_selectedShip = -1;
-	_baseY = _baseX = 150;
-	_background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
-	_background.SetTopLeft(_baseX - 10, _baseY - 10);
-	_background.SetFrameIndexOfBitmap(1);
+	//_baseY = _baseX = 150;
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);
@@ -189,18 +164,15 @@ void GameBoard::init() {
 }
 
 void GameBoard::show() {
-	_background.ShowBitmap();
 	if (!_isEnemy) {
-	// if (true){ // for debug 
 		for (auto& i: _ships) {
 			i->ShowBitmap();
 		}
 	}
 	for (auto& i: _grids) {
 		for (auto& j: i) {
-			if (j->getDisplayFlag() || _isEnemy) {
+			if (j->getDisplayFlag() || _isEnemy)
 				j->ShowBitmap();
-			}
 		}
 	}
 	if (_selectedShip != -1 && !_isEnemy) {
@@ -217,26 +189,6 @@ void GameBoard::setBaseX(const int& x) {
 
 int GameBoard::getBaseX() const {
 	return _baseX;
-}
-
-bool GameBoard::ifAllCMovingBitmapLoaded() const {
-	if (!_background.IsBitmapLoaded())
-		return false;
-	for (const auto& i: _ships) {
-		if (!i->IsBitmapLoaded())
-			return false;
-	}
-	for (const auto& i: _grids) {
-		for (const auto& j: i) {
-			if (!j->IsBitmapLoaded())
-				return false;
-		}
-	}
-	for (const auto& i: _shipHit) {
-		if (!i->IsBitmapLoaded())
-			return false;
-	}
-	return true;
 }
 
 void GameBoard::rotateShip() {

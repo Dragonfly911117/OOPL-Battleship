@@ -6,7 +6,6 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
-#include "audioIDEnum.h"
 
 using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
@@ -18,47 +17,34 @@ CGameStateInit::CGameStateInit(CGame* g)
 }
 
 void CGameStateInit::OnInit() {
+	//
+	// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
+	//     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
+	//
 	ShowInitProgress(0, "Start Initializing...");// 一開始的loading進度為0%
+	//
+	// 開始載入資料
+	//
+	// Sleep(1000); // 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+	//
+	// 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
+	//
 	startBg.LoadBitmapA("Resources/startBG.bmp");
 	startBg.SetTopLeft(0, 0);
-	CAudio* audio = CAudio::Instance();
-	audio->Load(AudioID::theme, "Resources/audio/Theme.wav");
 
-	// choose one to use
-	audio->Load(AudioID::sad_violin, "Resources/audio/Sad_violin.wav");
-	audio->Load(AudioID::defeated, "Resources/audio/Defeated.wav");
-	
-	for (int i = 0; i < AudioID::hit_buffer; i++) {
-		audio->Load(AudioID::player_hit + i, "Resources/audio/Hit_Marker.wav");
-		audio->Load(AudioID::bot_hit + i, "Resources/audio/Error.wav");
-	}
-	audio->Load(AudioID::click, "Resources/audio/Click.wav");
-	audio->Load(AudioID::Missed1,  "Resources/audio/Missed1.wav");
-	audio->Load(AudioID::Missed2,  "Resources/audio/Missed2.wav");
-	audio->Load(AudioID::Missed3,  "Resources/audio/Missed3.wav");
-	audio->Load(AudioID::Missed4,  "Resources/audio/Missed4.wav");
-	audio->Load(AudioID::defeat_not_DSMode_Bot, "Resources/audio/Defeat_NotDS.wav");
-	audio->Load(AudioID::defeat_dark_soul, "Resources/audio/Defeat_Dark_Soul.wav");
-	
-	
-	audio->Play(AudioID::theme, true);
 }
 
 void CGameStateInit::OnBeginState() {
-	
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
-	CAudio* audio = CAudio::Instance();
-	GotoGameState(GAME_STATE_RUN);// 切換至GAME_STATE_RUN
 }
 
 void CGameStateInit::OnShow() {
 	startBg.ShowBitmap();
-	
-	
+	GotoGameState(GAME_STATE_RUN);// 切換至GAME_STATE_RUN
+
 }

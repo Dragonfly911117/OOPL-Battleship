@@ -50,16 +50,16 @@ static char THIS_FILE[] = __FILE__;
 // CGameApp
 
 BEGIN_MESSAGE_MAP(CGameApp, CWinApp)
-		//{{AFX_MSG_MAP(CGameApp)
-		ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-		//}}AFX_MSG_MAP
-		// Standard file based document commands
-		ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-		ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-		// Standard print setup command
-		ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
+				//{{AFX_MSG_MAP(CGameApp)
+				ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+				// NOTE - the ClassWizard will add and remove mapping macros here.
+				//    DO NOT EDIT what you see in these blocks of generated code!
+				//}}AFX_MSG_MAP
+				// Standard file based document commands
+				ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
+				ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+				// Standard print setup command
+				ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -174,9 +174,9 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX) {
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-		//{{AFX_MSG_MAP(CAboutDlg)
-		ON_BN_CLICKED(IDC_README, OnReadme)
-		//}}AFX_MSG_MAP
+				//{{AFX_MSG_MAP(CAboutDlg)
+				ON_BN_CLICKED(IDC_README, OnReadme)
+				//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 // App command to run the dialog
