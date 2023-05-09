@@ -15,7 +15,7 @@
 void GameBoard::pickUpShip(const int& shipIndex) {
 	_selectedShip = shipIndex;
 	const int x = (_ships.at(shipIndex)->GetLeft() - _baseX) / 60;
-	const int y = (_ships.at(shipIndex)->GetTop() - _baseX) / 60;
+	const int y = (_ships.at(shipIndex)->GetTop() - _baseY) / 60;
 	const direction d = _ships.at(shipIndex)->getDirection();
 	for (int i = 0; i < _ships.at(_selectedShip)->getSize(); ++i) {
 		if (x < 10 && y < 10 && x >= 0 && y >= 0) {
