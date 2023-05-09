@@ -75,7 +75,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point) {
 	_cursor.SetTopLeft(point.x - 5, point.y - 5);
-	const int x1 = (point.x - 150) / 60;
+	const int x1 = (point.x - _player1Board.getBaseX()) / 60;
 	const int x2 = (point.x - _player2Board.getBaseX()) / 60;
 	const int y = (point.y - 150) / 60;
 	if (_phase == menu) {
@@ -289,6 +289,8 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 			    _gameStartButton.GetFrameIndexOfBitmap() == 1) {
 				_gameStartButton.released();
 				gameStart();
+				_randomBoardButton.SetTopLeft(SIZE_X - 150 - _randomBoardButton.GetWidth(), _randomBoardButton.GetTop());
+				_gameStartButton.SetTopLeft(SIZE_X - 150 - _randomBoardButton.GetWidth(), _gameStartButton.GetTop());
 				// start game
 			}
 		}
