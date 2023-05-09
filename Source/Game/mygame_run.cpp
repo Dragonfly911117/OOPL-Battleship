@@ -53,7 +53,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 				_player1Board.rotateShip();
 			}
 		}
-	} else if (_phase == multiply_players) {
+	} else if (_phase == multiply_players || _phase == turnplay2) {
 		if ((_player1Board.getSelectedShipIndex() != -1) &&
 		    !_player1Board.ifAllShipPlaced()) {
 			if (nChar == 52 || nChar == 82) {
@@ -329,7 +329,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
 		}
-	} else if (_phase == multiply_players) {
+	} else if (_phase == multiply_players || _phase == turnplay2) {
 		if (_player1Board.getSelectedShipIndex() != -1 && !_player1Board.ifAllShipPlaced()) {
 			_player1Board.getShip().at(_player1Board.getSelectedShipIndex())->SetTopLeft(point.x - 25, point.y - 25);
 		} else if (_player2Board.getSelectedShipIndex() != -1) {
