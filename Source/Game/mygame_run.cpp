@@ -35,7 +35,8 @@ void CGameStateRun::OnInit() {
 	initializer.emplace_back(new PhaseInitializer_menu(temp2));
 
 	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
-	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2));
+	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2, 150));
+	initializer.emplace_back(new PhaseInitializer_placement(&this->_player2Board, temp2, 1020));
 
 	temp2 = {&this->_restartButton, &this->_exitButton};
 	initializer.emplace_back(new PhaseInitializer_ending(temp2));
@@ -278,6 +279,8 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 			    _gameStartButton.GetFrameIndexOfBitmap() == 1) {
 				_gameStartButton.released();
 				gameStart();
+				_randomBoardButton.SetTopLeft(150, _randomBoardButton.GetTop());
+				_gameStartButton.SetTopLeft(150, _gameStartButton.GetTop());
 				// start game
 			}
 		}
@@ -369,12 +372,12 @@ void CGameStateRun::OnShow() {
 			}
 		}
 
-	} else if (_phase == single_game &&
+	} else if ((_phase == single_game || _phase == multi_game) &&
 	           _player1Board.ifAllShipPlaced() &&
 	           _player2Board.ifAllShipPlaced()) {
 		_player1Board.show();
 		_player2Board.show();
-		
+
 	} else if (_phase == p1_wins || _phase == p2_wins) {
 		_restartButton.showBtn();
 		_exitButton.showBtn();
@@ -429,8 +432,8 @@ bool CGameStateRun::turn(const CPoint& point, const int& player) {
 		if (result != INT_MAX) {
 			return true;
 		}
-			return false;
-		}
+		return false;
+	}
 	_player2Board.setMyTurn(player == 1);
 	_player1Board.setMyTurn(player == 2);
 	_turnFlag = !_turnFlag;
@@ -482,11 +485,11 @@ void CGameStateRun::OnMove() {
 	auto* audio = CAudio::Instance();
 	if (_phase == p1_wins) {
 		if (_playWithRobot) {
-			if (! _endingThemeStarted) {
+			if (!_endingThemeStarted) {
 				audio->Stop(AudioID::theme);
 				if (_bot.getDifficulty() != robot_enums::dark_soul) {
 					audio->Play(AudioID::defeat_not_DSMode_Bot);
-				}else {
+				} else {
 					audio->Play(AudioID::defeat_dark_soul);
 				}
 				_endingThemeStarted = true;
@@ -494,7 +497,7 @@ void CGameStateRun::OnMove() {
 		}
 	} else if (_phase == p2_wins) {
 		audio->Stop(AudioID::theme);
-		if (_playWithRobot && ! _endingThemeStarted) {
+		if (_playWithRobot && !_endingThemeStarted) {
 			audio->Play(AudioID::defeated);
 			_endingThemeStarted = true;
 		}
