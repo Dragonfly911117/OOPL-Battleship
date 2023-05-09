@@ -79,14 +79,13 @@ CPoint Robot::hardModeFire() {
 }
 
 CPoint Robot::darkSoulModeFire() {
-	if (_cheatCountdown-- < 0 && !_cheatSheet.empty()) {
+	if (_cheatCount-- < 0 && !_cheatSheet.empty()) {
 		const CPoint pt = _cheatSheet.front();
 		_cheatSheet.pop_front();
 		_lastCoordinate = pt;
 		return pt;
-	} else {
-		return hardModeFire();
 	}
+		return hardModeFire();
 
 }
 
@@ -138,4 +137,14 @@ robot_enums::difficulty Robot::getDifficulty() const {
 
 void Robot::setDifficulty(const int& i) {
 	_difficulty = static_cast<robot_enums::difficulty>(i);
+}
+
+void Robot::reset() {
+	_map.clear();
+	_dfsStack = std::stack<CPoint>();
+	_lastCoordinate = CPoint(-1, -1);
+	_lastDirection = robot_enums::up;
+	_vertFlag = false;
+	_cheatCount = default_cheat_count;
+	_cheatSheet.clear();
 }
