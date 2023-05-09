@@ -10,8 +10,8 @@ protected:
 	const vector<vector<string>> _buttonPath = {
 		{"Resources/singlePlayerButton.bmp", "Resources/singlePlayerButtonPressed.bmp"},
 		{"Resources/multiplePlayerButtons.bmp", "Resources/multiplePlayerButtonPressed.bmp"},
-		{"Resources/optionsButton.bmp", "Resources/optionsButtonPressed.bmp"},
 		{"Resources/exitButton.bmp", "Resources/exitButtonPressed.bmp"},
+		
 		{"Resources/noobButton.bmp", "Resources/noobButtonPressed.bmp"},
 		{"Resources/normalButton.bmp", "Resources/normalButtonPressed.bmp"},
 		{"Resources/hardButton.bmp", "Resources/hardButtonPressed.bmp"},
@@ -54,7 +54,7 @@ class PhaseInitializer_placement final : public PhaseInitializer_base {
 	short _boardBaseX;
 	
 public:
-	PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs, const int& baseX);
+	PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs, const short& baseX);
 	void init() override;
 };
 

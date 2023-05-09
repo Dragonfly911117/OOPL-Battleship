@@ -23,14 +23,14 @@ CGameStateRun::CGameStateRun(CGame* g)
 }
 
 void CGameStateRun::OnInit() {
-	_menuButton.resize(4);
+	_menuButton.resize(3);
 	_difficultyButton.resize(4);
 	_phase = menu;
 	vector<shared_ptr<PhaseInitializer_base>> initializer;
 	const vector<CMovingBitmap*> temp = {&this->_background, &this->_cursor};
 	initializer.emplace_back(new PhaseInitializer_global(temp));
 
-	vector<myBtn*> temp2 = {&_menuButton[0], &_menuButton[1], &_menuButton[2], &_menuButton[3],
+	vector<myBtn*> temp2 = {&_menuButton[0], &_menuButton[1], &_menuButton[2],
 	                        &_difficultyButton[0], &_difficultyButton[1], &_difficultyButton[2], &_difficultyButton[3]};
 	initializer.emplace_back(new PhaseInitializer_menu(temp2));
 
@@ -223,7 +223,7 @@ void CGameStateRun::restart() {
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 	_cursor.SetTopLeft(point.x - 5, point.y - 5);
 	if (_phase == menu) {
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < _menuButton.size(); ++i) {
 			if (CMovingBitmap::IsOverlap(_cursor, _menuButton[i]) &&
 			    _menuButton[i].GetFrameIndexOfBitmap() == 1) {
 				_menuButton[i].released();
@@ -232,8 +232,6 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) {
 				} else if (i == 1) {
 					startMultiplePlayersGame();
 				} else if (i == 2) {
-					gotoSettings();
-				} else if (i == 3) {
 					gotoExit();
 				}
 			}
