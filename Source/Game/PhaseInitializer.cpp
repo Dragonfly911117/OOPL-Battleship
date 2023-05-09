@@ -29,9 +29,10 @@ void PhaseInitializer_menu::init() {
 }
 
 
-PhaseInitializer_placement::PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs) {
+PhaseInitializer_placement::PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs = {}, const int& baseX = 0) {
 	this->_board1 = board1;
 	this->_container = objs;
+	this->_boardBaseX = baseX;
 }
 
 void PhaseInitializer_placement::init() {
@@ -41,7 +42,7 @@ void PhaseInitializer_placement::init() {
 	this->_container.at(_randomBoardButtonPos)->setText("Random Board");
 	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString({ "Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp" });
 	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight() * 2 - 50);
-	this->_board1->init();
+	this->_board1->init(_boardBaseX);
 }
 
 PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
