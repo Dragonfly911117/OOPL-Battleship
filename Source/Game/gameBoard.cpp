@@ -30,7 +30,7 @@ void GameBoard::pickUpShip(const int& shipIndex) {
 }
 
 BaseGrid* GameBoard::getGridByCoordinate(const int& x, const int& y) const {
-	assert(x >= 0 && x < 10 && y >= 0 && y < 10);
+	assert(x >= 0 && x < 10);
 	return _grids.at(x).at(y).get();
 }
 
