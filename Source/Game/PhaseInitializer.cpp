@@ -43,3 +43,16 @@ void PhaseInitializer_placement::init() {
 	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight() * 2 - 50);
 	this->_board1->init();
 }
+
+PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
+	this->_container = objs;
+}
+
+void PhaseInitializer_ending::init() {
+	this->_container.at(_restartButtonPos)->setText("Return to menu");
+	this->_container.at(_restartButtonPos)->LoadBitmapByString({"Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp"});
+	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_restartButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
+	this->_container.at(_exitButtonPos)->setText("Exit");
+	this->_container.at(_exitButtonPos)->LoadBitmapByString({ "Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp" });
+	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight());
+}

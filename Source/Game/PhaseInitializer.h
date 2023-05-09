@@ -51,9 +51,17 @@ class PhaseInitializer_placement final : public PhaseInitializer_base {
 	GameBoard* _board1 = nullptr;
 	const short _startButtonPos = 0;
 	const short _randomBoardButtonPos = 1;
-	const short _size = 2;
 
 public:
 	PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs);
+	void init() override;
+};
+
+class PhaseInitializer_ending final : public PhaseInitializer_base {
+	vector<myBtn*> _container;
+	const short _restartButtonPos = 0;
+	const short _exitButtonPos = 1;
+public:
+	PhaseInitializer_ending(const vector<myBtn*>& objs);
 	void init() override;
 };

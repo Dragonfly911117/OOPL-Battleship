@@ -115,7 +115,7 @@ namespace game_framework {
 		/* Is function */
 		bool IsAnimation();
 		bool IsAnimationDone();
-		bool IsBitmapLoaded();
+		bool IsBitmapLoaded() const;
 		bool IsOnceAnimation();
 		static bool IsOverlap(CMovingBitmap bmp1, CMovingBitmap bmp2);
 
