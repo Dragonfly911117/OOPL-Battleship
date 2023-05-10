@@ -50,8 +50,8 @@ PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
 
 void PhaseInitializer_ending::init() {
 	// TODO: add restart button and exit button
-	this->_container.at(_restartButtonPos)->LoadBitmapByString({"Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp"});
+	this->_container.at(_restartButtonPos)->LoadBitmapByString({"Resources/restartButton.bmp", "Resources/restartButtonPress.bmp"});
 	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_restartButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
-	this->_container.at(_exitButtonPos)->LoadBitmapByString({"Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp"});
+	this->_container.at(_exitButtonPos)->LoadBitmapByString({"Resources/exitButton.bmp", "Resources/exitButtonPressed.bmp"});
 	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight());
 }

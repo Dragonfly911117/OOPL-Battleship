@@ -191,8 +191,8 @@ void GameBoard::init(const short& baseX) {
 
 void GameBoard::show() {
 	_background.ShowBitmap();
-	// if (!_isEnemy) {
-	if (true) {
+	if (!_isEnemy) {
+	// if (true) {
 		// for debug 
 		for (auto& i: _ships) {
 			i->ShowBitmap();
