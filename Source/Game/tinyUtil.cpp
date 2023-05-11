@@ -72,7 +72,7 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 		CPoint temp;
 		temp.x = result._baseX + static_cast<int>(unif(generator));
 		temp.y = result._baseY + static_cast<int>(unif(generator));
-		while (!result.dropShip(temp)) {
+		while (! result.dropShip(temp)) {
 			temp.x = result._baseX + static_cast<int>(unif(generator));
 			temp.y = result._baseY + static_cast<int>(unif(generator));
 		}
@@ -81,7 +81,7 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 }
 
 deque<CPoint> getShipCoordinates(const GameBoard& board) {
-	deque<CPoint> res;
+	deque<CPoint>res;
 	for (int i = 0; i < board._grids.size(); ++i) {
 		for (int j = 0; j < board._grids.at(i).size(); ++j) {
 			if (board._grids.at(i).at(j)->getShipId() != -1) {

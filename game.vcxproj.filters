@@ -54,6 +54,13 @@
     <ClCompile Include="Source\Game\mygame_run.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\button.cpp" />
+    <ClCompile Include="Source\Game\gameBoard.cpp" />
+    <ClCompile Include="Source\Game\grids.cpp" />
+    <ClCompile Include="Source\Game\PhaseInitializer.cpp" />
+    <ClCompile Include="Source\Game\Robot.cpp" />
+    <ClCompile Include="Source\Game\Ship.cpp" />
+    <ClCompile Include="Source\Game\tinyUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Library\audio.h">
@@ -89,6 +96,13 @@
     <ClInclude Include="Source\Game\config.h">
       <Filter>MyGame</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\buttons.h" />
+    <ClInclude Include="Source\Game\GameBoard.h" />
+    <ClInclude Include="Source\Game\grids.h" />
+    <ClInclude Include="Source\Game\PhaseInitializer.h" />
+    <ClInclude Include="Source\Game\Robot.h" />
+    <ClInclude Include="Source\Game\Ship.h" />
+    <ClInclude Include="Source\Game\tinyUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\Core\game.rc">

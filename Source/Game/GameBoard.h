@@ -33,7 +33,7 @@ public:
 	bool ifAllCMovingBitmapLoaded() const;
 
 	// deployment-phase methods
-	void init();
+	void init(const short& baseX);
 	int getSelectedShipIndex() const;
 	void pickUpShip(const int& shipIndex);
 	void rotateShip();

@@ -27,7 +27,7 @@ void CGameStateOver::OnBeginState() {
 }
 
 void CGameStateOver::OnInit() {
-	
+
 	 
 }
 

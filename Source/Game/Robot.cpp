@@ -85,7 +85,7 @@ CPoint Robot::darkSoulModeFire() {
 		_lastCoordinate = pt;
 		return pt;
 	}
-	return hardModeFire();
+		return hardModeFire();
 
 }
 

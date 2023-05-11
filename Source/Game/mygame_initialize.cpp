@@ -27,7 +27,7 @@ void CGameStateInit::OnInit() {
 	// choose one to use
 	audio->Load(AudioID::sad_violin, "Resources/audio/Sad_violin.wav");
 	audio->Load(AudioID::defeated, "Resources/audio/Defeated.wav");
-	
+
 	for (int i = 0; i < AudioID::hit_buffer; i++) {
 		audio->Load(AudioID::player_hit + i, "Resources/audio/Hit_Marker.wav");
 		audio->Load(AudioID::bot_hit + i, "Resources/audio/Error.wav");
@@ -45,11 +45,9 @@ void CGameStateInit::OnInit() {
 }
 
 void CGameStateInit::OnBeginState() {
-	
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -60,5 +58,5 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point) {
 void CGameStateInit::OnShow() {
 	startBg.ShowBitmap();
 	
-	
+
 }

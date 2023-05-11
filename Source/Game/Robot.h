@@ -38,9 +38,9 @@ class Robot {
 	static CPoint randomlyPickCoordinate();
 
 public:
-	CPoint infiniteMonkeyModeFire();// fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
+	CPoint infiniteMonkeyModeFire(); // fire randomly Reference: https://en.wikipedia.org/wiki/Infinite_monkey_theorem
 	CPoint normalModeFire();        // If hit, fire its adjacent coordinates 'tll miss.
-	CPoint hardModeFire();          // have some additional strategies
+	CPoint hardModeFire(); // have some additional strategies
 	CPoint darkSoulModeFire();      // hard mode 'till the _cheatCount is 0, then cheat
 	void gatherEnemyShipCoordinates(const std::deque<CPoint>& pt);
 	void getFeedback(const bool& res);
