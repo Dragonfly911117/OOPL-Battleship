@@ -9,9 +9,9 @@ PhaseInitializer_global::PhaseInitializer_global(const vector<CMovingBitmap*>& o
 }
 
 void PhaseInitializer_global::init() {
-	this->_container.at(_bgPos)->LoadBitmapA("Resources/menuBg.bmp");
+	this->_container.at(_bgPos)->LoadBitmapA(R"(Resources/Images/Backgrounds/menu.bmp)");
 	this->_container.at(_bgPos)->SetTopLeft(0, 0);
-	this->_container.at(_cursorPos)->LoadBitmapA("Resources/cursor.bmp");
+	this->_container.at(_cursorPos)->LoadBitmapA(R"(Resources/Images/Misc/cursor.bmp)");
 }
 
 PhaseInitializer_menu::PhaseInitializer_menu(const vector<myBtn*>& objs) {
@@ -37,9 +37,9 @@ PhaseInitializer_placement::PhaseInitializer_placement(GameBoard* const& board1,
 }
 
 void PhaseInitializer_placement::init() {
-	this->_container.at(_startButtonPos)->LoadBitmapByString({"Resources/gameStartButton.bmp", "Resources/gameStartButtonPressed.bmp"});
+	this->_container.at(_startButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/gameStart.bmp)", R"(Resources/Images/Buttons/Pressed/gameStart.bmp)"});
 	this->_container.at(_startButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_startButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_startButtonPos)->GetHeight());
-	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString({"Resources/randomBoardoButton.bmp", "Resources/randomBoardButtonPressed.bmp"});
+	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/randomBoard.bmp)", R"(Resources//Images/Buttons/Pressed/randomBoard.bmp)"});
 	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight() * 2 - 50);
 	this->_board1->init(_boardBaseX);
 }
@@ -49,9 +49,8 @@ PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
 }
 
 void PhaseInitializer_ending::init() {
-	// TODO: add restart button and exit button
-	this->_container.at(_restartButtonPos)->LoadBitmapByString({"Resources/restartButton.bmp", "Resources/restartButtonPress.bmp"});
+	this->_container.at(_restartButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/restart.bmp)", R"(Resources/Images/Buttons/Pressed/restart.bmp)"});
 	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_restartButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
-	this->_container.at(_exitButtonPos)->LoadBitmapByString({"Resources/exitButton.bmp", "Resources/exitButtonPressed.bmp"});
+	this->_container.at(_exitButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/exit.bmp)", R"(Resources/Images/Buttons/Pressed/exit.bmp)"});
 	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight());
 }

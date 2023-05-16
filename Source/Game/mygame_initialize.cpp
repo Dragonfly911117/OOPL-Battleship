@@ -19,14 +19,14 @@ CGameStateInit::CGameStateInit(CGame* g)
 
 void CGameStateInit::OnInit() {
 	ShowInitProgress(0, "Start Initializing...");// 一開始的loading進度為0%
-	startBg.LoadBitmapA("Resources/startBG.bmp");
+	startBg.LoadBitmapA(R"(Resources/Images/Backgrounds/gameInit.bmp)");
 	startBg.SetTopLeft(0, 0);
 	CAudio* audio = CAudio::Instance();
-	audio->Load(AudioID::theme, "Resources/audio/Theme.wav");
+	audio->Load(AudioID::theme, R"(Resources/audio/Theme.wav)");
 
 	// choose one to use
-	audio->Load(AudioID::sad_violin, "Resources/audio/Sad_violin.wav");
-	audio->Load(AudioID::defeated, "Resources/audio/Defeated.wav");
+	audio->Load(AudioID::sad_violin, R"(Resources/audio/Sad_violin.wav)");
+	audio->Load(AudioID::defeated, R"(Resources/audio/Defeated.wav)");
 
 	for (int i = 0; i < AudioID::hit_buffer; i++) {
 		audio->Load(AudioID::player_hit + i, "Resources/audio/Hit_Marker.wav");

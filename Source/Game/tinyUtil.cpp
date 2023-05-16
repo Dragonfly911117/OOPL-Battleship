@@ -42,7 +42,7 @@ GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	result._isEnemy = isEnemy;
 	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
 	result._baseX = x;
-	result._background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
+	result._background.LoadBitmapByString({R"(Resources/Images/Backgrounds/Boards/normal.bmp)", R"(Resources/Images/Backgrounds/Boards/onFocus.bmp)"});
 	result._background.SetTopLeft(result._baseX - 10, result._baseY - 10);
 	// result._background.SetFrameIndexOfBitmap(isEnemy ? 1 : 0);
 	result._background.SetFrameIndexOfBitmap(1);
