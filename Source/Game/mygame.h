@@ -116,9 +116,12 @@ namespace game_framework {
 		vector<myBtn> _menuButton;
 		vector<myBtn> _difficultyButton;
 
-		// Variables used ONLY by in-game
+		// Variables used ONLY by placement
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
+		CMovingBitmap _hint;
+		
+		// Variables used ONLY by in-game
 		clock_t _lastTimePlayerPlayed;
 		const int bot_play_delay = 200;
 		bool _turnFlag = true;// true for player 1, false for player 2

@@ -23,17 +23,18 @@ void PhaseInitializer_menu::init() {
 		this->_container.at(i)->LoadBitmapByString(this->_buttonPath[i]);
 		this->_container.at(i)->SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * (i) + 200)));
 	}
-	
+
 	for (int i = 3; i < 7; ++i) {
 		this->_container.at(i)->LoadBitmapByString(this->_buttonPath[i]);
 		this->_container.at(i)->SetTopLeft(static_cast<int>((SIZE_X * 0.4)), static_cast<int>((SIZE_Y * 0.2 * ((i + 1) % 4) + 200)));
 	}
 }
 
-PhaseInitializer_placement::PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs = {}, const short& baseX = 0) {
+PhaseInitializer_placement::PhaseInitializer_placement(GameBoard* const& board1, const vector<myBtn*>& objs, const short& baseX, CMovingBitmap* const& hint) {
 	this->_board1 = board1;
 	this->_container = objs;
 	this->_boardBaseX = baseX;
+	this->hint = hint;
 }
 
 void PhaseInitializer_placement::init() {
@@ -42,6 +43,10 @@ void PhaseInitializer_placement::init() {
 	this->_container.at(_randomBoardButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/randomBoard.bmp)", R"(Resources//Images/Buttons/Pressed/randomBoard.bmp)"});
 	this->_container.at(_randomBoardButtonPos)->SetTopLeft(SIZE_X - 150 - this->_container.at(_randomBoardButtonPos)->GetWidth(), SIZE_Y - 150 - this->_container.at(_randomBoardButtonPos)->GetHeight() * 2 - 50);
 	this->_board1->init(_boardBaseX);
+	if (hint != nullptr) {
+		this->hint->LoadBitmapA(R"(Resources/Images/Misc/hint.bmp)");
+		this->hint->SetTopLeft(SIZE_X - 150 - this->hint->GetWidth(), 150);
+	}
 }
 
 PhaseInitializer_ending::PhaseInitializer_ending(const vector<myBtn*>& objs) {
