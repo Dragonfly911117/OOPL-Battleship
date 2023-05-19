@@ -35,7 +35,7 @@ void CGameStateRun::OnInit() {
 	initializer.emplace_back(new PhaseInitializer_menu(temp2));
 
 	temp2 = {&this->_gameStartButton, &this->_randomBoardButton};
-	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2, 150));
+	initializer.emplace_back(new PhaseInitializer_placement(&this->_player1Board, temp2, 150, &_hint));
 	initializer.emplace_back(new PhaseInitializer_placement(&this->_player2Board, temp2, 1020));
 
 	temp2 = {&this->_restartButton, &this->_exitButton};
@@ -355,6 +355,8 @@ void CGameStateRun::OnShow() {
 		if (_player1Board.ifAllShipPlaced()) {
 			_gameStartButton.showBtn();
 		}
+		_hint.SetTopLeft(SIZE_X - 150 - _hint.GetWidth(), 150);
+		_hint.ShowBitmap();
 	} else if (_phase == multiply_players || _phase == turnplay2) {
 		_randomBoardButton.showBtn();
 		if (_phase != turnplay2) {
@@ -362,6 +364,8 @@ void CGameStateRun::OnShow() {
 			if (_player1Board.ifAllShipPlaced()) {
 				_gameStartButton.showBtn();
 			}
+			_hint.SetTopLeft(SIZE_X - 150 - _hint.GetWidth(), 150);
+			_hint.ShowBitmap();
 		} else {
 			if (_phase == turnplay2) {
 				_player2Board.show();
@@ -370,6 +374,8 @@ void CGameStateRun::OnShow() {
 			    _player2Board.ifAllShipPlaced()) {
 				_gameStartButton.showBtn();
 			}
+			_hint.SetTopLeft(150, 150);
+			_hint.ShowBitmap();
 		}
 
 	} else if ((_phase == single_game || _phase == multi_game) &&
