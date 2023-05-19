@@ -67,7 +67,7 @@ shared_ptr<Ship> makeAShip(const int& tp) {
 	ship->_type = tp;
 	ship->_health = ship->getSize();
 	ship->_placeable = false;
-	const string baseAddress = "Resources/ships/";
+	const string baseAddress = "Resources/Ships/";
 	vector<string> fileNames = {"headAtLeft.bmp", "HeadAtTop.bmp", "Resources/gridHit.bmp"};
 	string folderName("A/");
 	folderName[0] += tp - 2;// {2, 3, 4, 5, 9} ->{ 'A', 'B', 'C', 'D', 'H'}
