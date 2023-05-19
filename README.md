@@ -12,5 +12,5 @@
   * 若猜中敵方戰艦(以![擊中](Resources/Images/Misc/UsedByREADME/shipHit.jpg)標示)則繼續猜測，否則(以![藍色酷方框](Resources/Images/Misc/UsedByREADME/gridHit.jpg)標示)輪到玩家二
   * 玩家二猜測完後輪到玩家一
   * 當一方所有戰艦被擊沉時，遊戲結束
-  * 輪到玩家一時，右邊棋盤背景以 <span style="color=#000000">黑色</span> 標示，輪到玩家二時則以 <span style="color=#4E4E4E">灰色</span> 標示。反之亦然
+  * 輪到玩家一時，右邊棋盤背景以 <font color="#000000">黑色</font> 標示，輪到玩家二時則以 <font color="#4E4E4E">灰色</font> 標示。反之亦然
 
