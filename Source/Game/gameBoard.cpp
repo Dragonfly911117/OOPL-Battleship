@@ -125,7 +125,7 @@ int GameBoard::beingHit(const int& x, const int& y) {
 	if (getGridByCoordinate(x, y)->getShipId() != -1) {
 		_ships.at(getGridByCoordinate(x, y)->getShipId())->beingHit();
 		const shared_ptr<BaseGrid> temp(new BaseGrid);
-		temp->LoadBitmapA("Resources/shipHit.bmp");
+		temp->LoadBitmapA(R"(Resources/Images/Ships/hit.bmp)");
 		temp->SetTopLeft(getGridByCoordinate(x, y)->GetLeft(), getGridByCoordinate(x, y)->GetTop());
 		_shipHit.push_back(temp);
 	}
@@ -148,7 +148,7 @@ void GameBoard::reset() {
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
 			_grids.at(i).at(j).reset(new EmptyGrid);
-			_grids.at(i).at(j)->LoadBitmapByString({R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"});
+			_grids.at(i).at(j)->LoadBitmapByString({R"(Resources/Images/Grids/empty.bmp)", R"(Resources/Images/Grids/hit.bmp)"});
 			_grids.at(i).at(j)->SetTopLeft(_baseX + 60 * i, _baseY + 60 * j);
 		}
 	}
@@ -167,10 +167,10 @@ void GameBoard::init(const short& baseX) {
 	_selectedShip = -1;
 	_baseY = 150;
 	_baseX = baseX;
-	_background.LoadBitmapByString({R"(Resources/boardBackground2.bmp)", R"(Resources/boardBackground.bmp)"});
+	_background.LoadBitmapByString({R"(Resources/Images/Backgrounds/Boards/normal.bmp)", R"(Resources/Images/Backgrounds/Boards/onFocus.bmp)"});
 	_background.SetTopLeft(_baseX - 10, _baseY - 10);
 	_background.SetFrameIndexOfBitmap(1);
-	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
+	const vector<string> fileName = {R"(Resources/Images/Grids/empty.bmp)", R"(Resources/Images/Grids/hit.bmp)"};
 	for (int i = 0; i < 10; ++i) {
 		vector<shared_ptr<BaseGrid>> curr(10);
 		for (int j = 0; j < 10; ++j) {

@@ -19,26 +19,26 @@ CGameStateInit::CGameStateInit(CGame* g)
 
 void CGameStateInit::OnInit() {
 	ShowInitProgress(0, "Start Initializing...");// 一開始的loading進度為0%
-	startBg.LoadBitmapA("Resources/startBG.bmp");
+	startBg.LoadBitmapA(R"(Resources/Images/Backgrounds/gameInit.bmp)");
 	startBg.SetTopLeft(0, 0);
 	CAudio* audio = CAudio::Instance();
-	audio->Load(AudioID::theme, "Resources/audio/Theme.wav");
+	audio->Load(AudioID::theme, R"(Resources/Audio/Theme.wav)");
 
 	// choose one to use
-	audio->Load(AudioID::sad_violin, "Resources/audio/Sad_violin.wav");
-	audio->Load(AudioID::defeated, "Resources/audio/Defeated.wav");
+	audio->Load(AudioID::sad_violin, R"(Resources/Audio/Sad_violin.wav)");
+	audio->Load(AudioID::defeated, R"(Resources/Audio/Defeated.wav)");
 
 	for (int i = 0; i < AudioID::hit_buffer; i++) {
-		audio->Load(AudioID::player_hit + i, "Resources/audio/Hit_Marker.wav");
-		audio->Load(AudioID::bot_hit + i, "Resources/audio/Error.wav");
+		audio->Load(AudioID::player_hit + i, "Resources/Audio/Hit_Marker.wav");
+		audio->Load(AudioID::bot_hit + i, "Resources/Audio/Error.wav");
 	}
-	audio->Load(AudioID::click, "Resources/audio/Click.wav");
-	audio->Load(AudioID::Missed1,  "Resources/audio/Missed1.wav");
-	audio->Load(AudioID::Missed2,  "Resources/audio/Missed2.wav");
-	audio->Load(AudioID::Missed3,  "Resources/audio/Missed3.wav");
-	audio->Load(AudioID::Missed4,  "Resources/audio/Missed4.wav");
-	audio->Load(AudioID::defeat_not_DSMode_Bot, "Resources/audio/Defeat_NotDS.wav");
-	audio->Load(AudioID::defeat_dark_soul, "Resources/audio/Defeat_Dark_Soul.wav");
+	audio->Load(AudioID::click, "Resources/Audio/Click.wav");
+	audio->Load(AudioID::Missed1,  "Resources/Audio/Missed1.wav");
+	audio->Load(AudioID::Missed2,  "Resources/Audio/Missed2.wav");
+	audio->Load(AudioID::Missed3,  "Resources/Audio/Missed3.wav");
+	audio->Load(AudioID::Missed4,  "Resources/Audio/Missed4.wav");
+	audio->Load(AudioID::defeat_not_DSMode_Bot, "Resources/Audio/Defeat_NotDS.wav");
+	audio->Load(AudioID::defeat_dark_soul, "Resources/Audio/Defeat_Dark_Soul.wav");
 	
 	
 	audio->Play(AudioID::theme, true);

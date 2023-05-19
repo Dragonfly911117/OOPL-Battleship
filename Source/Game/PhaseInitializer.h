@@ -8,14 +8,14 @@ using namespace game_framework;
 class PhaseInitializer_base {
 protected:
 	const vector<vector<string>> _buttonPath = {
-		{"Resources/singlePlayerButton.bmp", "Resources/singlePlayerButtonPressed.bmp"},
-		{"Resources/multiplePlayerButtons.bmp", "Resources/multiplePlayerButtonPressed.bmp"},
-		{"Resources/exitButton.bmp", "Resources/exitButtonPressed.bmp"},
-		
-		{"Resources/noobButton.bmp", "Resources/noobButtonPressed.bmp"},
-		{"Resources/normalButton.bmp", "Resources/normalButtonPressed.bmp"},
-		{"Resources/hardButton.bmp", "Resources/hardButtonPressed.bmp"},
-		{"Resources/insaneButton.bmp", "Resources/insaneButtonPressed.bmp"}
+		{R"(Resources/Images/Buttons/Normal/singlePlayer.bmp)", R"(Resources/Images/Buttons/Pressed/singlePlayer.bmp)"},
+		{R"(Resources/Images/Buttons/Normal/multiplePlayers.bmp)", R"(Resources/Images/Buttons/Pressed/multiplePlayers.bmp)"},
+		{R"(Resources/Images/Buttons/Normal/exit.bmp)", "Resources/Images/Buttons/Pressed/exit.bmp"},
+
+		{R"(Resources/Images/Buttons/Normal/noob.bmp)", R"(Resources/Images/Buttons/Pressed/noob.bmp)"},
+		{R"(Resources/Images/Buttons/Normal/normal.bmp)", R"(Resources/Images/Buttons/Pressed/normal.bmp)"},
+		{R"(Resources/Images/Buttons/Normal/hard.bmp)", R"(Resources/Images/Buttons/Pressed/hard.bmp)"},
+		{R"(Resources/Images/Buttons/Normal/insane.bmp)", R"(Resources/Images/Buttons/Pressed/insane.bmp)"}
 	};
 	vector<CMovingBitmap*> _container;
 
