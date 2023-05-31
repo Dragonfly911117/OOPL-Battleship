@@ -40,6 +40,7 @@ void CGameStateRun::OnInit() {
 
 	temp2 = {&this->_restartButton, &this->_exitButton};
 	initializer.emplace_back(new PhaseInitializer_ending(temp2));
+	initializer.emplace_back(new PhaseInitializer_cheatMode({&_smoke}));
 	for (const auto& i: initializer) {
 		i->init();
 	}
@@ -56,6 +57,8 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 			if (++_cheatPhase == _cheatCode.size()) {
 				const auto audio = CAudio::Instance();
 				_cheatMode = true;
+				_smoke.SetAnimation(10, true);
+				_smoke.ToggleAnimation();
 				audio->Stop(AudioID::theme);
 				audio->Play(AudioID::CheatModeActivated, true);
 				_cheatPhase = 0;
@@ -415,7 +418,10 @@ void CGameStateRun::OnShow() {
 
 	} else {
 	}
-	// cursor.ShowBitmap(); // un-comment this to see where the cursor is 
+	if (_cheatMode && _smoke.GetFrameIndexOfBitmap() != _smoke.GetFrameSizeOfBitmap() - 1) {
+		_smoke.ShowBitmap();
+	}
+	// _cursor.ShowBitmap();// un-comment this to see where the cursor is 
 }
 
 void CGameStateRun::startSingleGame() {

@@ -112,11 +112,14 @@ namespace game_framework {
 		CMovingBitmap _cursor;
 		GameBoard _player1Board;
 		GameBoard _player2Board;
+		
+		// Variables used by cheat mode 
 		time_t _cheatCodeTimer;
 		vector<UINT> _cheatCode;
 		int cheatCodeWindow = 1000;
 		int _cheatPhase = 0;
 		bool _cheatMode = false;
+		CMovingBitmap _smoke;
 
 		// Variables used ONLY by menu
 		CMovingBitmap _background;
