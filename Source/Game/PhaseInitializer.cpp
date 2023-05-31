@@ -69,7 +69,7 @@ PhaseInitializer_cheatMode::PhaseInitializer_cheatMode(const vector<CMovingBitma
 void PhaseInitializer_cheatMode::init() {
 	// load  bmp files named 00001.bmp to 00262 in Resources/Images/Cheat
 	vector<string> paths;
-	COLORREF color = RGB(75, 253, 20);
+	
 	for (int i = 1; i <= 262; ++i) {
 		string path = R"(Resources/Images/Cheat/)";
 		if (i < 10) {
@@ -85,6 +85,6 @@ void PhaseInitializer_cheatMode::init() {
 		path += ".bmp";
 		paths.push_back(path);
 	}
-	this->_container.front()->LoadBitmapByString(paths, color);
+	this->_container.front()->LoadBitmapByString(paths, RGB(0, 0, 255));
 	this->_container.front()->SetTopLeft((SIZE_X - this->_container.front()->GetWidth() )/ 2, SIZE_Y - this->_container.front()->GetHeight());
 }
