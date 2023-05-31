@@ -20,6 +20,7 @@ namespace AudioID {
 		Missed2 = 9 + hit_buffer*2,
 		Missed3 = 10 + hit_buffer*2,
 		Missed4 = 11 + hit_buffer*2,
+		CheatModeActivated = 12 + hit_buffer*2,
 	};// enum AudioID
 
 }

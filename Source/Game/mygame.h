@@ -116,6 +116,7 @@ namespace game_framework {
 		vector<UINT> _cheatCode;
 		int cheatCodeWindow = 1000;
 		int _cheatPhase = 0;
+		bool _cheatMode = false;
 
 		// Variables used ONLY by menu
 		CMovingBitmap _background;
