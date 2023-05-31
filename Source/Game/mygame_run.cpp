@@ -43,10 +43,25 @@ void CGameStateRun::OnInit() {
 	for (const auto& i: initializer) {
 		i->init();
 	}
+	_cheatCode = {38, 38, 40, 40, 37, 39, 37, 39, 66, 65};// up up down down left right left right b a
 
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	if (nChar == 27) {
+		exit(27);
+	}
+	if (nChar == _cheatCode[_cheatPhase]) {
+		if (clock() - _cheatCodeTimer < cheatCodeWindow || _cheatPhase == 0) {
+			if (++_cheatPhase == _cheatCode.size()) {
+				_cheatPhase = 0;
+				_player1Board.becomeEnemy(false);
+				_player2Board.becomeEnemy(false);
+			}
+		} else {
+			_cheatPhase = 0;
+		}
+	} else { _cheatPhase = 0; }
 	if (_phase == single_placement_phase) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			if (nChar == 52 || nChar == 82) {
@@ -66,6 +81,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 			}
 		}
 	}
+	_cheatCodeTimer = clock();
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -216,6 +232,7 @@ void CGameStateRun::restart() {
 	CAudio* audio = CAudio::Instance();
 	audio->Stop(AudioID::defeated);
 	audio->Stop(AudioID::defeat_not_DSMode_Bot);
+	audio->Stop(AudioID::defeat_dark_soul);
 	audio->Play(AudioID::theme);
 	_endingThemeStarted = false;
 }
@@ -421,8 +438,8 @@ void CGameStateRun::gameStart() {
 			_phase = turnplay2;
 		}
 	}
-	_player1Board.setMyTurn(false);
-	_player2Board.setMyTurn(true);
+	_player1Board.setMyTurn(true);
+	_player2Board.setMyTurn(false);
 	// _phase = in_game;
 }
 

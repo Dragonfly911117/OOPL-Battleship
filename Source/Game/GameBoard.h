@@ -42,7 +42,7 @@ public:
 	void gettingStart();
 
 	// main-game-phase methods
-	void becomeEnemy();
+	void becomeEnemy(const bool isEnemy = true);
 	int beingHit(const int& x, const int& y);
 	bool ifAllShipSunk() const;
 	void setMyTurn(const bool& isMyTurn);
