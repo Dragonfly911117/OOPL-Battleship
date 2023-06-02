@@ -56,13 +56,13 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 		if (clock() - _cheatCodeTimer < cheatCodeWindow || _cheatPhase == 0) {
 			if (++_cheatPhase == _cheatCode.size()) {
 				const auto audio = CAudio::Instance();
-				_cheatMode = true;
 				_smoke.SetAnimation(10, true);
 				_smoke.ToggleAnimation();
-				if (!_cheatMode) {
+				if (!_cheatMode){
 					audio->Stop(AudioID::theme);
 					audio->Play(AudioID::CheatModeActivated, true);
 				}
+				_cheatMode = true;
 				_cheatPhase = 0;
 				_player1Board.becomeEnemy(false);
 				_player2Board.becomeEnemy(false);
@@ -527,14 +527,14 @@ void CGameStateRun::OnMove() {
 		}
 	}
 	auto* audio = CAudio::Instance();
-	if (_cheatMode) {
-		audio->Stop(AudioID::CheatModeActivated);
-	} else {
-		audio->Stop(AudioID::theme);
-	}
 	if (_phase == p1_wins) {
 		if (_playWithRobot) {
 			if (!_endingThemeStarted) {
+				if (_cheatMode) {
+					audio->Stop(AudioID::CheatModeActivated);
+				} else {
+					audio->Stop(AudioID::theme);
+				}
 				if (_bot.getDifficulty() != robot_enums::dark_soul) {
 					audio->Play(AudioID::defeat_not_DSMode_Bot, true);
 				} else {
@@ -544,6 +544,7 @@ void CGameStateRun::OnMove() {
 			}
 		}
 	} else if (_phase == p2_wins) {
+		audio->Stop(AudioID::theme);
 		if (_playWithRobot && !_endingThemeStarted) {
 			audio->Play(AudioID::defeated);
 			_endingThemeStarted = true;
