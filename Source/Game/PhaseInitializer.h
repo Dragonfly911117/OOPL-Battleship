@@ -67,3 +67,11 @@ public:
 	PhaseInitializer_ending(const vector<myBtn*>& objs);
 	void init() override;
 };
+
+class PhaseInitializer_cheatMode final : public PhaseInitializer_base {
+	vector<CMovingBitmap*> _container;
+	const short _smokePos = 0;
+public:
+	PhaseInitializer_cheatMode( const vector<CMovingBitmap*>& objs);
+	  void init() override;
+};

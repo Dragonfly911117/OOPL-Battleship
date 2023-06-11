@@ -40,7 +40,7 @@ int myIsOverlap(const CPoint& pt1, Ship& ship) {
 GameBoard generateABoard(const int& x, const bool& isEnemy) {
 	GameBoard result;
 	result._isEnemy = isEnemy;
-	const vector<string> fileName = {R"(Resources/emptyGrid.bmp)", R"(Resources/gridHit.bmp)"};
+	const vector<string> fileName = {R"(Resources/Images/Grids/empty.bmp)", R"(Resources/Images/Grids/Hit.bmp)"};
 	result._baseX = x;
 	result._background.LoadBitmapByString({R"(Resources/Images/Backgrounds/Boards/normal.bmp)", R"(Resources/Images/Backgrounds/Boards/onFocus.bmp)"});
 	result._background.SetTopLeft(result._baseX - 10, result._baseY - 10);

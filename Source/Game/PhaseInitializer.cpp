@@ -4,6 +4,8 @@
 #include "config.h"
 #include "GameBoard.h"
 
+#include <string>
+
 PhaseInitializer_global::PhaseInitializer_global(const vector<CMovingBitmap*>& objs) {
 	this->_container = objs;
 }
@@ -58,4 +60,31 @@ void PhaseInitializer_ending::init() {
 	this->_container.at(_restartButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_restartButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_restartButtonPos)->GetHeight() * 2 - 50);
 	this->_container.at(_exitButtonPos)->LoadBitmapByString({R"(Resources/Images/Buttons/Normal/exit.bmp)", R"(Resources/Images/Buttons/Pressed/exit.bmp)"});
 	this->_container.at(_exitButtonPos)->SetTopLeft(SIZE_X / 2 - this->_container.at(_exitButtonPos)->GetWidth() / 2, SIZE_Y - 150 - this->_container.at(_exitButtonPos)->GetHeight());
+}
+
+PhaseInitializer_cheatMode::PhaseInitializer_cheatMode(const vector<CMovingBitmap*>& objs) {
+	this->_container = objs;
+}
+
+void PhaseInitializer_cheatMode::init() {
+	// load  bmp files named 00001.bmp to 00262 in Resources/Images/Cheat
+	vector<string> paths;
+	
+	for (int i = 1; i <= 262; ++i) {
+		string path = R"(Resources/Images/Cheat/)";
+		if (i < 10) {
+			path += "0000";
+		}
+		else if (i < 100) {
+			path += "000";
+		}
+		else {
+			path += "00";
+		}
+		path += to_string(i);
+		path += ".bmp";
+		paths.push_back(path);
+	}
+	this->_container.front()->LoadBitmapByString(paths, RGB(0, 0, 255));
+	this->_container.front()->SetTopLeft((SIZE_X - this->_container.front()->GetWidth() )/ 2, SIZE_Y - this->_container.front()->GetHeight());
 }

@@ -114,8 +114,8 @@ void GameBoard::gettingStart() {
 	// }
 }
 
-void GameBoard::becomeEnemy() {
-	_isEnemy = true;
+void GameBoard::becomeEnemy(const bool isEnemy) {
+	_isEnemy = isEnemy;
 }
 
 int GameBoard::beingHit(const int& x, const int& y) {
@@ -141,7 +141,7 @@ bool GameBoard::ifAllShipSunk() const {
 }
 
 void GameBoard::setMyTurn(const bool& isMyTurn) {
-	_background.SetFrameIndexOfBitmap(isMyTurn ? 1 : 0);
+	_background.SetFrameIndexOfBitmap(isMyTurn ? 0 : 1);
 }
 
 void GameBoard::reset() {

@@ -40,6 +40,8 @@
 #pragma once
 #include "tinyUtil.h"
 
+#include <unordered_map>
+
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -110,6 +112,14 @@ namespace game_framework {
 		CMovingBitmap _cursor;
 		GameBoard _player1Board;
 		GameBoard _player2Board;
+		
+		// Variables used by cheat mode 
+		time_t _cheatCodeTimer;
+		vector<UINT> _cheatCode;
+		int cheatCodeWindow = 1000;
+		int _cheatPhase = 0;
+		bool _cheatMode = false;
+		CMovingBitmap _smoke;
 
 		// Variables used ONLY by menu
 		CMovingBitmap _background;
@@ -120,15 +130,15 @@ namespace game_framework {
 		myBtn _gameStartButton;
 		myBtn _randomBoardButton;
 		CMovingBitmap _hint;
-		
+
 		// Variables used ONLY by in-game
 		clock_t _lastTimePlayerPlayed;
 		const int bot_play_delay = 200;
 		bool _turnFlag = true;// true for player 1, false for player 2
 		bool turn(const CPoint& point, const int& player);
-		pair<short, short> _hitAudioPos; // first for player 1, second for player 2
+		pair<short, short> _hitAudioPos;// first for player 1, second for player 2
 		short _missAudioPos = 0;
-		
+
 		// Variables used ONLY by ending
 		CMovingBitmap _endingBackground;
 		myBtn _restartButton;

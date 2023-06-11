@@ -40,13 +40,37 @@ void CGameStateRun::OnInit() {
 
 	temp2 = {&this->_restartButton, &this->_exitButton};
 	initializer.emplace_back(new PhaseInitializer_ending(temp2));
+	initializer.emplace_back(new PhaseInitializer_cheatMode({&_smoke}));
 	for (const auto& i: initializer) {
 		i->init();
 	}
+	_cheatCode = {38, 38, 40, 40, 37, 39, 37, 39, 66, 65};// up up down down left right left right b a
 
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	if (nChar == 27) {
+		exit(27);
+	}
+	if (nChar == _cheatCode[_cheatPhase]) {
+		if (clock() - _cheatCodeTimer < cheatCodeWindow || _cheatPhase == 0) {
+			if (++_cheatPhase == _cheatCode.size()) {
+				const auto audio = CAudio::Instance();
+				_smoke.SetAnimation(10, true);
+				_smoke.ToggleAnimation();
+				if (!_cheatMode){
+					audio->Stop(AudioID::theme);
+					audio->Play(AudioID::CheatModeActivated, true);
+				}
+				_cheatMode = true;
+				_cheatPhase = 0;
+				_player1Board.becomeEnemy(false);
+				_player2Board.becomeEnemy(false);
+			}
+		} else {
+			_cheatPhase = 0;
+		}
+	} else { _cheatPhase = 0; }
 	if (_phase == single_placement_phase) {
 		if (_player1Board.getSelectedShipIndex() != -1) {
 			if (nChar == 52 || nChar == 82) {
@@ -66,6 +90,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 			}
 		}
 	}
+	_cheatCodeTimer = clock();
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -216,7 +241,12 @@ void CGameStateRun::restart() {
 	CAudio* audio = CAudio::Instance();
 	audio->Stop(AudioID::defeated);
 	audio->Stop(AudioID::defeat_not_DSMode_Bot);
-	audio->Play(AudioID::theme);
+	audio->Stop(AudioID::defeat_dark_soul);
+	if (_cheatMode) {
+		audio->Play(AudioID::CheatModeActivated, true);
+	} else {
+		audio->Play(AudioID::theme, true);
+	}
 	_endingThemeStarted = false;
 }
 
@@ -390,7 +420,10 @@ void CGameStateRun::OnShow() {
 
 	} else {
 	}
-	// cursor.ShowBitmap(); // un-comment this to see where the cursor is 
+	if (_cheatMode && _smoke.GetFrameIndexOfBitmap() != _smoke.GetFrameSizeOfBitmap() - 1) {
+		_smoke.ShowBitmap();
+	}
+	// _cursor.ShowBitmap();// un-comment this to see where the cursor is 
 }
 
 void CGameStateRun::startSingleGame() {
@@ -421,8 +454,13 @@ void CGameStateRun::gameStart() {
 			_phase = turnplay2;
 		}
 	}
-	_player1Board.setMyTurn(false);
-	_player2Board.setMyTurn(true);
+	_player1Board.setMyTurn(true);
+	_player2Board.setMyTurn(false);
+	if (_cheatMode) {
+		_player1Board.becomeEnemy(false);
+		_player2Board.becomeEnemy(false);
+	}
+
 	// _phase = in_game;
 }
 
@@ -492,11 +530,15 @@ void CGameStateRun::OnMove() {
 	if (_phase == p1_wins) {
 		if (_playWithRobot) {
 			if (!_endingThemeStarted) {
-				audio->Stop(AudioID::theme);
-				if (_bot.getDifficulty() != robot_enums::dark_soul) {
-					audio->Play(AudioID::defeat_not_DSMode_Bot);
+				if (_cheatMode) {
+					audio->Stop(AudioID::CheatModeActivated);
 				} else {
-					audio->Play(AudioID::defeat_dark_soul);
+					audio->Stop(AudioID::theme);
+				}
+				if (_bot.getDifficulty() != robot_enums::dark_soul) {
+					audio->Play(AudioID::defeat_not_DSMode_Bot, true);
+				} else {
+					audio->Play(AudioID::defeat_dark_soul, true);
 				}
 				_endingThemeStarted = true;
 			}

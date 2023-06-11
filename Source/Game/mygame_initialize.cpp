@@ -29,17 +29,17 @@ void CGameStateInit::OnInit() {
 	audio->Load(AudioID::defeated, R"(Resources/Audio/Defeated.wav)");
 
 	for (int i = 0; i < AudioID::hit_buffer; i++) {
-		audio->Load(AudioID::player_hit + i, "Resources/Audio/Hit_Marker.wav");
-		audio->Load(AudioID::bot_hit + i, "Resources/Audio/Error.wav");
+		audio->Load(AudioID::player_hit + i, R"(Resources/Audio/Hit_Marker.wav)");
+		audio->Load(AudioID::bot_hit + i, R"(Resources/Audio/Error.wav)");
 	}
-	audio->Load(AudioID::click, "Resources/Audio/Click.wav");
-	audio->Load(AudioID::Missed1,  "Resources/Audio/Missed1.wav");
-	audio->Load(AudioID::Missed2,  "Resources/Audio/Missed2.wav");
-	audio->Load(AudioID::Missed3,  "Resources/Audio/Missed3.wav");
-	audio->Load(AudioID::Missed4,  "Resources/Audio/Missed4.wav");
-	audio->Load(AudioID::defeat_not_DSMode_Bot, "Resources/Audio/Defeat_NotDS.wav");
-	audio->Load(AudioID::defeat_dark_soul, "Resources/Audio/Defeat_Dark_Soul.wav");
-	
+	audio->Load(AudioID::click, R"(Resources/Audio/Click.wav)");
+	audio->Load(AudioID::Missed1,  R"(Resources/Audio/Missed1.wav)");
+	audio->Load(AudioID::Missed2,  R"(Resources/Audio/Missed2.wav)");
+	audio->Load(AudioID::Missed3,  R"(Resources/Audio/Missed3.wav)");
+	audio->Load(AudioID::Missed4,  R"(Resources/Audio/Missed4.wav)");
+	audio->Load(AudioID::defeat_not_DSMode_Bot, R"(Resources/Audio/Defeat_NotDS.wav)");
+	audio->Load(AudioID::defeat_dark_soul, R"(Resources/Audio/Defeat_Dark_Soul.wav)");
+	audio->Load(AudioID::CheatModeActivated, R"(Resources/Audio/CheatModeActivated.wav)");
 	
 	audio->Play(AudioID::theme, true);
 }
